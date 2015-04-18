@@ -1,0 +1,12 @@
+{
+  "name": "nw-demo",
+  "main": "index.html",
+  "window": {
+    "title": "node-webkit demo",
+    "toolbar": true,
+    "frame": true,
+    "width": 800,
+    "height": 500,
+    "position": "center"
+  }
+}
