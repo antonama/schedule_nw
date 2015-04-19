@@ -1,0 +1,9 @@
+@import "variables";
+@import "colors";
+
+header {
+  min-height: $logo-height + 2 * $padding-top-aside-header;
+  margin-left: $logo-width;
+  padding: $padding-top-aside-header;
+  border-bottom: 1px solid $grey-lighten-2;
+}

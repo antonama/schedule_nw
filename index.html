@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
+        <title>Schedule</title>
 
-     <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">
+        <link rel="shortcut icon" href="img/icon.png">
 
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">
 
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js"></script>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 
-  <script type="text/javascript" src="script.js"></script>
-  <script type="text/javascript" src="routing.js"></script>
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
 
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+        <script type="text/javascript" src="clientScripts.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles.css">
 
-</head>
-<body ng-app="sample">
-    <header ui-view="header"></header>
-    <aside ui-view="aside"></aside>
-</body>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    </head>
+    <body ng-app="editor">
+        <ui-view></ui-view>
+    </body>
 </html>

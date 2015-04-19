@@ -1,0 +1,38 @@
+@import "variables";
+@import "colors";
+
+aside {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: $logo-width;
+
+  .aside-container {
+    height: 100%;
+
+    .logo-container {
+      min-height: $logo-height + 2 * $padding-top-aside-header;
+      position: relative;
+      border-bottom: 1px solid $grey-lighten-2;
+
+      .logo {
+        position: absolute;
+        top: $padding-top-aside-header;
+        bottom: $padding-top-aside-header;
+        background-image: url("img/logo.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: $logo-width;
+      }
+    }
+
+    .navigation {
+      .collapsible {
+        margin: 0;
+        border: 0;
+        box-shadow: none;
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 {
-  "name": "nw-demo",
+  "name": "schedule_nw",
   "main": "index.html",
   "window": {
     "title": "node-webkit demo",
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "width": 800,
     "height": 500,
