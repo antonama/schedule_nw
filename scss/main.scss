@@ -1,11 +1,9 @@
-body,
-html {
-  height: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  font-family: 'Roboto', sans-serif;
-}
+@import "bower";
+@import "variables";
+@import "globals";
 
-ui-view {
-  display: block;
-}
+@import "../bower_components/materialize/sass/materialize";
+
+@import "aside";
+@import "header";
+@import "content";

@@ -3,10 +3,19 @@
   "main": "index.html",
   "window": {
     "title": "node-webkit demo",
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "width": 800,
     "height": 500,
     "position": "center"
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-sass": "*",
+    "gulp-concat": "*",
+    "gulp-strip-comments": "*"
   }
 }

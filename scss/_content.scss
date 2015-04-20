@@ -1,0 +1,9 @@
+.content {
+  position: fixed;
+  top: $logo-height + 2 * $padding-top-aside-header;
+  left: $logo-width;
+  right: 0;
+  bottom: 0;
+  padding: 0 $padding-top-aside-header;
+  z-index: 50;
+}

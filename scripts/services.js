@@ -8,10 +8,10 @@ angular.module("editor").service("iScrolls", function () {
     this.map = {};
 
     return {
-        getIScroll: function (name) {
+        get: function (name) {
             return self.map[name];
         },
-        setIScroll: function (name, instance) {
+        set: function (name, instance) {
             self.map[name] = instance;
         }
     };

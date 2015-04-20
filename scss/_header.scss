@@ -1,11 +1,13 @@
-@import "variables";
-@import "colors";
-
 header {
-  min-height: $logo-height + 2 * $padding-top-aside-header;
-  margin-left: $logo-width;
-  padding: $padding-top-aside-header;
-  border-bottom: 1px solid $grey-lighten-2;
+  position: fixed;
+  top: 0;
+  left: $logo-width;
+  right: 0;
+  height: $logo-height + 2 * $padding-top-aside-header;
+  border-bottom: 1px solid color("grey", "lighten-2");
+  border-left: 1px solid color("grey", "lighten-2");
+  z-index: 100;
+  background-color: $logo-container-background;
 
   .header {
     .links-container {

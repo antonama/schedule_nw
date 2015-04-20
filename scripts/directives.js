@@ -4,7 +4,7 @@
 
 angular.module("editor")
 
-.directive("iscroll",
+.directive("asideIscroll",
     function (iScrolls) {
         return function (scope, elem, attrs) {
             var asideIscroll = new IScroll(elem.get(0), {
@@ -15,27 +15,28 @@ angular.module("editor")
                 bounce: false,
                 disableMouse: true
             });
-            iScrolls.setIScroll("asideIScroll", asideIscroll);
+            iScrolls.set("asideIScroll", asideIscroll);
         }
     })
 
-//.directive("backButton", function () {
-//        return function (scope, elem) {
-//            elem.bind('click', goBack);
-//
-//            function goBack() {
-//                history.back();
-//                scope.$apply();
-//            }
-//        }
-//    })
-//.directive("forwardButton", function () {
-//    return function (scope, elem) {
-//        elem.bind('click', goBack);
-//
-//        function goBack() {
-//            history.forward();
-//            scope.$apply();
-//        }
-//    }
-//});
+.directive("contentIscroll",
+    function ($rootScope, $timeout, iScrolls) {
+
+        $rootScope.$on("$stateChangeSuccess", function () {
+            $timeout(function () {
+                iScrolls.get("contentIscroll").refresh();
+            });
+        });
+
+        return function (scope, elem, attrs) {
+            var contentIscroll = new IScroll(elem.get(0), {
+                mouseWheel: true,
+                scrollbars: true,
+                fadeScrollbars: true,
+                interactiveScrollbars: true,
+                bounce: false,
+                disableMouse: true
+            });
+            iScrolls.set("contentIscroll", contentIscroll);
+        }
+    });

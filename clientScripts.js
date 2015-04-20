@@ -1,10 +1,13 @@
-angular.module("editor", ["ui.router"])
+angular.module("editor", [
+    "ui.router",
+    "cfp.loadingBar"
+]);
 
 
 
 angular.module("editor")
 
-.directive("iscroll",
+.directive("asideIscroll",
     function (iScrolls) {
         return function (scope, elem, attrs) {
             var asideIscroll = new IScroll(elem.get(0), {
@@ -15,28 +18,31 @@ angular.module("editor")
                 bounce: false,
                 disableMouse: true
             });
-            iScrolls.setIScroll("asideIScroll", asideIscroll);
+            iScrolls.set("asideIScroll", asideIscroll);
         }
     })
 
+.directive("contentIscroll",
+    function ($rootScope, $timeout, iScrolls) {
 
+        $rootScope.$on("$stateChangeSuccess", function () {
+            $timeout(function () {
+                iScrolls.get("contentIscroll").refresh();
+            });
+        });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return function (scope, elem, attrs) {
+            var contentIscroll = new IScroll(elem.get(0), {
+                mouseWheel: true,
+                scrollbars: true,
+                fadeScrollbars: true,
+                interactiveScrollbars: true,
+                bounce: false,
+                disableMouse: true
+            });
+            iScrolls.set("contentIscroll", contentIscroll);
+        }
+    });
 angular.module('editor')
 .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home");
@@ -82,10 +88,10 @@ angular.module("editor").service("iScrolls", function () {
     this.map = {};
 
     return {
-        getIScroll: function (name) {
+        get: function (name) {
             return self.map[name];
         },
-        setIScroll: function (name, instance) {
+        set: function (name, instance) {
             self.map[name] = instance;
         }
     };
@@ -161,7 +167,7 @@ angular.module("editor")
 
                 elem.find("li").on("click", function () {
                     $timeout(function () {
-                        iScrolls.getIScroll("asideIScroll").refresh();
+                        iScrolls.get("asideIScroll").refresh();
                     }, 500);
                 })
             }

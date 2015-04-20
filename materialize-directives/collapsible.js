@@ -13,7 +13,7 @@ angular.module("editor")
 
                 elem.find("li").on("click", function () {
                     $timeout(function () {
-                        iScrolls.getIScroll("asideIScroll").refresh();
+                        iScrolls.get("asideIScroll").refresh();
                     }, 500);
                 })
             }
