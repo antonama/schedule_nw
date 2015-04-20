@@ -7999,5 +7999,15 @@ header {
   left: 240px;
   right: 0;
   bottom: 0;
-  padding: 0 15px;
   z-index: 50; }
+  .content .circular-image {
+    width: 75px;
+    height: 75px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+    -ms-border-radius: 150px;
+    -o-border-radius: 150px;
+    border-radius: 150px; }
+  .content .circular-image img {
+    opacity: 0;
+    filter: alpha(opacity=0); }

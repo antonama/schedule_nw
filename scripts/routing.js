@@ -12,6 +12,17 @@ angular.module('editor')
 
     $stateProvider.state("main.home", {
         url: "/home",
+        controller: function ($scope, $timeout, iScrolls, rfeStaff, cfpLoadingBar) {
+            cfpLoadingBar.start();
+
+            rfeStaff.getAll().then(function (staff) {
+                $scope.staff = staff;
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                    cfpLoadingBar.complete();
+                }, 500);
+            });
+        },
         templateUrl: "templates/home.html"
     });
 

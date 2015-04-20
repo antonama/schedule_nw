@@ -24,7 +24,7 @@ angular.module("editor")
 
         $rootScope.$on("$stateChangeSuccess", function () {
             $timeout(function () {
-                iScrolls.get("contentIscroll").refresh();
+                iScrolls.get("contentIScroll").refresh();
             });
         });
 
@@ -35,8 +35,18 @@ angular.module("editor")
                 fadeScrollbars: true,
                 interactiveScrollbars: true,
                 bounce: false,
-                disableMouse: true
+                disableMouse: true,
+                keyBindings: {
+                    pageUp: 33,
+                    pageDown: 34,
+                    end: 35,
+                    home: 36,
+                    left: 37,
+                    up: 38,
+                    right: 39,
+                    down: 40
+                }
             });
-            iScrolls.set("contentIscroll", contentIscroll);
+            iScrolls.set("contentIScroll", contentIscroll);
         }
     });

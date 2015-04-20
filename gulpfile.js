@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     sass = require('gulp-sass');
 
 var sources = {
-    scss: "scss/main.scss",
+    scss: "scss/**/*.scss",
+    serverJs: ["node_scripts/**/*.js"],
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [
         "bower_components/jquery/dist/jquery.js",
@@ -31,6 +32,10 @@ var destinations = {
         file: "clientScripts.js",
         path: "./"
     },
+    serverJs: {
+        file: "serverScripts.js",
+        path: "./"
+    },
     bowerComponentsJs: {
         file: "bowerComponents.js",
         path: "./"
@@ -45,7 +50,8 @@ gulp.task('default', [
     'sass',
     'bower-components-js',
     'bower-components-css',
-    'concat-js',
+    'concat-server-js',
+    'concat-client-js',
     'watch'
 ]);
 
@@ -61,11 +67,18 @@ gulp.task('bower-components-css', function () {
         .pipe(gulp.dest(destinations.bowerComponentsCss.path));
 });
 
-gulp.task('concat-js', function () {
+gulp.task('concat-client-js', function () {
     gulp.src(sources.clientJs)
         .pipe(concat(destinations.clientJs.file))
         .pipe(strip())
         .pipe(gulp.dest(destinations.clientJs.path));
+});
+
+gulp.task('concat-server-js', function () {
+    gulp.src(sources.serverJs)
+        .pipe(concat(destinations.serverJs.file))
+        .pipe(strip())
+        .pipe(gulp.dest(destinations.serverJs.path));
 });
 
 gulp.task('sass', function () {
@@ -77,5 +90,6 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function () {
     gulp.watch(sources.scss, ['sass']);
-    gulp.watch('scripts/**/*.js', ['concat-js']);
+    gulp.watch('scripts/**/*.js', ['concat-client-js']);
+    gulp.watch('node_scripts/**/*.js', ['concat-server-js']);
 });

@@ -3,14 +3,14 @@
   "main": "index.html",
   "window": {
     "title": "node-webkit demo",
-    "toolbar": false,
+    "toolbar": true,
     "frame": true,
     "width": 800,
     "height": 500,
     "position": "center"
   },
   "dependencies": {
-
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "gulp": "*",

@@ -4,6 +4,20 @@
   left: $logo-width;
   right: 0;
   bottom: 0;
-  padding: 0 $padding-top-aside-header;
   z-index: 50;
+
+  .circular-image {
+    width: 75px;
+    height: 75px;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+    -ms-border-radius: 150px;
+    -o-border-radius: 150px;
+    border-radius: 150px;
+  }
+
+  .circular-image img {
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
 }
