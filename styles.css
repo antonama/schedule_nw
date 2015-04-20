@@ -8,7 +8,9 @@ aside {
     aside .aside-container .logo-container {
       min-height: 70px;
       position: relative;
-      border-bottom: 1px solid #e0e0e0; }
+      border-bottom: 1px solid #e0e0e0;
+      background-color: #fff;
+      z-index: 100; }
       aside .aside-container .logo-container .logo {
         position: absolute;
         top: 15px;
@@ -18,10 +20,16 @@ aside {
         background-position: center;
         background-repeat: no-repeat;
         width: 240px; }
-    aside .aside-container .navigation .collapsible {
-      margin: 0;
-      border: 0;
-      box-shadow: none; }
+    aside .aside-container .navigation {
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      top: 70px; }
+      aside .aside-container .navigation .collapsible {
+        margin: 0;
+        border: 0;
+        box-shadow: none; }
 
 .content {
   margin-left: 240px;
@@ -32,6 +40,25 @@ header {
   margin-left: 240px;
   padding: 15px;
   border-bottom: 1px solid #e0e0e0; }
+  header .header .links-container {
+    position: relative; }
+    header .header .links-container .link {
+      position: absolute;
+      line-height: 70px;
+      top: 0;
+      bottom: 0;
+      width: 35px;
+      font-size: 2.5rem;
+      text-align: left;
+      color: #cdcdcd;
+      cursor: default; }
+      header .header .links-container .link.active {
+        color: black;
+        cursor: pointer; }
+      header .header .links-container .link.previous {
+        left: 0; }
+      header .header .links-container .link.next {
+        right: 0; }
 
 body, html {
   height: 100%;

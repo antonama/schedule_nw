@@ -1,80 +1,6 @@
-angular.module("editor", ["ui.router"])
-
-
-
-angular.module("editor")
-
-.directive("iscroll",
-    function (iScrolls) {
-        return function (scope, elem, attrs) {
-            var asideIscroll = new IScroll(elem.get(0), {
-                mouseWheel: true,
-                scrollbars: true,
-                fadeScrollbars: true,
-                interactiveScrollbars: true,
-                bounce: false,
-                disableMouse: true
-            });
-            iScrolls.setIScroll("asideIScroll", asideIscroll);
-        }
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-angular.module('editor')
-.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/home");
-
-    $stateProvider.state("main", {
-        abstract: true,
-        templateUrl: "templates/main.html",
-        controller: function ($scope, $history) {
-            $scope.$history = $history;
-        }
-    });
-
-    $stateProvider.state("main.home", {
-        url: "/home",
-        templateUrl: "templates/home.html"
-    });
-
-    $stateProvider.state("main.custom", {
-        url: "/custom",
-        template: "<div>custom</div>"
-    });
-
-        $stateProvider.state("main.custom2", {
-            url: "/custom2",
-            template: "<div>custom2</div>"
-        });
-
-        $stateProvider.state("main.custom3", {
-            url: "/custom3",
-            template: "<div>custom3</div>"
-        });
-
-        $stateProvider.state("main.custom4", {
-            url: "/custom4",
-            template: "<div>custom4</div>"
-        });
-});
-
+/**
+ * Created by Anton on 20.04.2015.
+ */
 
 angular.module("editor").service("iScrolls", function () {
     var self = this;
@@ -147,23 +73,4 @@ angular.module("editor").service("iScrolls", function () {
                 }
             }
         });
-    });
-
-
-angular.module("editor")
-.directive("collapsible", function ($timeout, iScrolls) {
-        return {
-            restrict: "A",
-            link: function (scope, elem, attrs) {
-                elem.collapsible({
-                    accordion : false
-                });
-
-                elem.find("li").on("click", function () {
-                    $timeout(function () {
-                        iScrolls.getIScroll("asideIScroll").refresh();
-                    }, 500);
-                })
-            }
-        }
     });

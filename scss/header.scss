@@ -6,4 +6,35 @@ header {
   margin-left: $logo-width;
   padding: $padding-top-aside-header;
   border-bottom: 1px solid $grey-lighten-2;
+
+  .header {
+    .links-container {
+      position: relative;
+
+      .link {
+        position: absolute;
+        line-height: 70px;
+        top: 0;
+        bottom: 0;
+        width: 35px;
+        font-size: 2.5rem;
+        text-align: left;
+        color: #cdcdcd;
+        cursor: default;
+
+        &.active {
+          color: black;
+          cursor: pointer;
+        }
+
+        &.previous {
+          left: 0;
+        }
+
+        &.next {
+          right: 0;
+        }
+      }
+    }
+  }
 }

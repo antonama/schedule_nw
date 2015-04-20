@@ -1,1 +1,11 @@
-<div>header</div>
+<div class="header">
+    <div class="links-container">
+        <a href="javascript:void(0)" class="link previous" ng-click="$history.back()" ng-class="{'active': $history.hasPrevious()}">
+            <i class="mdi-image-navigate-before"></i>
+        </a>
+        <a href="javascript:void(0)" class="link next" ng-click="$history.forward()" ng-class="{'active': $history.hasNext()}">
+            <i class="mdi-image-navigate-next"></i>
+        </a>
+    </div>
+
+</div>

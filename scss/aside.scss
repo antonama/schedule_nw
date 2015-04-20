@@ -14,6 +14,8 @@ aside {
       min-height: $logo-height + 2 * $padding-top-aside-header;
       position: relative;
       border-bottom: 1px solid $grey-lighten-2;
+      background-color: $logo-container-background;
+      z-index: 100;
 
       .logo {
         position: absolute;
@@ -28,6 +30,12 @@ aside {
     }
 
     .navigation {
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      top: 70px;
+
       .collapsible {
         margin: 0;
         border: 0;

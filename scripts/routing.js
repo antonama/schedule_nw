@@ -4,7 +4,10 @@ angular.module('editor')
 
     $stateProvider.state("main", {
         abstract: true,
-        templateUrl: "templates/main.html"
+        templateUrl: "templates/main.html",
+        controller: function ($scope, $history) {
+            $scope.$history = $history;
+        }
     });
 
     $stateProvider.state("main.home", {
@@ -16,4 +19,19 @@ angular.module('editor')
         url: "/custom",
         template: "<div>custom</div>"
     });
+
+        $stateProvider.state("main.custom2", {
+            url: "/custom2",
+            template: "<div>custom2</div>"
+        });
+
+        $stateProvider.state("main.custom3", {
+            url: "/custom3",
+            template: "<div>custom3</div>"
+        });
+
+        $stateProvider.state("main.custom4", {
+            url: "/custom4",
+            template: "<div>custom4</div>"
+        });
 });
