@@ -1,0 +1,33 @@
+<div class="rfe-staff">
+    <div class="row staff-list">
+
+        <div class="input-field">
+            <input id="classFind" type="text"
+                   fuzzy="filteredStaffItems"
+                   original-items="staffItems"
+                   ng-model="searchExpr"
+                   keys="{{['name.full']}}"
+                   ng-disabled="newItemIsShown"/>
+            <label for="classFind">Lecturer</label>
+        </div>
+
+        <div ng-repeat="person in filteredStaffItems | orderBy: 'name.full'" class="col s12 m12 l6">
+            <div class="staff-item">
+                <div class="circular-image" style="
+                background: url('{{person.avatar}}') no-repeat;
+                background-position: 0 -10px;
+                background-size: cover;">
+                    <img ng-src="{{person.avatar}}"/>
+                </div>
+                <div class="person-position">{{person.position}}</div>
+                <div class="person-name">{{person.name.full}}</div>
+                <div class="person-rank">{{person.rank}}</div>
+
+                <div class="staff-edit-item">
+                    <i class="mdi-action-delete" ng-click="deleteItem(person)"></i>
+                    <i class="mdi-editor-mode-edit"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

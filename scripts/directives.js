@@ -53,20 +53,23 @@ angular.module("editor")
             link: function (scope, elem, attrs) {
                 var fuse;
 
+                var blocked = true;
                 elem.attr("disabled", "");
 
-                var unwatch = scope.$watch("originalItems", function (newValue) {
+                var unwatchNgModel = angular.noop;
+                scope.$watch("originalItems", function (newValue) {
                     if (newValue && newValue.length) {
-                        unwatch();
+                        unwatchNgModel();
 
-                        elem.removeAttr("disabled");
+                        blocked ? elem.removeAttr("disabled") : angular.noop;
+                        blocked = false;
 
                         fuse = new Fuse(scope.originalItems, {
                             keys: $parse(scope.keys)(),
                             threshold: 0.4
                         });
 
-                        scope.$watch("ngModel", function (newValue) {
+                        unwatchNgModel = scope.$watch("ngModel", function (newValue) {
                             if (newValue && fuse) {
                                 scope.fuzzy = fuse.search(elem.val());
                             } else {

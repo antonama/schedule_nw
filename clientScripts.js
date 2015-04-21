@@ -58,20 +58,23 @@ angular.module("editor")
             link: function (scope, elem, attrs) {
                 var fuse;
 
+                var blocked = true;
                 elem.attr("disabled", "");
 
-                var unwatch = scope.$watch("originalItems", function (newValue) {
+                var unwatchNgModel = angular.noop;
+                scope.$watch("originalItems", function (newValue) {
                     if (newValue && newValue.length) {
-                        unwatch();
+                        unwatchNgModel();
 
-                        elem.removeAttr("disabled");
+                        blocked ? elem.removeAttr("disabled") : angular.noop;
+                        blocked = false;
 
                         fuse = new Fuse(scope.originalItems, {
                             keys: $parse(scope.keys)(),
                             threshold: 0.4
                         });
 
-                        scope.$watch("ngModel", function (newValue) {
+                        unwatchNgModel = scope.$watch("ngModel", function (newValue) {
                             if (newValue && fuse) {
                                 scope.fuzzy = fuse.search(elem.val());
                             } else {
@@ -91,6 +94,15 @@ angular.module("editor")
             }
         }
     });
+
+
+angular.module("editor")
+.controller("mainMenuCtrl", function ($scope, $state, $rootScope, iScrolls) {
+        $scope.$state = $state;
+        $rootScope.$on("$stateChangeSuccess", function () {
+            iScrolls.get("asideIScroll").scrollTo(0, 0);
+        });
+    });
 angular.module('editor')
 .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home");
@@ -103,6 +115,9 @@ angular.module('editor')
                 controller: function ($scope, $history) {
                     $scope.$history = $history;
                 }
+            },
+            "asideView@main": {
+                templateUrl: "templates/mainMenu.html"
             }
         }
     });
@@ -111,21 +126,97 @@ angular.module('editor')
         url: "/home",
         views: {
             "": {
-                templateUrl: "templates/home.html",
+                templateUrl: "templates/home.html"
+            }
+        }
+    });
+
+    $stateProvider.state("main.staff", {
+        url: "/staff",
+        views: {
+            "": {
+                templateUrl: "templates/staff.html",
                 controller: function ($scope, $timeout, iScrolls, rfeStaff, cfpLoadingBar) {
                     cfpLoadingBar.start();
 
-                    rfeStaff.getAll().then(function (staff) {
-                        $scope.staff = staff;
-                        $timeout(function () {
-                            iScrolls.get("contentIScroll").refresh();
-                            cfpLoadingBar.complete();
-                        }, 500);
+                    $scope.deleteItem = function (person) {
+                        rfeStaff.delete(person).then(function () {
+                            update();
+                        });
+                    };
+
+                    function update () {
+                        rfeStaff.getAll().then(function (staff) {
+                            $scope.filteredStaffItems = staff;
+                            $scope.staffItems = staff;
+
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                                cfpLoadingBar.complete();
+                            }, 500);
+                        });
+                    }
+
+                    update();
+                    $scope.searchExpr = "";
+                    $scope.$watch("searchExpr", function () {
+                        if (iScrolls.get("contentIScroll")) {
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                            }, 250);
+                        }
                     });
                 }
-            },
-            "asideView@main": {
-                templateUrl: "templates/mainMenu.html"
+            }
+        }
+    });
+
+    $stateProvider.state("main.groups", {
+        url: "/groups",
+        views: {
+            "": {
+                templateUrl: "templates/groups.html"
+            }
+        }
+    });
+
+    $stateProvider.state("main.rooms", {
+        url: "/rooms",
+        views: {
+            "": {
+                templateUrl: "templates/rooms.html",
+                controller: function ($scope, rfeRooms, cfpLoadingBar) {
+                    cfpLoadingBar.start();
+
+                    $scope.saveItem = function () {
+                        rfeRooms.save($scope.newRoomItem).then(function () {
+                            update();
+                            clearItem({saveAddress: true});
+                        })
+                    };
+
+                    function update () {
+                        rfeRooms.getAll().then(function (rooms) {
+                            $scope.rooms = rooms;
+                            cfpLoadingBar.complete();
+                        });
+                    }
+
+                    function clearItem(options) {
+                        options.saveAddress ?
+                        $scope.newRoomItem = {
+                            title: "",
+                            address: $scope.newRoomItem.address
+                        } :
+                        $scope.newRoomItem = {
+                            title: "",
+                            address: ""
+                        }
+                    }
+
+                    update();
+                    clearItem({});
+                }
             }
         }
     });

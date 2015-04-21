@@ -8000,13 +8000,99 @@ header {
   right: 0;
   bottom: 0;
   z-index: 50; }
-  .content .circular-image {
+
+.staff-list > div:last-child {
+  margin-bottom: 25px; }
+.staff-list .staff-item {
+  padding: 10px 10px 10px 95px;
+  position: relative;
+  min-height: 95px;
+  margin: 10px 0 0 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px; }
+  .staff-list .staff-item:hover .staff-edit-item {
+    display: block; }
+  .staff-list .staff-item .staff-edit-item {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 5px solid #fff;
+    border-radius: 8px;
+    text-align: center; }
+    .staff-list .staff-item .staff-edit-item i {
+      cursor: pointer;
+      font-size: 2rem;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      padding: 10px;
+      margin-right: 10px;
+      line-height: 85px;
+      color: #fff; }
+      .staff-list .staff-item .staff-edit-item i:hover {
+        border: 3px solid #4db6ac;
+        background-color: #4db6ac; }
+  .staff-list .staff-item .circular-image {
     width: 75px;
     height: 75px;
-    border-radius: 150px; }
-    .content .circular-image img {
+    border-radius: 150px;
+    position: absolute;
+    left: 10px;
+    top: 10px; }
+    .staff-list .staff-item .circular-image img {
       opacity: 0;
       filter: alpha(opacity=0); }
+  .staff-list .staff-item .person-name {
+    font-weight: bold; }
+  .staff-list .staff-item .person-rank {
+    font-style: italic; }
+
+.main-menu {
+  margin: 0; }
+  .main-menu .main-menu-item {
+    padding: 10px;
+    color: black;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    display: block;
+    line-height: 2rem; }
+    .main-menu .main-menu-item i {
+      position: relative;
+      top: 5px;
+      display: inline-block; }
+    .main-menu .main-menu-item span {
+      font-size: 1.2rem;
+      display: inline-block;
+      position: relative;
+      top: -1px; }
+
+.rfe-rooms {
+  padding: 10px; }
+  .rfe-rooms .add-room {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    position: relative; }
+    .rfe-rooms .add-room .input-field label {
+      left: 0; }
+    .rfe-rooms .add-room .add-button {
+      position: absolute;
+      bottom: 50%;
+      right: 0;
+      transform: translate(0, 50%); }
+  .rfe-rooms .rooms-list .room-item {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    margin: 10px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    cursor: default; }
 
 .rfe-classes .input-field {
   padding: 0 150px 0 10px; }
@@ -8099,11 +8185,11 @@ header {
   top: 10px;
   right: 10px; }
 
-.staff-list {
+.lecturers-list {
   padding: 0 10px 10px 10px; }
-  .staff-list .input-field label {
+  .lecturers-list .input-field label {
     left: 0; }
-  .staff-list li {
+  .lecturers-list li {
     padding: 0.5rem;
     border-bottom: 1px solid #bdbdbd;
     white-space: nowrap;

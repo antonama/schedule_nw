@@ -1,0 +1,37 @@
+.rfe-rooms {
+  padding: 10px;
+
+  .add-room {
+    border: 1px solid color('grey', 'lighten-2');
+    border-radius: 4px;
+    position: relative;
+
+    .input-field {
+      label {
+        left: 0;
+      }
+    }
+
+    .add-button {
+      position: absolute;
+      bottom: 50%;
+      right: 0;
+      transform: translate(0,50%);
+    }
+  }
+  
+  .rooms-list {
+    .room-item {
+      display: inline-block;
+      width: 45px;
+      height: 45px;
+      line-height: 45px;
+      text-align: center;
+      margin: 10px;
+      border-radius: 50%;
+      border: 1px solid color('grey', 'lighten-2');
+      position: relative;
+      cursor: default;
+    }
+  }
+}

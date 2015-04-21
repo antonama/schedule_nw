@@ -1,52 +1,51 @@
 /**
- * Created by Anton on 4/20/2015.
+ * Created by Anton on 4/22/2015.
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds031691.mongolab.com:31691/staff');
+    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds053130.mongolab.com:53130/rooms');
     var dbDeferred = q.defer();
-    var Staff;
+    var Room;
     db.once('open', function () {
         dbDeferred.resolve();
-        Staff = db.model("Staff", staffSchema);
+        Room = db.model("Room", roomSchema);
     });
 
     angular.module("editor")
-        .service("rfeStaff", function ($q) {
+        .service("rfeRooms", function ($q) {
             var loading = true;
 
             return {
                 getAll: function () {
                     var deferred = $q.defer();
-                    var staff = [];
+                    var rooms = [];
                     dbDeferred.promise.then(function () {
-                        Staff.find(function (err, found) {
+                        Room.find(function (err, found) {
                             found.forEach(function (item) {
-                                staff.push(item.toObject());
+                                rooms.push(item.toObject());
                             });
                             loading = false;
-                            deferred.resolve(staff);
+                            deferred.resolve(rooms);
                         })
                     });
 
                     return deferred.promise;
                 },
-                delete: function (item) {
-                    var deferred = $q.defer();
+                save: function (item) {
+                    var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        Staff.findOneAndRemove({
-                            _id: item._id
-                        }, function (err, item) {
+                        var dbItem = new Room(item);
+                        dbItem.save(function (err) {
                             if (!err) {
-                                deferred.resolve();
+                                dbItemDeferred.resolve();
                             } else {
-                                deferred.reject();
+                                dbItemDeferred.reject();
                             }
-                        });
+                        })
                     });
 
-                    return deferred.promise;
+                    return dbItemDeferred.promise;
                 },
                 isLoading: function () {
                     return loading;

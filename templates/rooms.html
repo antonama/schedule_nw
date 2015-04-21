@@ -1,0 +1,29 @@
+<div class="rfe-rooms">
+    
+    <form class="add-room row" ng-submit="saveItem()">
+        <div class="col s4 m4 l4">
+            <div class="input-field">
+                <input id="room-title" type="text" ng-model="newRoomItem.title"/>
+                <label for="room-title">Номер</label>
+            </div>
+        </div>
+        <div class="col s6 m6 l6">
+            <div class="input-field">
+                <input id="room-address" type="text" ng-model="newRoomItem.address"/>
+                <label for="room-address">Адрес</label>
+            </div>
+        </div>
+        <div class="col s2 m2 l2 add-button">
+            <button type="submit" class="btn-floating waves-effect waves-light right">
+                <i class="mdi-content-add"></i>
+            </button>
+        </div>
+    </form>
+
+    <div class="rooms-list">
+        <div ng-repeat="room in rooms | orderBy: 'title'" class="room-item">
+            <span class="room-title">{{room.title}}</span>
+        </div>
+    </div>
+
+</div>

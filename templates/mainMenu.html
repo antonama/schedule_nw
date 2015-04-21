@@ -1,3 +1,22 @@
-<div>
-    <a ui-sref="main.classes">Classes</a>
-</div>
+<ul class="main-menu" ng-controller="mainMenuCtrl">
+    <li class="main-menu-item waves-effect" ng-click="$state.go('main.staff')">
+        <i class="small mdi-action-wallet-travel"></i>
+        <span>Staff</span>
+    </li>
+    <li class="main-menu-item waves-effect" ng-click="$state.go('main.rooms')">
+        <i class="small mdi-action-home"></i>
+        <span>Rooms</span>
+    </li>
+    <li class="main-menu-item waves-effect" ng-click="$state.go('main.groups')">
+        <i class="small mdi-action-account-child"></i>
+        <span>Groups</span>
+    </li>
+    <li class="main-menu-item waves-effect" ng-click="$state.go('main.classes')">
+        <i class="small mdi-action-assignment"></i>
+        <span>Classes</span>
+    </li>
+    <li class="main-menu-item waves-effect">
+        <i class="small mdi-av-web"></i>
+        <span>Schedule</span>
+    </li>
+</ul>

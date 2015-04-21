@@ -5,15 +5,4 @@
   right: 0;
   bottom: 0;
   z-index: 50;
-
-  .circular-image {
-    width: 75px;
-    height: 75px;
-    border-radius: 150px;
-
-    img {
-      opacity: 0;
-      filter: alpha(opacity=0);
-    }
-  }
 }

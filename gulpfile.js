@@ -9,14 +9,16 @@ var sources = {
         "node_scripts/requires.js",
         "node_scripts/staffSchema.js",
         "node_scripts/classSchema.js",
+        "node_scripts/roomSchema.js",
         "node_scripts/rfeStaff.js",
-        "node_scripts/rfeClasses.js"
+        "node_scripts/rfeClasses.js",
+        "node_scripts/rfeRooms.js"
     ],
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [
         "bower_components/jquery/dist/jquery.js",
         "bower_components/jquery-ui/jquery-ui.js",
-        "bower_components/materialize/bin/materialize.js",
+        "bower_components/materialize/dist/js/materialize.js",
         "bower_components/iscroll/build/iscroll.js",
         "bower_components/fuse/src/fuse.min.js",
         "bower_components/angular/angular.js",

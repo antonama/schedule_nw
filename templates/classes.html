@@ -1,15 +1,13 @@
 <div class="rfe-classes">
 
-    <div class="input-field-wrapper">
-        <div class="input-field">
-            <input id="classFind" type="text"
-                   fuzzy="filteredClassItems"
-                   original-items="classItems"
-                   ng-model="searchExpr"
-                   keys="{{['title', 'lecturers.name.full']}}"
-                   ng-disabled="newItemIsShown"/>
-            <label for="classFind">Предмет или преподаватель</label>
-        </div>
+    <div class="input-field">
+        <input id="classFind" type="text"
+               fuzzy="filteredClassItems"
+               original-items="classItems"
+               ng-model="searchExpr"
+               keys="{{['title', 'lecturers.name.full']}}"
+               ng-disabled="newItemIsShown"/>
+        <label for="classFind">Предмет или преподаватель</label>
     </div>
 
     <div class="classes-list row">
