@@ -49,4 +49,41 @@ angular.module("editor")
             });
             iScrolls.set("contentIScroll", contentIscroll);
         }
+    })
+
+.directive("fuzzyStaff", function (rfeStaff) {
+        var fuse;
+
+        return {
+            restrict: "A",
+            scope: {
+                fuzzyStaff: "=",
+                originalItems: "=",
+                ngModel: "="
+            },
+            link: function (scope, elem, attrs) {
+                elem.attr("disabled", "");
+
+                var unwatch = scope.$watch("originalItems", function (newValue) {
+                    if (newValue && newValue.length) {
+                        unwatch();
+
+                        elem.removeAttr("disabled");
+
+                        fuse = new Fuse(scope.originalItems, {
+                            keys: ["name.full"],
+                            threshold: 0.4
+                        });
+
+                        scope.$watch("ngModel", function (newValue) {
+                            if (newValue && fuse) {
+                                scope.fuzzyStaff = fuse.search(elem.val());
+                            } else {
+                                scope.fuzzyStaff = scope.originalItems;
+                            }
+                        });
+                    }
+                });
+            }
+        }
     });

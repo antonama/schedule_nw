@@ -4,39 +4,8 @@
     </div>
 
     <div class="navigation" aside-iscroll>
-        <ul class="collapsible" collapsible>
-            <li>
-                <div class="collapsible-header"><i class="mdi-action-account-child"></i>Groups</div>
-                <div class="collapsible-body">
-                    <p>
-                        <a ui-sref="main.custom">Custom</a>
-                    </p>
-                </div>
-
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="mdi-maps-place"></i>Second</div>
-                <div class="collapsible-body"><p>
-                    <a ui-sref="main.custom2">Custom 2</a>
-
-                </p></div>
-
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="mdi-social-whatshot"></i>Third</div>
-                <div class="collapsible-body"><p>
-                    <a ui-sref="main.custom3">Custom 3</a>
-
-                </p></div>
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="mdi-image-filter-drama"></i>First</div>
-                <div class="collapsible-body"><p>
-                    <a ui-sref="main.custom4">Custom 4</a>
-
-                </p></div>
-
-            </li>
-        </ul>
+        <div>
+            <div ui-view="asideView"></div>
+        </div>
     </div>
 </div>

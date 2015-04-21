@@ -5,12 +5,19 @@ var gulp = require('gulp'),
 
 var sources = {
     scss: "scss/**/*.scss",
-    serverJs: ["node_scripts/**/*.js"],
+    serverJs: [
+        "node_scripts/requires.js",
+        "node_scripts/staffSchema.js",
+        "node_scripts/classSchema.js",
+        "node_scripts/rfeStaff.js",
+        "node_scripts/rfeClasses.js"
+    ],
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [
         "bower_components/jquery/dist/jquery.js",
         "bower_components/materialize/bin/materialize.js",
         "bower_components/iscroll/build/iscroll.js",
+        "bower_components/fuse/src/fuse.min.js",
         "bower_components/angular/angular.js",
         "bower_components/angular-ui-router/release/angular-ui-router.js",
         "bower_components/angular-loading-bar/build/loading-bar.js"

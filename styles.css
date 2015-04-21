@@ -8011,3 +8011,53 @@ header {
   .content .circular-image img {
     opacity: 0;
     filter: alpha(opacity=0); }
+
+.rfe-classes .classes-list .class-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-top: 15px;
+  position: relative;
+  overflow: hidden; }
+  .rfe-classes .classes-list .class-item .item-title {
+    padding: 10px 10px 0 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    overflow: hidden;
+    position: relative; }
+  .rfe-classes .classes-list .class-item .class-types {
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.8rem;
+    padding: 0 10px 10px 10px; }
+    .rfe-classes .classes-list .class-item .class-types .class-type {
+      display: inline-block; }
+  .rfe-classes .classes-list .class-item .class-lecturers.collection {
+    margin: 0; }
+    .rfe-classes .classes-list .class-item .class-lecturers.collection .collection-item {
+      height: 64px; }
+  .rfe-classes .classes-list .class-item .add-new-area {
+    border-top: 1px solid #e0e0e0;
+    font-size: 2rem;
+    color: #bdbdbd; }
+  .rfe-classes .classes-list .class-item .edit-item {
+    position: absolute;
+    bottom: 5px;
+    right: 5px; }
+.rfe-classes .add-button {
+  height: 75px;
+  line-height: 55px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 2rem;
+  border-top: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+  background-color: #fff;
+  cursor: pointer; }
+
+.staff-list {
+  padding: 0 10px 10px 10px; }
+  .staff-list .input-field label {
+    left: 0; }

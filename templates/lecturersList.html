@@ -1,0 +1,11 @@
+<ul class="staff-list">
+
+    <div class="input-field">
+        <input id="staffInput" type="text" fuzzy-staff="filteredStaffItems" original-items="staffItems" ng-model="searchExpr"/>
+        <label for="staffInput">Lecturer</label>
+    </div>
+
+    <li ng-repeat="staffItem in filteredStaffItems | orderBy: 'name.full'">
+        <p>{{staffItem.name.full}}</p>
+    </li>
+</ul>

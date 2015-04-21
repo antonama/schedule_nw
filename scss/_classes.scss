@@ -1,0 +1,77 @@
+.rfe-classes {
+  .classes-list {
+    .class-item {
+      border: 1px solid color('grey', 'lighten-2');
+      border-radius: 4px;
+      margin-top: 15px;
+      position: relative;
+      overflow: hidden;
+
+      .item-title {
+        padding: 10px 10px 0 10px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .class-types {
+        border-bottom: 1px solid color('grey', 'lighten-2');
+        font-size: 0.8rem;
+        padding: 0 10px 10px 10px;
+
+        .class-type {
+          display: inline-block;
+        }
+      }
+
+      .class-lecturers {
+        &.collection {
+          margin: 0;
+
+          .collection-item {
+            height: 64px;
+          }
+        }
+      }
+
+      .add-new-area {
+        border-top: 1px solid color('grey', 'lighten-2');
+        font-size: 2rem;
+        color: color('grey', 'lighten-1');
+      }
+
+      .edit-item {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+      }
+    }
+  }
+
+  .add-button {
+    height: 75px;
+    line-height: 55px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 2rem;
+    border-top: 1px solid color('grey', 'lighten-2');
+    border-left: 1px solid color('grey', 'lighten-2');
+    background-color: $logo-container-background;
+    cursor: pointer;
+  }
+}
+
+.staff-list {
+  padding: 0 10px 10px 10px;
+
+  .input-field {
+    label {
+      left: 0;
+    }
+  }
+}
