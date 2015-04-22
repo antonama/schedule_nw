@@ -10,10 +10,10 @@
     width: 75px;
     height: 75px;
     border-radius: 150px;
-  }
 
-  .circular-image img {
-    opacity: 0;
-    filter: alpha(opacity=0);
+    img {
+      opacity: 0;
+      filter: alpha(opacity=0);
+    }
   }
 }

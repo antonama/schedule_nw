@@ -145,6 +145,14 @@ angular.module('editor')
                         }
                     });
 
+                    $scope.$watch("searchExpr", function () {
+                        if (iScrolls.get("contentIScroll")) {
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                            }, 250);
+                        }
+                    });
+
                     $scope.clearItem = function (options) {
                         options.show ? $scope.newItemIsShown = true : $scope.newItemIsShown = false;
 
@@ -176,6 +184,8 @@ angular.module('editor')
                     function update() {
                         rfeClasses.getAll().then(function (classes) {
                             $scope.classItems = classes;
+                            $scope.filteredClassItems = classes;
+
                             $timeout(function () {
                                 iScrolls.get("contentIScroll").refresh();
                             }, 250);
@@ -185,7 +195,6 @@ angular.module('editor')
 
                     update();
 
-                    $scope.filteredClassItems = $scope.classItems;
                     $scope.searchExpr = "";
 
                     $scope.onDrop = function () {
@@ -193,7 +202,7 @@ angular.module('editor')
                         $timeout(function () {
                             iScrolls.get("contentIScroll").refresh();
                         }, 250);
-                    }
+                    };
                 }
             },
             "asideView@main": {
@@ -213,13 +222,13 @@ angular.module('editor')
 
                     $scope.searchExpr = "";
 
-                    $scope.onStartDragging = function () {
-                        $("body").addClass("drag-active");
-                    };
-
-                    $scope.onStopDragging = function () {
-                        $("body").removeClass("drag-active");
-                    };
+                    $scope.$watch("searchExpr", function () {
+                        if (iScrolls.get("asideIScroll")) {
+                            $timeout(function () {
+                                iScrolls.get("asideIScroll").refresh();
+                            }, 250);
+                        }
+                    });
                 }
             }
         }

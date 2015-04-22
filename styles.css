@@ -8004,12 +8004,14 @@ header {
     width: 75px;
     height: 75px;
     border-radius: 150px; }
-  .content .circular-image img {
-    opacity: 0;
-    filter: alpha(opacity=0); }
+    .content .circular-image img {
+      opacity: 0;
+      filter: alpha(opacity=0); }
 
 .rfe-classes .input-field {
   padding: 0 150px 0 10px; }
+.rfe-classes .classes-list > div:last-child {
+  margin-bottom: 25px; }
 .rfe-classes .classes-list .class-item {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
@@ -8022,7 +8024,23 @@ header {
     font-weight: bold; }
   .rfe-classes .classes-list .class-item .future-class-lecturers {
     border: none;
-    border-top: 1px solid #e0e0e0; }
+    border-top: 1px solid #e0e0e0;
+    margin: 0; }
+    .rfe-classes .classes-list .class-item .future-class-lecturers .lecturer {
+      position: relative;
+      padding: 5px 10px;
+      border-bottom: 1px solid #e0e0e0; }
+      .rfe-classes .classes-list .class-item .future-class-lecturers .lecturer .circular-image {
+        width: 45px;
+        height: 45px;
+        border-radius: 150px; }
+        .rfe-classes .classes-list .class-item .future-class-lecturers .lecturer .circular-image img {
+          opacity: 0;
+          filter: alpha(opacity=0); }
+      .rfe-classes .classes-list .class-item .future-class-lecturers .lecturer .lecturer-name {
+        position: absolute;
+        top: 0;
+        left: 65px; }
   .rfe-classes .classes-list .class-item .available-class-types {
     padding: 0 10px 10px 10px; }
   .rfe-classes .classes-list .class-item .item-title {
@@ -8037,14 +8055,33 @@ header {
     padding: 0 10px 10px 10px; }
     .rfe-classes .classes-list .class-item .class-types .class-type {
       display: inline-block; }
-  .rfe-classes .classes-list .class-item .class-lecturers.collection {
+  .rfe-classes .classes-list .class-item .class-lecturers {
     margin: 0; }
-    .rfe-classes .classes-list .class-item .class-lecturers.collection .collection-item {
-      height: 64px; }
+    .rfe-classes .classes-list .class-item .class-lecturers .lecturer {
+      position: relative;
+      padding: 5px 10px;
+      border-bottom: 1px solid #e0e0e0; }
+      .rfe-classes .classes-list .class-item .class-lecturers .lecturer .circular-image {
+        width: 45px;
+        height: 45px;
+        border-radius: 150px; }
+        .rfe-classes .classes-list .class-item .class-lecturers .lecturer .circular-image img {
+          opacity: 0;
+          filter: alpha(opacity=0); }
+      .rfe-classes .classes-list .class-item .class-lecturers .lecturer .lecturer-name {
+        position: absolute;
+        top: 0;
+        left: 65px; }
   .rfe-classes .classes-list .class-item .add-new-area {
     border-top: 1px solid #e0e0e0;
     font-size: 2rem;
     color: #bdbdbd; }
+    .rfe-classes .classes-list .class-item .add-new-area.drag-active {
+      border: 2px solid #212121;
+      color: #212121; }
+      .rfe-classes .classes-list .class-item .add-new-area.drag-active.draggable-over {
+        background-color: #009688;
+        color: #fff; }
   .rfe-classes .classes-list .class-item .edit-item {
     position: absolute;
     bottom: 5px;
@@ -8072,8 +8109,6 @@ header {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    cursor: all-scroll; }
-
-body.drag-active .rfe-classes .classes-list .class-item .add-new-area {
-  border: 2px solid #212121;
-  color: #212121; }
+    cursor: all-scroll;
+    background-color: #fff;
+    border-radius: 4px; }

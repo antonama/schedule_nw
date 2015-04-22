@@ -11,8 +11,8 @@
 
     <li ng-repeat="staffItem in filteredStaffItems | orderBy: 'name.full'"
         data-drag="true"
-        data-jqyoui-options="{revert: true, opacity: 0.75, zIndex: 150}"
-        jqyoui-draggable="{animate:true, onStart: 'onStartDragging', onStop: 'onStopDragging'}"
+        data-jqyoui-options="{revert: true, zIndex: 9999}"
+        jqyoui-draggable="{placeholder: 'keep'}"
         ng-model="staffItem">
         {{staffItem.name.full}}
     </li>

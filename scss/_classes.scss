@@ -4,6 +4,11 @@
   }
 
   .classes-list {
+    > div {
+      &:last-child {
+        margin-bottom: 25px;
+      }
+    }
     .class-item {
       border: 1px solid color('grey', 'lighten-2');
       border-radius: 4px;
@@ -20,6 +25,30 @@
       .future-class-lecturers {
         border: none;
         border-top: 1px solid color('grey', 'lighten-2');
+        margin: 0;
+
+        .lecturer {
+          position: relative;
+          padding: 5px 10px;
+          border-bottom: 1px solid color('grey', 'lighten-2');
+
+          .circular-image {
+            width: 45px;
+            height: 45px;
+            border-radius: 150px;
+
+            img {
+              opacity: 0;
+              filter: alpha(opacity=0);
+            }
+          }
+
+          .lecturer-name {
+            position: absolute;
+            top: 0;
+            left: 65px;
+          }
+        }
       }
 
       .available-class-types {
@@ -45,11 +74,28 @@
       }
 
       .class-lecturers {
-        &.collection {
-          margin: 0;
+        margin: 0;
 
-          .collection-item {
-            height: 64px;
+        .lecturer {
+          position: relative;
+          padding: 5px 10px;
+          border-bottom: 1px solid color('grey', 'lighten-2');
+
+          .circular-image {
+            width: 45px;
+            height: 45px;
+            border-radius: 150px;
+
+            img {
+              opacity: 0;
+              filter: alpha(opacity=0);
+            }
+          }
+
+          .lecturer-name {
+            position: absolute;
+            top: 0;
+            left: 65px;
           }
         }
       }
@@ -58,6 +104,16 @@
         border-top: 1px solid color('grey', 'lighten-2');
         font-size: 2rem;
         color: color('grey', 'lighten-1');
+
+        &.drag-active {
+          border: 2px solid color('grey', 'darken-4');
+          color: color('grey', 'darken-4');
+
+          &.draggable-over {
+            background-color: color("teal", "base");
+            color: $logo-container-background;
+          }
+        }
       }
 
       .edit-item {
@@ -103,18 +159,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: all-scroll;
-  }
-}
-
-body.drag-active {
-  .rfe-classes {
-    .classes-list {
-      .class-item {
-        .add-new-area {
-          border: 2px solid color('grey', 'darken-4');
-          color: color('grey', 'darken-4');
-        }
-      }
-    }
+    background-color: #fff;
+    border-radius: 4px;
   }
 }
