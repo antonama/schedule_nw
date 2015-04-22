@@ -15,10 +15,13 @@ var sources = {
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [
         "bower_components/jquery/dist/jquery.js",
+        "bower_components/jquery-ui/jquery-ui.js",
         "bower_components/materialize/bin/materialize.js",
         "bower_components/iscroll/build/iscroll.js",
         "bower_components/fuse/src/fuse.min.js",
         "bower_components/angular/angular.js",
+        "bower_components/checklist-model/checklist-model.js",
+        "bower_components/angular-dragdrop/src/angular-dragdrop.js",
         "bower_components/angular-ui-router/release/angular-ui-router.js",
         "bower_components/angular-loading-bar/build/loading-bar.js"
     ],

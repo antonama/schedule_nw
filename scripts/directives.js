@@ -35,33 +35,24 @@ angular.module("editor")
                 fadeScrollbars: true,
                 interactiveScrollbars: true,
                 bounce: false,
-                disableMouse: true,
-                keyBindings: {
-                    pageUp: 33,
-                    pageDown: 34,
-                    end: 35,
-                    home: 36,
-                    left: 37,
-                    up: 38,
-                    right: 39,
-                    down: 40
-                }
+                disableMouse: true
             });
             iScrolls.set("contentIScroll", contentIscroll);
         }
     })
 
-.directive("fuzzyStaff", function (rfeStaff) {
-        var fuse;
-
+.directive("fuzzy", function ($document, $parse) {
         return {
             restrict: "A",
             scope: {
-                fuzzyStaff: "=",
+                fuzzy: "=",
                 originalItems: "=",
-                ngModel: "="
+                ngModel: "=",
+                keys: "@"
             },
             link: function (scope, elem, attrs) {
+                var fuse;
+
                 elem.attr("disabled", "");
 
                 var unwatch = scope.$watch("originalItems", function (newValue) {
@@ -71,17 +62,25 @@ angular.module("editor")
                         elem.removeAttr("disabled");
 
                         fuse = new Fuse(scope.originalItems, {
-                            keys: ["name.full"],
+                            keys: $parse(scope.keys)(),
                             threshold: 0.4
                         });
 
                         scope.$watch("ngModel", function (newValue) {
                             if (newValue && fuse) {
-                                scope.fuzzyStaff = fuse.search(elem.val());
+                                scope.fuzzy = fuse.search(elem.val());
                             } else {
-                                scope.fuzzyStaff = scope.originalItems;
+                                scope.fuzzy = scope.originalItems;
                             }
                         });
+
+                        $($document).keyup(function (e) {
+                            // esc
+                            if (e.keyCode == 27) {
+                                scope.ngModel = "";
+                                scope.$apply();
+                            }
+                        })
                     }
                 });
             }

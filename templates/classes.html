@@ -1,8 +1,47 @@
 <div class="rfe-classes">
 
+    <div class="input-field">
+        <input id="classFind" type="text"
+               fuzzy="filteredClassItems"
+               original-items="classItems"
+               ng-model="searchExpr"
+               keys="{{['title', 'lecturers.name.full']}}"
+               ng-disabled="newItemIsShown"/>
+        <label for="classFind">Предмет</label>
+    </div>
+
     <div class="classes-list row">
 
-        <div ng-repeat="class in classItems" class="col s12 m12 l6">
+        <div class="col s12 m12 l12" ng-show="newItemIsShown">
+            <div class="class-item">
+                <div class="future-item-title input-field">
+                    <input id="classTitle" type="text" ng-model="newClassItem.title">{{class.title}}</input>
+                    <label for="classTitle">Название предмета</label>
+                </div>
+                <div class="available-class-types">
+                    <div class="class-type" ng-repeat="type in availableClassTypes">
+                        <input type="checkbox" id="class-type-{{type}}"
+                               checklist-model="newClassItem.types"
+                               checklist-value="type"/>
+                        <label for="class-type-{{type}}">{{type}}</label>
+                    </div>
+                </div>
+                <ul class="future-class-lecturers collection" ng-show="!!newClassItem.lecturers.length">
+                    <li class="lecturer collection-item avatar" ng-repeat="lecturer in newClassItem.lecturers">
+                        <img ng-src="{{lecturer.avatar}}" class="circle">
+                        <p>{{lecturer.name.surname + " " + lecturer.name.initials}}</p>
+                    </li>
+                </ul>
+                <div class="add-new-area center-align"
+                     data-drop="true"
+                     jqyoui-droppable="{onDrop: 'onDrop'}"
+                     ng-model="lecturer">
+                    <i class="mdi-content-add"></i>
+                </div>
+            </div>
+        </div>
+
+        <div ng-repeat="class in filteredClassItems" class="col s12 m12 l12">
             <div class="class-item">
                 <div class="item-title valign-wrapper">
                     <span class="valign">{{class.title}}</span>
@@ -14,20 +53,24 @@
                 </div>
                 <ul class="class-lecturers collection">
                     <li class="lecturer collection-item avatar" ng-repeat="lecturer in class.lecturers" >
-                        <img src="http://png-4.findicons.com/files/icons/1072/face_avatars/300/i03.png" class="circle">
+                        <img ng-src="{{lecturer.avatar}}" class="circle">
                         <p>{{lecturer.name.full}}</p>
                     </li>
                 </ul>
-                <div class="add-new-area center-align">
-                    <i class="mdi-content-add"></i>
-                </div>
             </div>
         </div>
     </div>
 
+    <a class="add-button btn-floating waves-effect waves-light" ng-click="newItemIsShown = true" ng-show="!newItemIsShown">
+        <i class="mdi-content-add"></i>
+    </a>
 
-    <!--<div class="add-button waves-effect valign-wrapper">-->
-        <!--<i class="mdi-content-add-circle-outline"></i>-->
-        <!--<span>Add class</span>-->
-    <!--</div>-->
+    <a class="cancel-button btn-floating waves-effect waves-light" ng-click="clearItem({show: false})" ng-show="newItemIsShown">
+        <i class="mdi-navigation-close"></i>
+    </a>
+
+    <a class="save-button btn-floating waves-effect waves-light" ng-click="saveItem()" ng-show="newItemIsShown">
+        <i class="mdi-navigation-check"></i>
+    </a>
+
 </div>

@@ -8003,21 +8003,28 @@ header {
   .content .circular-image {
     width: 75px;
     height: 75px;
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
-    -ms-border-radius: 150px;
-    -o-border-radius: 150px;
     border-radius: 150px; }
   .content .circular-image img {
     opacity: 0;
     filter: alpha(opacity=0); }
 
+.rfe-classes .input-field {
+  padding: 0 150px 0 10px; }
 .rfe-classes .classes-list .class-item {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   margin-top: 15px;
   position: relative;
   overflow: hidden; }
+  .rfe-classes .classes-list .class-item .future-item-title {
+    margin-top: 1.2rem;
+    padding: 0 10px;
+    font-weight: bold; }
+  .rfe-classes .classes-list .class-item .future-class-lecturers {
+    border: none;
+    border-top: 1px solid #e0e0e0; }
+  .rfe-classes .classes-list .class-item .available-class-types {
+    padding: 0 10px 10px 10px; }
   .rfe-classes .classes-list .class-item .item-title {
     padding: 10px 10px 0 10px;
     font-weight: bold;
@@ -8043,21 +8050,30 @@ header {
     bottom: 5px;
     right: 5px; }
 .rfe-classes .add-button {
-  height: 75px;
-  line-height: 55px;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 2rem;
-  border-top: 1px solid #e0e0e0;
-  border-left: 1px solid #e0e0e0;
-  background-color: #fff;
-  cursor: pointer; }
+  top: 10px;
+  right: 10px; }
+.rfe-classes .cancel-button {
+  position: fixed;
+  top: 10px;
+  right: 60px; }
+.rfe-classes .save-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
 
 .staff-list {
   padding: 0 10px 10px 10px; }
   .staff-list .input-field label {
     left: 0; }
+  .staff-list li {
+    padding: 0.5rem;
+    border-bottom: 1px solid #bdbdbd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: all-scroll; }
+
+body.drag-active .rfe-classes .classes-list .class-item .add-new-area {
+  border: 2px solid #212121;
+  color: #212121; }

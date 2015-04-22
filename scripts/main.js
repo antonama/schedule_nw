@@ -1,4 +1,6 @@
 angular.module("editor", [
     "ui.router",
-    "cfp.loadingBar"
+    "cfp.loadingBar",
+    "checklist-model",
+    "ngDragDrop"
 ]);

@@ -42,41 +42,65 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/classes.html",
-                controller: function ($scope, rfeStaff, cfpLoadingBar) {
+                controller: function ($scope, $timeout, iScrolls, rfeClasses) {
 
-                    $scope.classItems = [
-                        {
-                            title: "Simple title",
-                            types: ["lecture", "laboratory", "practic"],
-                            lecturers: [{
-                                name: {
-                                    full: "Vorotnisky Yuri Iosifovich"
-                                }
-                            },{
-                                name: {
-                                    full: "Molofeev Dmitry Vladimirovich"
-                                }
-                            }]
-                        },
-                        {
-                            title: "Simple title, but more length",
-                            types: ["lecture", "practic"],
-                            lecturers: [{
-                                name: {
-                                    full: "Molofeev Dmitry Vladimirovich"
-                                }
-                            }]
-                        },
-                        {
-                            title: "Very long title, because some classes has it and I can't do anything about it",
-                            types: ["practic"],
-                            lecturers: [{
-                                name: {
-                                    full: "Vorotnisky Yuri Iosifovich"
-                                }
-                            }]
+                    $scope.$watch("newItemIsShown", function () {
+                        if (iScrolls.get("contentIScroll")) {
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                            }, 250);
                         }
-                    ]
+                    });
+
+                    $scope.clearItem = function (options) {
+                        options.show ? $scope.newItemIsShown = true : $scope.newItemIsShown = false;
+
+                        $scope.newClassItem = {
+                            title: "",
+                            types: [],
+                            lecturers: []
+                        };
+                    };
+
+                    $scope.clearItem({
+                        show: false
+                    });
+
+                    $scope.saveItem = function () {
+                        rfeClasses.save($scope.newClassItem).then(function () {
+                            $scope.clearItem({
+                                show: true
+                            });
+                        }, function () {
+                            console.log("error")
+                        }).finally(function () {
+                            update();
+                        })
+                    };
+
+                    $scope.availableClassTypes = ["lecture", "laboratory", "practic", "seminar"];
+
+                    function update() {
+                        rfeClasses.getAll().then(function (classes) {
+                            $scope.classItems = classes;
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                            }, 250);
+                            $scope.$applyAsync();
+                        });
+                    }
+
+                    update();
+
+                    $scope.filteredClassItems = $scope.classItems;
+                    $scope.searchExpr = "";
+
+                    $scope.onDrop = function () {
+                        $scope.newClassItem.lecturers.push($scope.lecturer);
+                        $timeout(function () {
+                            iScrolls.get("contentIScroll").refresh();
+                        }, 250);
+                    }
                 }
             },
             "asideView@main": {
@@ -95,6 +119,14 @@ angular.module('editor')
                     });
 
                     $scope.searchExpr = "";
+
+                    $scope.onStartDragging = function () {
+                        $("body").addClass("drag-active");
+                    };
+
+                    $scope.onStopDragging = function () {
+                        $("body").removeClass("drag-active");
+                    };
                 }
             }
         }

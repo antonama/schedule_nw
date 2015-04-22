@@ -35,7 +35,7 @@
                 isLoading: function () {
                     return loading;
                 },
-                add: function (item) {
+                save: function (item) {
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {

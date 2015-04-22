@@ -6,7 +6,9 @@
     "toolbar": true,
     "frame": true,
     "width": 800,
+    "min_width": 600,
     "height": 500,
+    "min-width": 600,
     "position": "center"
   },
   "dependencies": {
