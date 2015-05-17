@@ -8198,3 +8198,26 @@ header {
     cursor: all-scroll;
     background-color: #fff;
     border-radius: 4px; }
+
+.rfe-groups {
+  padding: 10px; }
+  .rfe-groups .add-group {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    position: relative; }
+    .rfe-groups .add-group .input-field label {
+      left: 0; }
+    .rfe-groups .add-group .add-button {
+      position: absolute;
+      bottom: 50%;
+      right: 0;
+      transform: translate(0, 50%); }
+
+.rfe-classes.classes-aside .input-field {
+  padding: 0 10px !important; }
+.rfe-classes.classes-aside .classes-list .class-item .class-lecturers .lecturer {
+  white-space: nowrap;
+  overflow: hidden; }
+  .rfe-classes.classes-aside .classes-list .class-item .class-lecturers .lecturer .lecturer-name {
+    position: static;
+    margin: 0; }

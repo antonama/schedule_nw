@@ -1,3 +1,29 @@
-<div>
-    Groups
+<div class="rfe-groups">
+
+    <form class="add-group row" ng-submit="saveItem()">
+        <div class="col s4 m4 l4">
+            <div class="input-field">
+                <input id="group-title" type="text" ng-model="newGroupItem.title"/>
+                <label for="group-title">Number</label>
+            </div>
+        </div>
+        <div class="col s6 m6 l6">
+            <div class="input-field">
+                <input id="group-year" type="text" ng-model="newGroupItem.year"/>
+                <label for="group-year">Year</label>
+            </div>
+        </div>
+        <div class="col s2 m2 l2 add-button">
+            <button type="submit" class="btn-floating waves-effect waves-light right">
+                <i class="mdi-content-add"></i>
+            </button>
+        </div>
+    </form>
+
+    <ul ng-repeat="year in years | orderBy: 'number'">
+        <span>{{year.number}}:</span>
+        <li ng-repeat="group in year.groups | orderBy: 'title'">
+            {{group.title}}
+        </li>
+    </ul>
 </div>

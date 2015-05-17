@@ -70,7 +70,91 @@ angular.module('editor')
         url: "/groups",
         views: {
             "": {
-                templateUrl: "templates/groups.html"
+                templateUrl: "templates/groups.html",
+                controller: function ($scope, $timeout, rfeGroups, cfpLoadingBar, iScrolls) {
+                    cfpLoadingBar.start();
+
+                    $scope.newGroupItem = {
+                        title: '',
+                        year: ''
+                    };
+
+                    $scope.saveItem = function () {
+                        rfeGroups.save($scope.newGroupItem).then(function () {
+                            update();
+                            //clearItem({saveAddress: true});
+                        })
+                    };
+
+                    function update () {
+                        rfeGroups.getYears().then(function (years) {
+                            $scope.years = years;
+                            cfpLoadingBar.complete();
+
+                            $timeout(function () {
+                                iScrolls.get("contentIScroll").refresh();
+                                cfpLoadingBar.complete();
+                            }, 500);
+                        });
+                    }
+
+                    update();
+                }
+            }
+        }
+    });
+
+    $stateProvider.state("main.schedule", {
+        url: "/schedule",
+        views: {
+            "": {
+                templateUrl: "templates/schedule.html",
+                controller: function ($scope, cfpLoadingBar, rfeGroups, rfeSchedule) {
+                    cfpLoadingBar.start();
+
+                    $scope.changeGroups = function (year) {
+                        return rfeGroups.getGroupsForYear(year).then(function (groups) {
+                            $scope.groups = groups.sort(function (a, b) {
+                                return a.title > b.title ? 1 : -1
+                            });
+                            $scope.selectedGroup = $scope.groups[0];
+                        });
+                    };
+
+                    $scope.downloadSchedule = function () {
+                        console.log(1);
+                    };
+
+                    rfeGroups.getYears().then(function (years) {
+                        $scope.years = years.sort(function (a, b) {
+                            return a.number - b.number
+                        });
+                        $scope.selectedYear = years[0];
+                        $scope.changeGroups($scope.selectedYear).then(function () {
+                            cfpLoadingBar.complete();
+                        });
+                    });
+                }
+            },
+            "asideView@main": {
+                templateUrl: "templates/asideClasses.html",
+                controller: function ($scope, $timeout, rfeClasses, iScrolls) {
+                    rfeClasses.getAll().then(function (classes) {
+                        $scope.classItems = classes;
+
+                        $timeout(function () {
+                            iScrolls.get("asideIScroll").refresh();
+                        }, 500);
+                    });
+
+                    $scope.$watch("searchExpr", function () {
+                        if (iScrolls.get("asideIScroll")) {
+                            $timeout(function () {
+                                iScrolls.get("asideIScroll").refresh();
+                            }, 250);
+                        }
+                    });
+                }
             }
         }
     });

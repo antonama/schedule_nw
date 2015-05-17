@@ -1,0 +1,23 @@
+.rfe-classes {
+  &.classes-aside {
+    .input-field {
+      padding: 0 10px !important;
+    }
+
+    .classes-list {
+      .class-item {
+        .class-lecturers {
+          .lecturer {
+            white-space: nowrap;
+            overflow: hidden;
+
+            .lecturer-name {
+              position: static;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

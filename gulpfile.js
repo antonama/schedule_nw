@@ -7,12 +7,16 @@ var sources = {
     scss: "scss/**/*.scss",
     serverJs: [
         "node_scripts/requires.js",
-        "node_scripts/staffSchema.js",
-        "node_scripts/classSchema.js",
-        "node_scripts/roomSchema.js",
+        "node_scripts/schemas/staffSchema.js",
+        "node_scripts/schemas/classSchema.js",
+        "node_scripts/schemas/roomSchema.js",
+        "node_scripts/schemas/groupSchema.js",
+        "node_scripts/schemas/scheduleSchema.js",
         "node_scripts/rfeStaff.js",
         "node_scripts/rfeClasses.js",
-        "node_scripts/rfeRooms.js"
+        "node_scripts/rfeRooms.js",
+        "node_scripts/rfeGroups.js",
+        "node_scripts/rfeSchedule.js"
     ],
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [
