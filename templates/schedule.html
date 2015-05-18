@@ -13,5 +13,15 @@
                     ng-change="downloadSchedule()"></select>
         </div>
     </div>
+
+    <div class="container">
+        <div ng-repeat="day in schedule" class="day">
+            <span class="title">{{moment().day($index + 1).format('dddd')}}</span>
+            <div ng-repeat="class in day">
+                <span>{{class.title}} {{$index}}</span>
+            </div>
+            <button ng-click="addItem(day)">Add</button>
+        </div>
+    </div>
 </div>
 

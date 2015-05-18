@@ -17,15 +17,21 @@
 
             return {
                 getGroupSchedule: function (year, groupTitle) {
-                    Schedule.find({
-                        group: {
-                            year: year,
-                            title: groupTitle
-                        }
-                    }, function (err, found) {
-                        console.log(found.toObject());
-                        loading = false;
-                    })
+                    var deferred = $q.defer();
+                    //var schedule = [];
+                    dbDeferred.promise.then(function () {
+                        Schedule.find({
+                            group: {
+                                year: year,
+                                title: groupTitle
+                            }
+                        }, function (err, found) {
+                            deferred.resolve(found);
+                            loading = false;
+                        })
+                    });
+
+                    return deferred.promise;
                 },
                 save: function (item) {
                     var dbItemDeferred = $q.defer();

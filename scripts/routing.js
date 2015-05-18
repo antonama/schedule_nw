@@ -109,8 +109,11 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/schedule.html",
-                controller: function ($scope, cfpLoadingBar, rfeGroups, rfeSchedule) {
+                controller: function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, iScrolls) {
                     cfpLoadingBar.start();
+
+                    var daysInWeek = 6;
+                    $scope.moment = moment;
 
                     $scope.changeGroups = function (year) {
                         return rfeGroups.getGroupsForYear(year).then(function (groups) {
@@ -118,11 +121,34 @@ angular.module('editor')
                                 return a.title > b.title ? 1 : -1
                             });
                             $scope.selectedGroup = $scope.groups[0];
+                            $scope.downloadSchedule($scope.selectedYear, $scope.selectedGroup);
                         });
                     };
 
-                    $scope.downloadSchedule = function () {
-                        console.log(1);
+                    $scope.downloadSchedule = function (year, group) {
+                        $scope.schedule = [];
+                        for (var i = 0; i < daysInWeek; i++) {
+                            $scope.schedule[i] = [];
+                        }
+
+                        rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
+                            schedule.forEach(function (day, index) {
+                                $scope.schedule[index] = day.filter(function (item, itemIndex) {
+                                    return index === itemIndex;
+                                }).pop();
+                            });
+                            $scope.schedule.forEach(function (item, index, array) {
+                                array[index].push({});
+                            });
+                        });
+                    };
+
+                    $scope.addItem = function (day) {
+                        day.push({});
+                        $timeout(function () {
+                            iScrolls.get("contentIScroll").refresh();
+                            cfpLoadingBar.complete();
+                        }, 500);
                     };
 
                     rfeGroups.getYears().then(function (years) {
