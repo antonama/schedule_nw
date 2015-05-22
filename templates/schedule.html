@@ -2,13 +2,13 @@
     <div class="row">
         <div class="input-field col s6">
             <select ng-model="selectedYear"
-                    ng-options="year.number for year in years"
+                    ng-options="year.number + ' year' for year in years"
                     class="browser-default"
                     ng-change="changeGroups(selectedYear)"></select>
         </div>
         <div class="input-field col s6">
             <select ng-model="selectedGroup"
-                    ng-options="group.title for group in groups"
+                    ng-options="'Group ' + group.title for group in groups"
                     class="browser-default"
                     ng-change="downloadSchedule()"></select>
         </div>

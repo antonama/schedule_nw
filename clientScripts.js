@@ -139,37 +139,7 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/staff.html",
-                controller: function ($scope, $timeout, iScrolls, rfeStaff, cfpLoadingBar) {
-                    cfpLoadingBar.start();
-
-                    $scope.deleteItem = function (person) {
-                        rfeStaff.delete(person).then(function () {
-                            update();
-                        });
-                    };
-
-                    function update () {
-                        rfeStaff.getAll().then(function (staff) {
-                            $scope.filteredStaffItems = staff;
-                            $scope.staffItems = staff;
-
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                                cfpLoadingBar.complete();
-                            }, 500);
-                        });
-                    }
-
-                    update();
-                    $scope.searchExpr = "";
-                    $scope.$watch("searchExpr", function () {
-                        if (iScrolls.get("contentIScroll")) {
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                            }, 250);
-                        }
-                    });
-                }
+                controller: "StaffCtrl"
             }
         }
     });
@@ -179,35 +149,7 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/groups.html",
-                controller: function ($scope, $timeout, rfeGroups, cfpLoadingBar, iScrolls) {
-                    cfpLoadingBar.start();
-
-                    $scope.newGroupItem = {
-                        title: '',
-                        year: ''
-                    };
-
-                    $scope.saveItem = function () {
-                        rfeGroups.save($scope.newGroupItem).then(function () {
-                            update();
-                           
-                        })
-                    };
-
-                    function update () {
-                        rfeGroups.getYears().then(function (years) {
-                            $scope.years = years;
-                            cfpLoadingBar.complete();
-
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                                cfpLoadingBar.complete();
-                            }, 500);
-                        });
-                    }
-
-                    update();
-                }
+                controller: "GroupsCtrl"
             }
         }
     });
@@ -217,78 +159,11 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/schedule.html",
-                controller: function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, iScrolls) {
-                    cfpLoadingBar.start();
-
-                    var daysInWeek = 6;
-                    $scope.moment = moment;
-
-                    $scope.changeGroups = function (year) {
-                        return rfeGroups.getGroupsForYear(year).then(function (groups) {
-                            $scope.groups = groups.sort(function (a, b) {
-                                return a.title > b.title ? 1 : -1
-                            });
-                            $scope.selectedGroup = $scope.groups[0];
-                            $scope.downloadSchedule($scope.selectedYear, $scope.selectedGroup);
-                        });
-                    };
-
-                    $scope.downloadSchedule = function (year, group) {
-                        $scope.schedule = [];
-                        for (var i = 0; i < daysInWeek; i++) {
-                            $scope.schedule[i] = [];
-                        }
-
-                        rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
-                            schedule.forEach(function (day, index) {
-                                $scope.schedule[index] = day.filter(function (item, itemIndex) {
-                                    return index === itemIndex;
-                                }).pop();
-                            });
-                            $scope.schedule.forEach(function (item, index, array) {
-                                array[index].push({});
-                            });
-                        });
-                    };
-
-                    $scope.addItem = function (day) {
-                        day.push({});
-                        $timeout(function () {
-                            iScrolls.get("contentIScroll").refresh();
-                            cfpLoadingBar.complete();
-                        }, 500);
-                    };
-
-                    rfeGroups.getYears().then(function (years) {
-                        $scope.years = years.sort(function (a, b) {
-                            return a.number - b.number
-                        });
-                        $scope.selectedYear = years[0];
-                        $scope.changeGroups($scope.selectedYear).then(function () {
-                            cfpLoadingBar.complete();
-                        });
-                    });
-                }
+                controller: "ScheduleCtrl"
             },
             "asideView@main": {
                 templateUrl: "templates/asideClasses.html",
-                controller: function ($scope, $timeout, rfeClasses, iScrolls) {
-                    rfeClasses.getAll().then(function (classes) {
-                        $scope.classItems = classes;
-
-                        $timeout(function () {
-                            iScrolls.get("asideIScroll").refresh();
-                        }, 500);
-                    });
-
-                    $scope.$watch("searchExpr", function () {
-                        if (iScrolls.get("asideIScroll")) {
-                            $timeout(function () {
-                                iScrolls.get("asideIScroll").refresh();
-                            }, 250);
-                        }
-                    });
-                }
+                controller: "AsideClassesCtrl"
             }
         }
     });
@@ -298,38 +173,7 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/rooms.html",
-                controller: function ($scope, rfeRooms, cfpLoadingBar) {
-                    cfpLoadingBar.start();
-
-                    $scope.saveItem = function () {
-                        rfeRooms.save($scope.newRoomItem).then(function () {
-                            update();
-                            clearItem({saveAddress: true});
-                        })
-                    };
-
-                    function update () {
-                        rfeRooms.getAll().then(function (rooms) {
-                            $scope.rooms = rooms;
-                            cfpLoadingBar.complete();
-                        });
-                    }
-
-                    function clearItem(options) {
-                        options.saveAddress ?
-                        $scope.newRoomItem = {
-                            title: "",
-                            address: $scope.newRoomItem.address
-                        } :
-                        $scope.newRoomItem = {
-                            title: "",
-                            address: ""
-                        }
-                    }
-
-                    update();
-                    clearItem({});
-                }
+                controller: "RoomsCtrl"
             }
         }
     });
@@ -339,104 +183,24 @@ angular.module('editor')
         views: {
             "": {
                 templateUrl: "templates/classes.html",
-                controller: function ($scope, $timeout, iScrolls, rfeClasses) {
-
-                    $scope.$watch("newItemIsShown", function () {
-                        if (iScrolls.get("contentIScroll")) {
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                            }, 250);
-                        }
-                    });
-
-                    $scope.$watch("searchExpr", function () {
-                        if (iScrolls.get("contentIScroll")) {
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                            }, 250);
-                        }
-                    });
-
-                    $scope.clearItem = function (options) {
-                        options.show ? $scope.newItemIsShown = true : $scope.newItemIsShown = false;
-
-                        $scope.newClassItem = {
-                            title: "",
-                            types: [],
-                            lecturers: []
-                        };
-                    };
-
-                    $scope.clearItem({
-                        show: false
-                    });
-
-                    $scope.saveItem = function () {
-                        rfeClasses.save($scope.newClassItem).then(function () {
-                            $scope.clearItem({
-                                show: true
-                            });
-                        }, function () {
-                            console.log("error")
-                        }).finally(function () {
-                            update();
-                        })
-                    };
-
-                    $scope.availableClassTypes = ["lecture", "laboratory", "practic", "seminar"];
-
-                    function update() {
-                        rfeClasses.getAll().then(function (classes) {
-                            $scope.classItems = classes;
-                            $scope.filteredClassItems = classes;
-
-                            $timeout(function () {
-                                iScrolls.get("contentIScroll").refresh();
-                            }, 250);
-                            $scope.$applyAsync();
-                        });
-                    }
-
-                    update();
-
-                    $scope.searchExpr = "";
-
-                    $scope.onDrop = function () {
-                        $scope.newClassItem.lecturers.push($scope.lecturer);
-                        $timeout(function () {
-                            iScrolls.get("contentIScroll").refresh();
-                        }, 250);
-                    };
-                }
+                controller: "ClassesCtrl"
             },
             "asideView@main": {
                 templateUrl: "templates/lecturersList.html",
-                controller: function ($scope, $timeout, iScrolls, cfpLoadingBar, rfeStaff) {
-                    cfpLoadingBar.start();
-
-                    rfeStaff.getAll().then(function (staff) {
-                        $scope.staffItems = staff;
-                        $scope.filteredStaffItems = staff;
-
-                        $timeout(function () {
-                            iScrolls.get("asideIScroll").refresh();
-                            cfpLoadingBar.complete();
-                        }, 500);
-                    });
-
-                    $scope.searchExpr = "";
-
-                    $scope.$watch("searchExpr", function () {
-                        if (iScrolls.get("asideIScroll")) {
-                            $timeout(function () {
-                                iScrolls.get("asideIScroll").refresh();
-                            }, 250);
-                        }
-                    });
-                }
+                controller: "AsideLecturersCtrl"
             }
         }
     });
+
+    $stateProvider.state("main.settings", {
+            url: "/settings",
+            views: {
+                "": {
+                    templateUrl: "templates/settings.html",
+                    controller: "SettingsCtrl"
+                }
+            }
+        });
 });
 
 
@@ -510,6 +274,352 @@ angular.module("editor").service("iScrolls", function () {
                     forwardClicked = true;
                 }
             }
+        });
+    });
+
+
+angular.module("editor")
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, iScrolls) {
+        rfeClasses.getAll().then(function (classes) {
+            $scope.classItems = classes;
+
+            $timeout(function () {
+                iScrolls.get("asideIScroll").refresh();
+            }, 500);
+        });
+
+        $scope.$watch("searchExpr", function () {
+            if (iScrolls.get("asideIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("asideIScroll").refresh();
+                }, 250);
+            }
+        });
+    });
+
+
+angular.module("editor")
+    .controller("AsideLecturersCtrl", function ($scope, $timeout, iScrolls, cfpLoadingBar, rfeStaff) {
+        cfpLoadingBar.start();
+
+        rfeStaff.getAll().then(function (staff) {
+            $scope.staffItems = staff;
+            $scope.filteredStaffItems = staff;
+
+            $timeout(function () {
+                iScrolls.get("asideIScroll").refresh();
+                cfpLoadingBar.complete();
+            }, 500);
+        });
+
+        $scope.searchExpr = "";
+
+        $scope.$watch("searchExpr", function () {
+            if (iScrolls.get("asideIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("asideIScroll").refresh();
+                }, 250);
+            }
+        });
+    });
+
+
+angular.module("editor")
+    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses) {
+
+        $scope.$watch("newItemIsShown", function () {
+            if (iScrolls.get("contentIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            }
+        });
+
+        $scope.$watch("searchExpr", function () {
+            if (iScrolls.get("contentIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            }
+        });
+
+        $scope.clearItem = function (options) {
+            options.show ? $scope.newItemIsShown = true : $scope.newItemIsShown = false;
+
+            $scope.newClassItem = {
+                title: "",
+                types: [],
+                lecturers: []
+            };
+        };
+
+        $scope.clearItem({
+            show: false
+        });
+
+        $scope.saveItem = function () {
+            rfeClasses.save($scope.newClassItem).then(function () {
+                $scope.clearItem({
+                    show: true
+                });
+            }, function () {
+                console.log("error")
+            }).finally(function () {
+                update();
+            })
+        };
+
+        $scope.availableClassTypes = ["lecture", "laboratory", "practic", "seminar"];
+
+        function update() {
+            rfeClasses.getAll().then(function (classes) {
+                $scope.classItems = classes;
+                $scope.filteredClassItems = classes;
+
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+                $scope.$applyAsync();
+            });
+        }
+
+        update();
+
+        $scope.searchExpr = "";
+
+        $scope.onDrop = function () {
+            $scope.newClassItem.lecturers.push($scope.lecturer);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
+        };
+    });
+
+
+angular.module("editor")
+    .controller("GroupsCtrl", function ($scope, $timeout, rfeGroups, cfpLoadingBar, iScrolls) {
+        cfpLoadingBar.start();
+
+        $scope.newGroupItem = {
+            title: '',
+            year: ''
+        };
+
+        $scope.saveItem = function () {
+            rfeGroups.save($scope.newGroupItem).then(function () {
+                update();
+               
+            })
+        };
+
+        function update () {
+            rfeGroups.getYears().then(function (years) {
+                $scope.years = years;
+                cfpLoadingBar.complete();
+
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                    cfpLoadingBar.complete();
+                }, 500);
+            });
+        }
+
+        update();
+    });
+
+
+angular.module("editor")
+    .controller("RoomsCtrl", function ($scope, rfeRooms, cfpLoadingBar) {
+        cfpLoadingBar.start();
+
+        $scope.saveItem = function () {
+            rfeRooms.save($scope.newRoomItem).then(function () {
+                update();
+                clearItem({saveAddress: true});
+            })
+        };
+
+        function update () {
+            rfeRooms.getAll().then(function (rooms) {
+                $scope.rooms = rooms;
+                cfpLoadingBar.complete();
+            });
+        }
+
+        function clearItem(options) {
+            options.saveAddress ?
+                $scope.newRoomItem = {
+                    title: "",
+                    address: $scope.newRoomItem.address
+                } :
+                $scope.newRoomItem = {
+                    title: "",
+                    address: ""
+                }
+        }
+
+        update();
+        clearItem({});
+    });
+
+
+angular.module("editor")
+    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, iScrolls) {
+        cfpLoadingBar.start();
+
+        var daysInWeek = 6;
+        $scope.moment = moment;
+
+        $scope.changeGroups = function (year) {
+            return rfeGroups.getGroupsForYear(year).then(function (groups) {
+                $scope.groups = groups.sort(function (a, b) {
+                    return a.title > b.title ? 1 : -1
+                });
+                $scope.selectedGroup = $scope.groups[0];
+                $scope.downloadSchedule($scope.selectedYear, $scope.selectedGroup);
+            });
+        };
+
+        $scope.downloadSchedule = function (year, group) {
+            $scope.schedule = [];
+            for (var i = 0; i < daysInWeek; i++) {
+                $scope.schedule[i] = [];
+            }
+
+            rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
+                schedule.forEach(function (day, index) {
+                    $scope.schedule[index] = day.filter(function (item, itemIndex) {
+                        return index === itemIndex;
+                    }).pop();
+                });
+                $scope.schedule.forEach(function (item, index, array) {
+                    array[index].push({});
+                });
+            });
+        };
+
+        $scope.addItem = function (day) {
+            day.push({});
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+                cfpLoadingBar.complete();
+            }, 500);
+        };
+
+        rfeGroups.getYears().then(function (years) {
+            $scope.years = years.sort(function (a, b) {
+                return a.number - b.number
+            });
+            $scope.selectedYear = years[0];
+            $scope.changeGroups($scope.selectedYear).then(function () {
+                cfpLoadingBar.complete();
+            });
+        });
+    });
+
+
+angular.module("editor")
+    .controller("SettingsCtrl", function ($scope, rfeSettings, cfpLoadingBar) {
+        cfpLoadingBar.start();
+
+        $scope.saveItem = function (item) {
+            rfeSettings.save(item).then(function () {
+                update();
+            })
+        };
+
+        function update () {
+            rfeSettings.getAll().then(function (settings) {
+                $scope.settings = settings;
+                cfpLoadingBar.complete();
+            });
+        }
+
+        update();
+    })
+
+
+angular.module("editor")
+    .controller("StaffCtrl", function ($scope, $timeout, iScrolls, rfeStaff, cfpLoadingBar, rfeSettings) {
+        cfpLoadingBar.start();
+
+        $scope.deleteItem = function (person) {
+            rfeStaff.delete(person).then(function () {
+                update();
+            });
+        };
+
+        $scope.editItem = function (person) {
+            $scope.clearItem({
+                show: true
+            });
+            $scope.newStaffItem = angular.copy(person);
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+                cfpLoadingBar.complete();
+            }, 500);
+        };
+
+        function update () {
+            rfeStaff.getAll().then(function (staff) {
+                $scope.filteredStaffItems = staff;
+                $scope.staffItems = staff;
+
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                    cfpLoadingBar.complete();
+                }, 500);
+            });
+        }
+
+        update();
+        $scope.searchExpr = "";
+        $scope.$watch("searchExpr", function () {
+            if (iScrolls.get("contentIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            }
+        });
+
+        $scope.$watch("newItemIsShown", function () {
+            if (iScrolls.get("contentIScroll")) {
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            }
+        });
+
+        $scope.saveItem = function () {
+            rfeStaff.save($scope.newStaffItem).then(function () {
+                $scope.clearItem({
+                    show: false
+                });
+            }).finally(function () {
+                update();
+            })
+        };
+
+        $scope.clearItem = function (options) {
+            options.show ? $scope.newItemIsShown = true : $scope.newItemIsShown = false;
+
+            $scope.newStaffItem = {
+                name: {
+                    full: "",
+                    first: "",
+                    surname: "",
+                    patronymic: "",
+                    initials: ""
+                },
+                position: "",
+                rank: "",
+                avatar: ""
+            };
+        };
+
+        $scope.clearItem({
+            show: false
         });
     });
 

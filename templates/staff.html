@@ -1,14 +1,45 @@
 <div class="rfe-staff">
-    <div class="row staff-list">
 
-        <div class="input-field">
-            <input id="classFind" type="text"
-                   fuzzy="filteredStaffItems"
-                   original-items="staffItems"
-                   ng-model="searchExpr"
-                   keys="{{['name.full']}}"
-                   ng-disabled="newItemIsShown"/>
-            <label for="classFind">Lecturer</label>
+    <div class="input-field">
+        <input id="classFind" type="text"
+               fuzzy="filteredStaffItems"
+               original-items="staffItems"
+               ng-model="searchExpr"
+               keys="{{['name.full']}}"
+               ng-disabled="newItemIsShown"/>
+        <label for="classFind">Lecturer</label>
+    </div>
+
+    <div class="staff-list row">
+
+        <!--new class-->
+        <div class="col s12 m12 l12" ng-show="newItemIsShown">
+            <div class="class-item">
+                <div class="future-item-title input-field">
+                    <input placeholder="Surname" id="lecturerSurname" type="text" ng-model="newStaffItem.name.surname">
+                    <label class="active" for="lecturerSurname">Surname</label>
+                </div>
+                <div class="future-item-title input-field">
+                    <input placeholder="Name" id="lecturerFirstName" type="text" ng-model="newStaffItem.name.first">
+                    <label class="active" for="lecturerFirstName">Name</label>
+                </div>
+                <div class="future-item-title input-field">
+                    <input placeholder="Patronymic" id="lecturerPatronymic" type="text" ng-model="newStaffItem.name.patronymic">
+                    <label class="active" for="lecturerPatronymic">Patronymic</label>
+                </div>
+                <div class="future-item-title input-field">
+                    <input placeholder="Position" id="lecturerPosition" type="text" ng-model="newStaffItem.position">
+                    <label class="active" for="lecturerPosition">Position</label>
+                </div>
+                <div class="future-item-title input-field">
+                    <input placeholder="Rank" id="lecturerRank" type="text" ng-model="newStaffItem.rank">
+                    <label class="active" for="lecturerRank">Rank</label>
+                </div>
+                <div class="future-item-title input-field">
+                    <input placeholder="Avatar url" id="lecturerAvatar" type="text" ng-model="newStaffItem.avatar">
+                    <label class="active" for="lecturerAvatar">Avatar url</label>
+                </div>
+            </div>
         </div>
 
         <div ng-repeat="person in filteredStaffItems | orderBy: 'name.full'" class="col s12 m12 l6">
@@ -25,9 +56,22 @@
 
                 <div class="staff-edit-item">
                     <i class="mdi-action-delete" ng-click="deleteItem(person)"></i>
-                    <i class="mdi-editor-mode-edit"></i>
+                    <i class="mdi-editor-mode-edit" ng-click="editItem(person)"></i>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <a class="add-button btn-floating waves-effect waves-light" ng-click="newItemIsShown = true" ng-show="!newItemIsShown">
+        <i class="mdi-content-add"></i>
+    </a>
+
+    <a class="cancel-button btn-floating waves-effect waves-light" ng-click="clearItem({show: false})" ng-show="newItemIsShown">
+        <i class="mdi-navigation-close"></i>
+    </a>
+
+    <a class="save-button btn-floating waves-effect waves-light" ng-click="saveItem()" ng-show="newItemIsShown">
+        <i class="mdi-navigation-check"></i>
+    </a>
 </div>

@@ -8001,18 +8001,20 @@ header {
   bottom: 0;
   z-index: 50; }
 
-.staff-list > div:last-child {
+.rfe-staff .input-field {
+  padding: 0 150px 0 10px; }
+.rfe-staff .staff-list > div:last-child {
   margin-bottom: 25px; }
-.staff-list .staff-item {
+.rfe-staff .staff-list .staff-item {
   padding: 10px 10px 10px 95px;
   position: relative;
   min-height: 95px;
   margin: 10px 0 0 0;
   border: 1px solid #e0e0e0;
   border-radius: 8px; }
-  .staff-list .staff-item:hover .staff-edit-item {
+  .rfe-staff .staff-list .staff-item:hover .staff-edit-item {
     display: block; }
-  .staff-list .staff-item .staff-edit-item {
+  .rfe-staff .staff-list .staff-item .staff-edit-item {
     display: none;
     position: absolute;
     top: 0;
@@ -8023,7 +8025,7 @@ header {
     border: 5px solid #fff;
     border-radius: 8px;
     text-align: center; }
-    .staff-list .staff-item .staff-edit-item i {
+    .rfe-staff .staff-list .staff-item .staff-edit-item i {
       cursor: pointer;
       font-size: 2rem;
       border-radius: 50%;
@@ -8032,23 +8034,35 @@ header {
       margin-right: 10px;
       line-height: 85px;
       color: #fff; }
-      .staff-list .staff-item .staff-edit-item i:hover {
+      .rfe-staff .staff-list .staff-item .staff-edit-item i:hover {
         border: 3px solid #4db6ac;
         background-color: #4db6ac; }
-  .staff-list .staff-item .circular-image {
+  .rfe-staff .staff-list .staff-item .circular-image {
     width: 75px;
     height: 75px;
     border-radius: 150px;
     position: absolute;
     left: 10px;
     top: 10px; }
-    .staff-list .staff-item .circular-image img {
+    .rfe-staff .staff-list .staff-item .circular-image img {
       opacity: 0;
       filter: alpha(opacity=0); }
-  .staff-list .staff-item .person-name {
+  .rfe-staff .staff-list .staff-item .person-name {
     font-weight: bold; }
-  .staff-list .staff-item .person-rank {
+  .rfe-staff .staff-list .staff-item .person-rank {
     font-style: italic; }
+.rfe-staff .add-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
+.rfe-staff .cancel-button {
+  position: fixed;
+  top: 10px;
+  right: 60px; }
+.rfe-staff .save-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
 
 .main-menu {
   margin: 0; }
