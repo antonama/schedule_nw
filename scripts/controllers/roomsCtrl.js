@@ -3,13 +3,19 @@
  */
 
 angular.module("editor")
-    .controller("RoomsCtrl", function ($scope, rfeRooms, cfpLoadingBar) {
+    .controller("RoomsCtrl", function ($scope, rfeRooms, rfeSettings, cfpLoadingBar) {
         cfpLoadingBar.start();
 
         $scope.saveItem = function () {
             rfeRooms.save($scope.newRoomItem).then(function () {
                 update();
-                clearItem({saveAddress: true});
+                clearItem();
+            })
+        };
+
+        $scope.deleteItem = function (item) {
+            rfeRooms.delete(item).then(function () {
+                update();
             })
         };
 
@@ -20,17 +26,16 @@ angular.module("editor")
             });
         }
 
-        function clearItem(options) {
-            options.saveAddress ?
-                $scope.newRoomItem = {
-                    title: "",
-                    address: $scope.newRoomItem.address
-                } :
-                $scope.newRoomItem = {
-                    title: "",
-                    address: ""
-                }
+        function clearItem() {
+            $scope.newRoomItem = {
+                title: "",
+                types: []
+            }
         }
+
+        rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
+            $scope.availableRoomTypes = types.split(",");
+        });
 
         update();
         clearItem({});

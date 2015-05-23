@@ -6,17 +6,21 @@
     border-radius: 4px;
     position: relative;
 
-    .input-field {
-      label {
-        left: 0;
-      }
-    }
-
     .add-button {
       position: absolute;
-      bottom: 50%;
-      right: 0;
+      top: 0;
+      right: 10px;
       transform: translate(0,50%);
+    }
+
+    .input-field {
+      margin-top: 1.2rem;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+
+    .available-room-types {
+      padding: 0 10px 10px 10px;
     }
   }
   
@@ -32,6 +36,30 @@
       border: 1px solid color('grey', 'lighten-2');
       position: relative;
       cursor: default;
+
+      &:hover {
+        .room-edit-item {
+          display: block;
+        }
+      }
+
+      .room-edit-item {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+        border-radius: 50%;
+
+        i {
+          cursor: pointer;
+          font-size: 2rem;
+          color: #fff;
+        }
+      }
     }
   }
 }

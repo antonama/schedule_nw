@@ -3,10 +3,9 @@
  */
 
 angular.module("editor")
-    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, iScrolls) {
+    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, iScrolls) {
         cfpLoadingBar.start();
 
-        var daysInWeek = 6;
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
@@ -21,18 +20,23 @@ angular.module("editor")
 
         $scope.downloadSchedule = function (year, group) {
             $scope.schedule = [];
-            for (var i = 0; i < daysInWeek; i++) {
-                $scope.schedule[i] = [];
-            }
+            var daysInWeek = 6;
+            rfeSettings.getItemByUniqueId("maxClassesInDay").then(function (classesInDay) {
+                for (var i = 0; i < daysInWeek; i++) {
+                    $scope.schedule[i] = [];
+                }
 
-            rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
-                schedule.forEach(function (day, index) {
-                    $scope.schedule[index] = day.filter(function (item, itemIndex) {
-                        return index === itemIndex;
-                    }).pop();
-                });
-                $scope.schedule.forEach(function (item, index, array) {
-                    array[index].push({});
+                rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
+                    schedule.forEach(function (day, index) {
+                        $scope.schedule[index] = day.filter(function (item, itemIndex) {
+                            return index === itemIndex;
+                        }).pop();
+                    });
+                    $scope.schedule.forEach(function (item, index, array) {
+                        for (var i = 0; i < parseeInt(classesInDay, 10); classesInDay++) {
+                            array[index].push({});
+                        }
+                    });
                 });
             });
         };

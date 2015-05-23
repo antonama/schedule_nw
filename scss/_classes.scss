@@ -16,6 +16,41 @@
       position: relative;
       overflow: hidden;
 
+      &:hover {
+        .class-edit-item {
+          display: block;
+        }
+      }
+
+      .class-edit-item {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0,0,0,0.6);
+        border: 5px solid #fff;
+        border-radius: 8px;
+        text-align: center;
+
+        i {
+          cursor: pointer;
+          font-size: 2rem;
+          border-radius: 50%;
+          border: 3px solid #fff;
+          padding: 10px;
+          margin-right: 10px;
+          line-height: 85px;
+          color: #fff;
+
+          &:hover {
+            border: 3px solid color('teal', 'lighten-2');
+            background-color: color('teal', 'lighten-2');
+          }
+        }
+      }
+
       .future-item-title {
         margin-top: 1.2rem;
         padding: 0 10px;
@@ -47,6 +82,17 @@
             position: absolute;
             top: 0;
             left: 65px;
+          }
+        }
+
+        .remove-lecturer-from-class {
+          position: absolute;
+          cursor: pointer;
+          right: 20px;
+          top: 0;
+
+          i {
+            font-size: 2.5rem;
           }
         }
       }

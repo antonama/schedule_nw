@@ -12,6 +12,10 @@ angular.module("editor")
             })
         };
 
+        $scope.cancel = function () {
+            $scope.buttonsIsShown = false
+        };
+
         function update () {
             rfeSettings.getAll().then(function (settings) {
                 $scope.settings = settings;
@@ -20,4 +24,4 @@ angular.module("editor")
         }
 
         update();
-    })
+    });

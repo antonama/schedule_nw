@@ -1,9 +1,13 @@
 <div class="rfe-settings container">
     <div class="row">
         <ul>
-            <li ng-repeat="setting in settings">
+            <li ng-repeat="setting in settings | orderBy: 'title'" class="setting" ng-class="{'active': buttonsIsShown}">
                 <div>{{setting.title}}</div>
-                <input type="text" ng-model="setting.value"/>
+                <input type="text" ng-model="setting.value" ng-focus="buttonsIsShown = true"/>
+
+                <a class="save-button btn-floating waves-effect waves-light" ng-click="saveItem(setting)" ng-show="buttonsIsShown">
+                    <i class="mdi-navigation-check"></i>
+                </a>
             </li>
         </ul>
     </div>

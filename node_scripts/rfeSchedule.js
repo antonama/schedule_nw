@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds053139.mongolab.com:53139/schedule');
-    var dbDeferred = q.defer();
-    var Schedule;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Schedule = db.model("Schedule", scheduleSchema);
-    });
-
     angular.module("editor")
         .service("rfeSchedule", function ($q) {
             var loading = true;

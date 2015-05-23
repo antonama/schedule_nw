@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds031691.mongolab.com:31691/staff');
-    var dbDeferred = q.defer();
-    var Staff;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Staff = db.model("Staff", staffSchema);
-    });
-
     angular.module("editor")
         .service("rfeStaff", function ($q, rfeSettings) {
             var loading = true;

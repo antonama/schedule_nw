@@ -3,7 +3,7 @@
  */
 
 angular.module("editor")
-    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses) {
+    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeSettings) {
 
         $scope.$watch("newItemIsShown", function () {
             if (iScrolls.get("contentIScroll")) {
@@ -29,6 +29,8 @@ angular.module("editor")
                 types: [],
                 lecturers: []
             };
+
+            $scope.editingItem = false;
         };
 
         $scope.clearItem({
@@ -40,14 +42,14 @@ angular.module("editor")
                 $scope.clearItem({
                     show: true
                 });
-            }, function () {
-                console.log("error")
             }).finally(function () {
                 update();
             })
         };
 
-        $scope.availableClassTypes = ["lecture", "laboratory", "practic", "seminar"];
+        rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
+            $scope.availableClassTypes = types.split(",");
+        });
 
         function update() {
             rfeClasses.getAll().then(function (classes) {
@@ -70,5 +72,27 @@ angular.module("editor")
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
+        };
+
+        $scope.deleteItem = function (item) {
+            rfeClasses.delete(item).then(function () {
+                update();
+            })
+        };
+
+        $scope.editItem = function (classItem) {
+            $scope.clearItem({
+                show: true
+            });
+            $scope.editingItem = true;
+            $scope.newClassItem = angular.copy(classItem);
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 500);
+        };
+
+        $scope.deleteLecturerFromClass = function (lecturer, $index) {
+            $scope.newClassItem.lecturers.splice($index, 1);
         };
     });

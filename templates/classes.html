@@ -17,7 +17,7 @@
             <div class="class-item">
                 <div class="future-item-title input-field">
                     <input id="classTitle" type="text" ng-model="newClassItem.title">{{class.title}}</input>
-                    <label for="classTitle">Название предмета</label>
+                    <label ng-class="{'active': editingItem}" for="classTitle">Название предмета</label>
                 </div>
                 <div class="available-class-types">
                     <div class="class-type" ng-repeat="type in availableClassTypes">
@@ -35,6 +35,9 @@
                             <img ng-src="{{lecturer.avatar}}"/>
                         </div>
                         <p class="lecturer-name">{{lecturer.name.surname + " " + lecturer.name.initials}}</p>
+                        <span ng-click="deleteLecturerFromClass(lecturer, $index)" class="remove-lecturer-from-class">
+                            <i class="mdi-action-highlight-remove"></i>
+                        </span>
                     </li>
                 </ul>
                 <div class="add-new-area center-align"
@@ -68,6 +71,11 @@
                         <p class="lecturer-name">{{lecturer.name.full}}</p>
                     </li>
                 </ul>
+
+                <div class="class-edit-item">
+                    <i class="mdi-action-delete" ng-click="deleteItem(class)"></i>
+                    <i class="mdi-editor-mode-edit" ng-click="editItem(class)"></i>
+                </div>
             </div>
         </div>
     </div>

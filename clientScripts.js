@@ -94,18 +94,6 @@ angular.module("editor")
             }
         }
     });
-
-
-angular.module("editor")
-.controller("mainMenuCtrl", function ($scope, $state, $timeout, $rootScope, iScrolls) {
-        $scope.$state = $state;
-        $rootScope.$on("$stateChangeSuccess", function () {
-            iScrolls.get("asideIScroll").scrollTo(0, 0);
-            $timeout(function () {
-                iScrolls.get("asideIScroll").refresh();
-            }, 250)
-        });
-    });
 angular.module('editor')
 .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/home");
@@ -325,7 +313,7 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses) {
+    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeSettings) {
 
         $scope.$watch("newItemIsShown", function () {
             if (iScrolls.get("contentIScroll")) {
@@ -351,6 +339,8 @@ angular.module("editor")
                 types: [],
                 lecturers: []
             };
+
+            $scope.editingItem = false;
         };
 
         $scope.clearItem({
@@ -362,14 +352,14 @@ angular.module("editor")
                 $scope.clearItem({
                     show: true
                 });
-            }, function () {
-                console.log("error")
             }).finally(function () {
                 update();
             })
         };
 
-        $scope.availableClassTypes = ["lecture", "laboratory", "practic", "seminar"];
+        rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
+            $scope.availableClassTypes = types.split(",");
+        });
 
         function update() {
             rfeClasses.getAll().then(function (classes) {
@@ -392,6 +382,28 @@ angular.module("editor")
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
+        };
+
+        $scope.deleteItem = function (item) {
+            rfeClasses.delete(item).then(function () {
+                update();
+            })
+        };
+
+        $scope.editItem = function (classItem) {
+            $scope.clearItem({
+                show: true
+            });
+            $scope.editingItem = true;
+            $scope.newClassItem = angular.copy(classItem);
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 500);
+        };
+
+        $scope.deleteLecturerFromClass = function (lecturer, $index) {
+            $scope.newClassItem.lecturers.splice($index, 1);
         };
     });
 
@@ -429,13 +441,31 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("RoomsCtrl", function ($scope, rfeRooms, cfpLoadingBar) {
+.controller("mainMenuCtrl", function ($scope, $state, $timeout, $rootScope, iScrolls) {
+        $scope.$state = $state;
+        $rootScope.$on("$stateChangeSuccess", function () {
+            iScrolls.get("asideIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("asideIScroll").refresh();
+            }, 250)
+        });
+    });
+
+
+angular.module("editor")
+    .controller("RoomsCtrl", function ($scope, rfeRooms, rfeSettings, cfpLoadingBar) {
         cfpLoadingBar.start();
 
         $scope.saveItem = function () {
             rfeRooms.save($scope.newRoomItem).then(function () {
                 update();
-                clearItem({saveAddress: true});
+                clearItem();
+            })
+        };
+
+        $scope.deleteItem = function (item) {
+            rfeRooms.delete(item).then(function () {
+                update();
             })
         };
 
@@ -446,17 +476,16 @@ angular.module("editor")
             });
         }
 
-        function clearItem(options) {
-            options.saveAddress ?
-                $scope.newRoomItem = {
-                    title: "",
-                    address: $scope.newRoomItem.address
-                } :
-                $scope.newRoomItem = {
-                    title: "",
-                    address: ""
-                }
+        function clearItem() {
+            $scope.newRoomItem = {
+                title: "",
+                types: []
+            }
         }
+
+        rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
+            $scope.availableRoomTypes = types.split(",");
+        });
 
         update();
         clearItem({});
@@ -464,10 +493,9 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, iScrolls) {
+    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, iScrolls) {
         cfpLoadingBar.start();
 
-        var daysInWeek = 6;
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
@@ -482,18 +510,23 @@ angular.module("editor")
 
         $scope.downloadSchedule = function (year, group) {
             $scope.schedule = [];
-            for (var i = 0; i < daysInWeek; i++) {
-                $scope.schedule[i] = [];
-            }
+            var daysInWeek = 6;
+            rfeSettings.getItemByUniqueId("maxClassesInDay").then(function (classesInDay) {
+                for (var i = 0; i < daysInWeek; i++) {
+                    $scope.schedule[i] = [];
+                }
 
-            rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
-                schedule.forEach(function (day, index) {
-                    $scope.schedule[index] = day.filter(function (item, itemIndex) {
-                        return index === itemIndex;
-                    }).pop();
-                });
-                $scope.schedule.forEach(function (item, index, array) {
-                    array[index].push({});
+                rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
+                    schedule.forEach(function (day, index) {
+                        $scope.schedule[index] = day.filter(function (item, itemIndex) {
+                            return index === itemIndex;
+                        }).pop();
+                    });
+                    $scope.schedule.forEach(function (item, index, array) {
+                        for (var i = 0; i < parseeInt(classesInDay, 10); classesInDay++) {
+                            array[index].push({});
+                        }
+                    });
                 });
             });
         };
@@ -528,6 +561,10 @@ angular.module("editor")
             })
         };
 
+        $scope.cancel = function () {
+            $scope.buttonsIsShown = false
+        };
+
         function update () {
             rfeSettings.getAll().then(function (settings) {
                 $scope.settings = settings;
@@ -536,7 +573,7 @@ angular.module("editor")
         }
 
         update();
-    })
+    });
 
 
 angular.module("editor")

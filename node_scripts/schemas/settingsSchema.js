@@ -4,5 +4,6 @@
 
 var settingsSchema = mongoose.Schema({
     title: String,
-    uniqueId: String
+    uniqueId: String,
+    value: String
 });

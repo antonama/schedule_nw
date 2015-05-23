@@ -1,0 +1,20 @@
+.rfe-settings {
+  .setting {
+    position: relative;
+    margin-top: 15px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    .save-button {
+      position: absolute;
+      bottom: 20px;
+      right: 0;
+    }
+
+    div {
+      color: color('teal', 'base');
+    }
+  }
+}

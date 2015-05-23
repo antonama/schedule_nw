@@ -5,5 +5,5 @@
 var classSchema = mongoose.Schema({
     title: String,
     types: [String],
-    lecturers: [staffSchema]
+    lecturers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Staff'}]
 });

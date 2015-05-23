@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds053130.mongolab.com:53130/rooms');
-    var dbDeferred = q.defer();
-    var Room;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Room = db.model("Room", roomSchema);
-    });
-
     angular.module("editor")
         .service("rfeRooms", function ($q) {
             var loading = true;
@@ -37,6 +29,23 @@
                     dbDeferred.promise.then(function () {
                         var dbItem = new Room(item);
                         dbItem.save(function (err) {
+                            if (!err) {
+                                dbItemDeferred.resolve();
+                            } else {
+                                dbItemDeferred.reject();
+                            }
+                        })
+                    });
+
+                    return dbItemDeferred.promise;
+                },
+                delete: function (item) {
+                    var dbItemDeferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Room.findOneAndRemove({
+                            _id: item._id
+                        }, function (err) {
                             if (!err) {
                                 dbItemDeferred.resolve();
                             } else {

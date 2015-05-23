@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds037262.mongolab.com:37262/settings');
-    var dbDeferred = q.defer();
-    var Settings;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Settings = db.model("Settings", settingsSchema);
-    });
-
     angular.module("editor")
         .service("rfeSettings", function ($q) {
             var loading = true;
@@ -35,14 +27,15 @@
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        var dbItem = new Settings(item);
-                        dbItem.save(function (err) {
+                        Settings.findByIdAndUpdate(item._id, {
+                            $set: item
+                        }, function (err, item) {
                             if (!err) {
                                 dbItemDeferred.resolve();
                             } else {
                                 dbItemDeferred.reject();
                             }
-                        })
+                        });
                     });
 
                     return dbItemDeferred.promise;

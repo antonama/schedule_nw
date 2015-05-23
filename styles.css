@@ -7945,8 +7945,8 @@ aside {
       z-index: 100; }
       aside .aside-container .logo-container .logo {
         position: absolute;
-        top: 15px;
-        bottom: 15px;
+        top: 5px;
+        bottom: 5px;
         background-image: url("img/logo.png");
         background-size: contain;
         background-position: center;
@@ -8089,13 +8089,17 @@ header {
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     position: relative; }
-    .rfe-rooms .add-room .input-field label {
-      left: 0; }
     .rfe-rooms .add-room .add-button {
       position: absolute;
-      bottom: 50%;
-      right: 0;
+      top: 0;
+      right: 10px;
       transform: translate(0, 50%); }
+    .rfe-rooms .add-room .input-field {
+      margin-top: 1.2rem;
+      padding: 0 10px;
+      font-weight: bold; }
+    .rfe-rooms .add-room .available-room-types {
+      padding: 0 10px 10px 10px; }
   .rfe-rooms .rooms-list .room-item {
     display: inline-block;
     width: 45px;
@@ -8107,6 +8111,22 @@ header {
     border: 1px solid #e0e0e0;
     position: relative;
     cursor: default; }
+    .rfe-rooms .rooms-list .room-item:hover .room-edit-item {
+      display: block; }
+    .rfe-rooms .rooms-list .room-item .room-edit-item {
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      text-align: center;
+      border-radius: 50%; }
+      .rfe-rooms .rooms-list .room-item .room-edit-item i {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #fff; }
 
 .rfe-classes .input-field {
   padding: 0 150px 0 10px; }
@@ -8118,6 +8138,31 @@ header {
   margin-top: 15px;
   position: relative;
   overflow: hidden; }
+  .rfe-classes .classes-list .class-item:hover .class-edit-item {
+    display: block; }
+  .rfe-classes .classes-list .class-item .class-edit-item {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 5px solid #fff;
+    border-radius: 8px;
+    text-align: center; }
+    .rfe-classes .classes-list .class-item .class-edit-item i {
+      cursor: pointer;
+      font-size: 2rem;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      padding: 10px;
+      margin-right: 10px;
+      line-height: 85px;
+      color: #fff; }
+      .rfe-classes .classes-list .class-item .class-edit-item i:hover {
+        border: 3px solid #4db6ac;
+        background-color: #4db6ac; }
   .rfe-classes .classes-list .class-item .future-item-title {
     margin-top: 1.2rem;
     padding: 0 10px;
@@ -8141,6 +8186,13 @@ header {
         position: absolute;
         top: 0;
         left: 65px; }
+    .rfe-classes .classes-list .class-item .future-class-lecturers .remove-lecturer-from-class {
+      position: absolute;
+      cursor: pointer;
+      right: 20px;
+      top: 0; }
+      .rfe-classes .classes-list .class-item .future-class-lecturers .remove-lecturer-from-class i {
+        font-size: 2.5rem; }
   .rfe-classes .classes-list .class-item .available-class-types {
     padding: 0 10px 10px 10px; }
   .rfe-classes .classes-list .class-item .item-title {
@@ -8235,3 +8287,15 @@ header {
   .rfe-classes.classes-aside .classes-list .class-item .class-lecturers .lecturer .lecturer-name {
     position: static;
     margin: 0; }
+
+.rfe-settings .setting {
+  position: relative;
+  margin-top: 15px; }
+  .rfe-settings .setting:first-child {
+    margin-top: 0; }
+  .rfe-settings .setting .save-button {
+    position: absolute;
+    bottom: 20px;
+    right: 0; }
+  .rfe-settings .setting div {
+    color: #009688; }

@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds041327.mongolab.com:41327/classes');
-    var dbDeferred = q.defer();
-    var Class;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Class = db.model("Class", classSchema);
-    });
-
     angular.module("editor")
         .service("rfeClasses", function ($q) {
             var loading = true;
@@ -20,14 +12,16 @@
                     var deferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        Class.find(function (err, found) {
-                            var classes = [];
-                            found.forEach(function (item) {
-                                classes.push(item.toObject());
-                            });
-                            loading = false;
-                            deferred.resolve(classes);
-                        })
+                        Class.find()
+                            .populate("lecturers")
+                            .exec(function (err, found) {
+                                var classes = [];
+                                found.forEach(function (item) {
+                                    classes.push(item.toObject());
+                                });
+                                loading = false;
+                                deferred.resolve(classes);
+                            })
                     });
 
                     return deferred.promise;
@@ -39,17 +33,52 @@
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        var dbItem = new Class(item);
-                        dbItem.save(function (err) {
-                            if (!err) {
-                                dbItemDeferred.resolve();
-                            } else {
-                                dbItemDeferred.reject();
-                            }
-                        })
+                        if (item._id) {
+                            Class.findById(item._id, function (err, itemToUpdate) {
+                                if (!err) {
+                                    angular.forEach(item, function (value, key) {
+                                        if (key.indexOf("_") < 0) {
+                                            itemToUpdate[key] = value;
+                                        }
+                                    });
+                                    itemToUpdate.save(function (err) {
+                                        if (!err) {
+                                            dbItemDeferred.resolve();
+                                        } else {
+                                            dbItemDeferred.reject();
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            var dbItem = new Class(item);
+                            dbItem.save(function (err) {
+                                if (!err) {
+                                    dbItemDeferred.resolve();
+                                } else {
+                                    dbItemDeferred.reject();
+                                }
+                            });
+                        }
                     });
 
                     return dbItemDeferred.promise;
+                },
+                delete: function (item) {
+                    var deferred = $q.defer();
+                    dbDeferred.promise.then(function () {
+                        Class.findOneAndRemove({
+                            _id: item._id
+                        }, function (err, item) {
+                            if (!err) {
+                                deferred.resolve();
+                            } else {
+                                deferred.reject();
+                            }
+                        });
+                    });
+
+                    return deferred.promise;
                 }
             }
         });

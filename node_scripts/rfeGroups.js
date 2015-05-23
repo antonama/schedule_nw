@@ -3,14 +3,6 @@
  */
 
 (function () {
-    var db = mongoose.createConnection('mongodb://anton.abramovich:9875321Velvifoz@ds033400.mongolab.com:33400/groups');
-    var dbDeferred = q.defer();
-    var Group;
-    db.once('open', function () {
-        dbDeferred.resolve();
-        Group = db.model("Group", groupSchema);
-    });
-
     angular.module("editor")
         .service("rfeGroups", function ($q) {
             var loading = true;

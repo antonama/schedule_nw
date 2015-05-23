@@ -20,10 +20,10 @@
         </div>
     </form>
 
-    <ul ng-repeat="year in years | orderBy: 'number'">
-        <span>{{year.number}}:</span>
-        <li ng-repeat="group in year.groups | orderBy: 'title'">
-            {{group.title}}
+    <ul ng-repeat="year in years | orderBy: 'number'" class="year">
+        <span class="year-number">{{year.number}}</span>
+        <li ng-repeat="group in year.groups | orderBy: 'title'" class="group-list">
+            <span class="group-title">{{group.title}}</span>
         </li>
     </ul>
 </div>
