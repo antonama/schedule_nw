@@ -1,0 +1,40 @@
+.rfe-schedule {
+  .day {
+    border: 2px solid black;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    
+    &:last-child {
+      margin-bottom: 25px;
+    }
+    
+    .title {
+      display: block;
+      font-size: 2em;
+      border-bottom: 2px solid black;
+    }
+    
+    .day-class {
+      margin-bottom: -2px;
+      padding: 10px;
+      color: #a5a5a5;
+      border-bottom: 2px solid #a5a5a5;
+      text-align: left;
+      position: relative;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .remove-class {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+        right: -1.3em;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+    }
+  }
+}

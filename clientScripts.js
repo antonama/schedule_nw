@@ -189,6 +189,16 @@ angular.module('editor')
                 }
             }
         });
+
+    $stateProvider.state("main.announcements", {
+        url: "/announcements",
+        views: {
+            "": {
+                templateUrl: "templates/announcements.html",
+                controller: "AnnouncementsCtrl"
+            }
+        }
+    });
 });
 
 
@@ -267,6 +277,82 @@ angular.module("editor").service("iScrolls", function () {
 
 
 angular.module("editor")
+    .controller("AnnouncementsCtrl", function ($scope, $timeout, rfeGroups, rfeAnnouncements, cfpLoadingBar, iScrolls) {
+        $scope.moment = moment;
+
+        $scope.updateDate = null;
+
+        $scope.changeGroups = function (year) {
+            return rfeGroups.getGroupsForYear(year).then(function (groups) {
+                $scope.groups = groups.sort(function (a, b) {
+                    return a.title > b.title ? 1 : -1
+                });
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            });
+        };
+
+        $scope.addItem = function () {
+            rfeAnnouncements.save($scope.newAnnouncementItem).then(function () {
+                $scope.clear();
+                update();
+            });
+        };
+
+        $scope.editItem = function (item) {
+            $scope.newAnnouncementItem = item;
+            $scope.updateDate = item.expireAt;
+            $scope.newItemIsShown = true;
+            angular.forEach($scope.years, function (yearItem) {
+                if (yearItem.number === item.for[0].year) {
+                    $scope.selectedYear = yearItem;
+                }
+            });
+            $scope.changeGroups($scope.selectedYear);
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+        };
+
+        $scope.deleteItem = function (item) {
+            rfeAnnouncements.delete(item).then(function () {
+                update();
+            });
+        };
+
+        function updateGroups () {
+            cfpLoadingBar.start();
+            rfeGroups.getYears().then(function (years) {
+                $scope.years = years.sort(function (a, b) {
+                    return a.number - b.number
+                });
+                $scope.selectedYear = years[0];
+                $scope.changeGroups($scope.selectedYear).then(function () {
+                    update();
+                    cfpLoadingBar.complete();
+                });
+            });
+        }
+
+        function update () {
+            rfeAnnouncements.getAll().then(function (announcements) {
+                $scope.announcementsList = announcements;
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            });
+        }
+
+        $scope.clear = function () {
+            $scope.newAnnouncementItem = {};
+            $scope.updateDate = null;
+        };
+
+        updateGroups();
+        $scope.clear();
+    });
+
+
+angular.module("editor")
     .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, iScrolls) {
         rfeClasses.getAll().then(function (classes) {
             $scope.classItems = classes;
@@ -283,6 +369,17 @@ angular.module("editor")
                 }, 250);
             }
         });
+
+        $scope.customClassModel = {};
+        $scope.onStart = function ($event, u) {
+            var draggableScope = angular.element($event.target).scope();
+            $scope.customClassModel = {
+                title: draggableScope.class.title,
+                lecturer: draggableScope.lecturer || draggableScope.lecturer,
+                type: draggableScope.type ? draggableScope.type.trim() : null,
+                class: draggableScope.class
+            }
+        }
     });
 
 
@@ -494,8 +591,6 @@ angular.module("editor")
 
 angular.module("editor")
     .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, iScrolls) {
-        cfpLoadingBar.start();
-
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
@@ -504,50 +599,83 @@ angular.module("editor")
                     return a.title > b.title ? 1 : -1
                 });
                 $scope.selectedGroup = $scope.groups[0];
-                $scope.downloadSchedule($scope.selectedYear, $scope.selectedGroup);
+                $scope.downloadSchedule($scope.selectedGroup);
             });
         };
 
-        $scope.downloadSchedule = function (year, group) {
-            $scope.schedule = [];
-            var daysInWeek = 6;
-            rfeSettings.getItemByUniqueId("maxClassesInDay").then(function (classesInDay) {
+        $scope.downloadSchedule = function (group) {
+            cfpLoadingBar.start();
+
+            $scope.classesInDay = 0;
+
+            if ($scope.classesInDay) {
+                formSchedule(group);
+            } else {
+                rfeSettings.getItemByUniqueId("maxClassesInDay").then(function (classesInDayDb) {
+                    $scope.classesInDay = parseInt(classesInDayDb, 10);
+                    formSchedule(group);
+                });
+            }
+        };
+
+        function formSchedule (group) {
+            rfeSchedule.getGroupSchedule(group).then(function (schedule) {
+                $scope.schedule = [];
+                var daysInWeek = 6;
+
                 for (var i = 0; i < daysInWeek; i++) {
                     $scope.schedule[i] = [];
                 }
 
-                rfeSchedule.getGroupSchedule(year, group).then(function (schedule) {
-                    schedule.forEach(function (day, index) {
-                        $scope.schedule[index] = day.filter(function (item, itemIndex) {
-                            return index === itemIndex;
-                        }).pop();
-                    });
-                    $scope.schedule.forEach(function (item, index, array) {
-                        for (var i = 0; i < parseeInt(classesInDay, 10); classesInDay++) {
-                            array[index].push({});
-                        }
+                $scope.schedule.forEach(function (item, index, array) {
+                    for (var i = 0; i < $scope.classesInDay; i++) {
+                        array[index].push({});
+                    }
+                });
+
+                schedule.forEach(function (item, index, array) {
+                    $scope.schedule[item.day][item.index] = angular.extend(item, {
+                        title: item.class.title
                     });
                 });
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+                cfpLoadingBar.complete();
             });
-        };
+        }
 
-        $scope.addItem = function (day) {
-            day.push({});
+        function update () {
+            rfeGroups.getYears().then(function (years) {
+                $scope.years = years.sort(function (a, b) {
+                    return a.number - b.number
+                });
+                $scope.selectedYear = years[0];
+                $scope.changeGroups($scope.selectedYear).then(function () {
+                    cfpLoadingBar.complete();
+                });
+            });
+        }
+
+        $scope.onDrop = function ($event) {
+            var classScope = angular.element($event.toElement).scope();
+            rfeSchedule.save(angular.extend(classScope.class, {
+                day: classScope.$parent.$index,
+                index: classScope.$index,
+                group: $scope.selectedGroup
+            }));
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
-                cfpLoadingBar.complete();
-            }, 500);
+            }, 250);
         };
 
-        rfeGroups.getYears().then(function (years) {
-            $scope.years = years.sort(function (a, b) {
-                return a.number - b.number
+        $scope.removeClass = function (classItem) {
+            rfeSchedule.delete(classItem).then(function () {
+                $scope.downloadSchedule($scope.selectedGroup);
             });
-            $scope.selectedYear = years[0];
-            $scope.changeGroups($scope.selectedYear).then(function () {
-                cfpLoadingBar.complete();
-            });
-        });
+        };
+
+        update();
     });
 
 
@@ -675,6 +803,46 @@ angular.module("editor")
                         iScrolls.get("asideIScroll").refresh();
                     }, 500);
                 })
+            }
+        }
+    });
+
+
+angular.module("editor")
+    .directive("datepicker", function ($timeout, iScrolls) {
+        return {
+            restrict: "AEC",
+            scope: {
+                selectedDate: "=",
+                updateDate: "="
+            },
+            link: function (scope, elem, attrs) {
+                var $input = elem.pickadate({
+                    selectMonths: true,
+                    selectYears: 2,
+                    firstDay: 1,
+                    onSet: function(context) {
+                        scope.selectedDate = context.select;
+                    }
+                   
+                   
+                   
+                   
+                   
+                   
+                });
+
+                var picker = $input.pickadate('picker');
+
+                elem.click(function () {
+                    $timeout(function () {
+                        iScrolls.get("contentIScroll").refresh();
+                    }, 1000);
+                });
+
+                scope.$watch("updateDate", function (nw) {
+                    picker.set("select", nw);
+                });
             }
         }
     });

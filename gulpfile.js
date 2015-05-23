@@ -13,13 +13,15 @@ var sources = {
         "node_scripts/schemas/groupSchema.js",
         "node_scripts/schemas/scheduleSchema.js",
         "node_scripts/schemas/settingsSchema.js",
+        "node_scripts/schemas/announcementSchema.js",
         "node_scripts/connection.js",
         "node_scripts/rfeStaff.js",
         "node_scripts/rfeClasses.js",
         "node_scripts/rfeRooms.js",
         "node_scripts/rfeGroups.js",
         "node_scripts/rfeSchedule.js",
-        "node_scripts/rfeSettings.js"
+        "node_scripts/rfeSettings.js",
+        "node_scripts/rfeAnnouncements.js"
     ],
     clientJs: ["scripts/main.js", "scripts/**/*.js", "materialize-directives/**/*.js"],
     bowerComponentsJs: [

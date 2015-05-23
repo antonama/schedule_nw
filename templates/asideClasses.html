@@ -14,20 +14,31 @@
 
         <!--existing classes-->
         <div ng-repeat="class in filteredClassItems" class="col s12 m12 l12">
-            <div class="class-item">
+            <div class="class-item"
+                 data-drag="!class.lecturers.length"
+                 data-jqyoui-options="{revert: true, zIndex: 9999}"
+                 jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                 ng-model="customClassModel"
+                 ng-style="!class.lecturers.length ? {'cursor': 'all-scroll'} : null">
                 <div class="item-title valign-wrapper">
                     <span class="valign">{{class.title}}</span>
                 </div>
-                <div class="class-types">
-                    <div class="class-type" ng-repeat="type in class.types">
-                        <span>{{type}}</span><span ng-show="!$last">,&nbsp;</span>
+                <div ng-repeat="type in class.types">
+                    <div class="class-types">
+                        <div class="class-type">
+                            <span>{{type}}</span>
+                        </div>
                     </div>
+                    <ul class="class-lecturers">
+                        <li class="lecturer" ng-repeat="lecturer in class.lecturers"
+                            data-drag="true"
+                            data-jqyoui-options="{revert: true, zIndex: 9999}"
+                            jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                            ng-model="customClassModel">
+                            <p class="lecturer-name">{{lecturer.name.initials}} {{lecturer.name.surname}}</p>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="class-lecturers">
-                    <li class="lecturer" ng-repeat="lecturer in class.lecturers">
-                        <p class="lecturer-name">{{lecturer.name.initials}} {{lecturer.name.surname}}</p>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

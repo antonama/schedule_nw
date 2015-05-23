@@ -19,4 +19,15 @@ angular.module("editor")
                 }, 250);
             }
         });
+
+        $scope.customClassModel = {};
+        $scope.onStart = function ($event, u) {
+            var draggableScope = angular.element($event.target).scope();
+            $scope.customClassModel = {
+                title: draggableScope.class.title,
+                lecturer: draggableScope.lecturer || draggableScope.lecturer,
+                type: draggableScope.type ? draggableScope.type.trim() : null,
+                class: draggableScope.class
+            }
+        }
     });

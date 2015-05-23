@@ -70,7 +70,7 @@
                     var groups = [];
                     dbDeferred.promise.then(function () {
                         Group.find({
-                            year: year.number
+                            year: year.number ? year.number : year
                         }, function (err, found) {
                             found.forEach(function (item) {
                                 groups.push(item.toObject());

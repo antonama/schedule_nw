@@ -1,0 +1,58 @@
+<div class="rfe-announcements">
+    <div class="new-announcement row" ng-show="newItemIsShown">
+        <div class="input-field date-picker-container col s12 m12 l12">
+            <label for="expireAt">Показывать до (включительно)</label>
+            <input type="date" id="expireAt" class="datepicker" selected-date="newAnnouncementItem.expireAt" update-date="updateDate">
+        </div>
+        <div class="input-field col s12">
+            <textarea id="textarea1" class="materialize-textarea" ng-model="newAnnouncementItem.body"></textarea>
+            <label for="expireAt" class="active">Текст сообщения</label>
+        </div>
+        <div class="input-field col s4">
+            <select ng-model="selectedYear"
+                    ng-options="year.number for year in years"
+                    class="browser-default"
+                    ng-change="changeGroups(selectedYear)"></select>
+        </div>
+        <div class="input-field groups col s8">
+            <div class="">
+                <div class="" ng-repeat="group in groups">
+                    <input type="checkbox" id="group-{{$index}}"
+                           checklist-model="newAnnouncementItem.for"
+                           checklist-value="group"/>
+                    <label for="group-{{$index}}">{{group.title}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row announcements-list">
+        <div ng-repeat="announcement in announcementsList | orderBy: 'expireAt'" class="col s12 m12 l6">
+            <div class="announcement-item row">
+                <div class="col year">
+                    <span class="value">{{announcement.for[0].year}}</span>
+                </div>
+                <div class="col offset-s2 s9 announcement-body">{{announcement.body}}</div>
+                <div class="col offset-s2 s9 delete-notification">
+                    Удалится {{::moment(announcement.expireAt).add(1, 'day').format("Do MMMM")}}</div>
+
+                <div class="announcement-edit-item">
+                    <i class="mdi-action-delete" ng-click="deleteItem(announcement)"></i>
+                    <i class="mdi-editor-mode-edit" ng-click="editItem(announcement)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a class="add-button btn-floating waves-effect waves-light" ng-click="newItemIsShown = true" ng-show="!newItemIsShown">
+        <i class="mdi-content-add"></i>
+    </a>
+
+    <a class="cancel-button btn-floating waves-effect waves-light" ng-click="newItemIsShown = false; clear();" ng-show="newItemIsShown">
+        <i class="mdi-navigation-close"></i>
+    </a>
+
+    <a class="save-button btn-floating waves-effect waves-light" ng-click="addItem()" ng-show="newItemIsShown">
+        <i class="mdi-navigation-check"></i>
+    </a>
+</div>

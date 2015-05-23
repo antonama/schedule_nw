@@ -6,16 +6,30 @@
 
     .classes-list {
       .class-item {
+        .item-title {
+          padding: 10px;
+          border-bottom: 1px solid #e0e0e0;
+          background-color: color('teal', 'lighten-3');
+        }
+
         .class-lecturers {
           .lecturer {
             white-space: nowrap;
             overflow: hidden;
+            cursor: all-scroll;
+            z-index: 9999;
 
             .lecturer-name {
               position: static;
               margin: 0;
             }
           }
+        }
+
+        .class-types {
+          font-size: 0.8rem;
+          padding: 5px 10px;
+          font-weight: bold;
         }
       }
     }

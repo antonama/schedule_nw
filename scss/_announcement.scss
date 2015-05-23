@@ -1,0 +1,157 @@
+.rfe-announcements {
+  padding-top: 65px;
+
+  .new-announcement {
+    padding: 10px 10px 25px 0;
+    border: 2px solid #aeaeae;
+    border-radius: 6px;
+    margin: 10px;
+    position: relative;
+
+    margin-top: -55px;
+
+    * {
+      outline: none;
+    }
+
+    .input-field {
+      &.date-picker-container {
+        padding-right: 100px;
+      }
+    }
+
+    .groups {
+      margin-top: 0;
+    }
+
+    .picker__holder {
+      overflow-y: visible;
+      background: transparent !important;
+
+      .picker__weekday-display {
+        padding: 5px;
+      }
+
+      .picker__month-display {
+        font-size: 1.5rem;
+      }
+
+      .picker__day-display {
+        font-size: 3rem;
+      }
+
+      .picker__year-display {
+        font-size: 1rem;
+      }
+
+      .picker__day--infocus {
+        padding: 0.55rem 0;
+      }
+
+      .picker__day--selected {
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .announcements-list {
+    .announcement-item {
+      padding: 10px;
+      position: relative;
+      margin: 10px 0 0 0;
+      min-height: 95px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+
+      &:hover {
+        .announcement-edit-item {
+          display: block;
+        }
+      }
+
+      .year {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        $perc: unquote((100 / (12 / 2)) + "%");
+        width: $perc;
+        margin-left: 0;
+        text-align: center;
+        font-size: 4rem;
+        color: #a5a5a5;
+        border-right: 1px solid #e0e0e0;
+
+        .value {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .announcement-edit-item {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0,0,0,0.6);
+        border: 5px solid #fff;
+        border-radius: 8px;
+        text-align: center;
+
+        i {
+          cursor: pointer;
+          font-size: 2rem;
+          border-radius: 50%;
+          border: 3px solid #fff;
+          padding: 10px;
+          margin-right: 10px;
+          line-height: 85px;
+          color: #fff;
+
+          &:hover {
+            border: 3px solid color('teal', 'lighten-2');
+            background-color: color('teal', 'lighten-2');
+          }
+        }
+      }
+    }
+  }
+
+  .add-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+
+  .cancel-button {
+    position: fixed;
+    top: 20px;
+    right: 70px;
+  }
+
+  .save-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
+}
+
+//.active {
+//  + input  + .picker {
+//    display: block;
+//  }
+//}
+//
+//.picker__input--active {
+//  + .picker {
+//    display: block;
+//  }
+//}
+//
+//.picker {
+//  display: none;
+//}

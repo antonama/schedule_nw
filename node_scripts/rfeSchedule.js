@@ -8,19 +8,29 @@
             var loading = true;
 
             return {
-                getGroupSchedule: function (year, groupTitle) {
+                getGroupSchedule: function (group) {
                     var deferred = $q.defer();
-                    //var schedule = [];
+
                     dbDeferred.promise.then(function () {
-                        Schedule.find({
-                            group: {
-                                year: year,
-                                title: groupTitle
+                        Schedule
+                        .find()
+                        .populate({
+                            path: 'group',
+                            match: {
+                                _id: group._id
                             }
-                        }, function (err, found) {
-                            deferred.resolve(found);
-                            loading = false;
                         })
+                        .populate("class lecturer")
+                        .exec(function (err, found) {
+                            var items = found.filter(function (item) {
+                                return item.group ? true : false;
+                            });
+                            items.map(function (item) {
+                                return item.toObject();
+                            });
+                            deferred.resolve(items);
+                            loading = false;
+                        });
                     });
 
                     return deferred.promise;
@@ -30,6 +40,9 @@
 
                     dbDeferred.promise.then(function () {
                         var dbItem = new Schedule(item);
+                        angular.forEach(item, function (value, key) {
+                            dbItem[key] = value;
+                        });
                         dbItem.save(function (err) {
                             if (!err) {
                                 dbItemDeferred.resolve();
@@ -37,6 +50,21 @@
                                 dbItemDeferred.reject();
                             }
                         })
+                    });
+
+                    return dbItemDeferred.promise;
+                },
+                delete: function (item) {
+                    var dbItemDeferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Schedule.findOneAndRemove(item._id, function (err) {
+                            if (!err) {
+                                dbItemDeferred.resolve();
+                            } else {
+                                dbItemDeferred.reject();
+                            }
+                        });
                     });
 
                     return dbItemDeferred.promise;

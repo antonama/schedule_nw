@@ -10,7 +10,8 @@ var Schedule,
     Group,
     Room,
     Settings,
-    Staff;
+    Staff,
+    Announcement;
 
 db.once('open', function () {
     Schedule = db.model("Schedule", scheduleSchema);
@@ -19,6 +20,9 @@ db.once('open', function () {
     Room = db.model("Room", roomSchema);
     Settings = db.model("Settings", settingsSchema);
     Staff = db.model("Staff", staffSchema);
+
+    Announcement = db.model("Announcement", announcementSchema);
+    Announcement.collection.createIndex( { "expireAt": 1 }, { expireAfterSeconds: 0 }, function () {} );
 
     dbDeferred.resolve();
 });

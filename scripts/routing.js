@@ -93,4 +93,14 @@ angular.module('editor')
                 }
             }
         });
+
+    $stateProvider.state("main.announcements", {
+        url: "/announcements",
+        views: {
+            "": {
+                templateUrl: "templates/announcements.html",
+                controller: "AnnouncementsCtrl"
+            }
+        }
+    });
 });

@@ -10,17 +10,28 @@
             <select ng-model="selectedGroup"
                     ng-options="'Group ' + group.title for group in groups"
                     class="browser-default"
-                    ng-change="downloadSchedule()"></select>
+                    ng-change="downloadSchedule(selectedGroup)"></select>
         </div>
     </div>
 
     <div class="container">
-        <div ng-repeat="day in schedule" class="day">
+        <div ng-repeat="day in schedule" class="row day">
             <span class="title">{{moment().day($index + 1).format('dddd')}}</span>
-            <div ng-repeat="class in day">
-                <span>{{class.title}} {{$index}}</span>
+            <div ng-repeat="class in day" class="day-class"
+                 data-drop="true"
+                 data-jqyoui-options="{activeClass: 'drag-active', hoverClass: 'draggable-over', tolerance: 'pointer'}"
+                 jqyoui-droppable="{onDrop: 'onDrop'}"
+                 ng-model="class">
+                <span ng-show="!class.title">{{$index + 1}}</span>
+                <div ng-show="class.title">
+                    <span>{{class.title}}</span>
+                    <br/>
+                    <span ng-show="class.type">{{::class.type}}, {{::class.lecturer.name.surname}} {{::class.lecturer.name.initials}}</span>
+                </div>
+                <div class="remove-class" ng-click="removeClass(class)" ng-show="class.title">
+                    <i class="mdi-action-highlight-remove"></i>
+                </div>
             </div>
-            <button ng-click="addItem(day)">Add</button>
         </div>
     </div>
 </div>
