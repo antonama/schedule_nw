@@ -8292,13 +8292,21 @@ header {
     border-bottom: 2px solid black; }
   .rfe-schedule .day .day-class {
     margin-bottom: -2px;
-    padding: 10px;
     color: #a5a5a5;
     border-bottom: 2px solid #a5a5a5;
     text-align: left;
     position: relative; }
     .rfe-schedule .day .day-class:last-child {
       border-bottom: none; }
+    .rfe-schedule .day .day-class .placeholder {
+      padding: 10px;
+      display: inline-block; }
+    .rfe-schedule .day .day-class > div:last-child {
+      border-bottom: none; }
+    .rfe-schedule .day .day-class .dupe {
+      position: relative;
+      border-bottom: 2px dashed #a5a5a5;
+      padding: 10px; }
     .rfe-schedule .day .day-class .class-item {
       margin-bottom: 0; }
     .rfe-schedule .day .day-class .remove-class {
@@ -8328,7 +8336,8 @@ header {
 .rfe-classes.classes-aside .classes-list .class-item .class-types {
   font-size: 0.8rem;
   padding: 5px 10px;
-  font-weight: bold; }
+  font-weight: bold;
+  cursor: all-scroll; }
 
 .rfe-settings .setting {
   position: relative;

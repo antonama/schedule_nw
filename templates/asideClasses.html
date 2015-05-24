@@ -24,7 +24,11 @@
                     <span class="valign">{{class.title}}</span>
                 </div>
                 <div ng-repeat="type in class.types">
-                    <div class="class-types">
+                    <div class="class-types"
+                         data-drag="true"
+                         data-jqyoui-options="{revert: true, zIndex: 9999}"
+                         jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                         ng-model="customClassModel">
                         <div class="class-type">
                             <span>{{type}}</span>
                         </div>

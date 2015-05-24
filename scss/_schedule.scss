@@ -17,7 +17,6 @@
     
     .day-class {
       margin-bottom: -2px;
-      padding: 10px;
       color: #a5a5a5;
       border-bottom: 2px solid #a5a5a5;
       text-align: left;
@@ -25,6 +24,23 @@
 
       &:last-child {
         border-bottom: none;
+      }
+
+      .placeholder {
+        padding: 10px;
+        display: inline-block;
+      }
+
+      > div {
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .dupe {
+        position: relative;
+        border-bottom: 2px dashed #a5a5a5;
+        padding: 10px;
       }
 
       .class-item {

@@ -84,6 +84,8 @@ angular.module("editor")
                                 scope.$apply();
                             }
                         })
+                    } else if (newValue && newValue.length === 0) {
+                        scope.fuzzy = [];
                     }
                 });
             }

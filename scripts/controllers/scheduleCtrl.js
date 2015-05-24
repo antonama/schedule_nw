@@ -42,14 +42,14 @@ angular.module("editor")
 
                 $scope.schedule.forEach(function (item, index, array) {
                     for (var i = 0; i < $scope.classesInDay; i++) {
-                        array[index].push({});
+                        array[index].push([]);
                     }
                 });
 
                 schedule.forEach(function (item, index, array) {
-                    $scope.schedule[item.day][item.index] = angular.extend(item, {
+                    $scope.schedule[item.day][item.index].push(angular.extend(item, {
                         title: item.class.title
-                    });
+                    }));
                 });
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
@@ -72,7 +72,12 @@ angular.module("editor")
 
         $scope.onDrop = function ($event) {
             var classScope = angular.element($event.toElement).scope();
-            $scope.getAvailableRoomsAndSave(classScope);
+            if (!classScope.dupe) {
+                $scope.saveItem(classScope.$parent.$index, classScope.$index, classScope.dndDragItem);
+            } else {
+                $scope.saveItem(classScope.$parent.$parent.$index, classScope.$parent.$index, classScope.dndDragItem);
+            }
+            //$scope.saveItem();
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
@@ -83,22 +88,22 @@ angular.module("editor")
                 $scope.downloadSchedule($scope.selectedGroup);
             });
         };
+        //
+        //$scope.getAvailableRoomsAndSave = function (scope) {
+        //    rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+        //        scope.availableRooms = rooms;
+        //        scope.class.room = rooms[0];
+        //
+        //        $scope.saveItem(scope.$parent.$parent.$index, scope.$parent.$index, scope.class);
+        //    });
+        //};
 
-        $scope.getAvailableRoomsAndSave = function (scope) {
-            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-                scope.availableRooms = rooms;
-                scope.class.room = rooms[0];
-
-                $scope.saveItem(scope.$parent.$index, scope.$index, scope.class);
-            });
-        };
-
-        $scope.getAvailableRooms = function (scope) {
-            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-                scope.availableRooms = rooms;
-                scope.class.room = rooms[0];
-            });
-        };
+        //$scope.getAvailableRooms = function (scope) {
+        //    rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+        //        scope.availableRooms = rooms;
+        //        scope.class.room = rooms[0];
+        //    });
+        //};
 
         $scope.saveItem = function (day, index, item) {
             rfeSchedule.save(angular.extend(item, {

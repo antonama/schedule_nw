@@ -12,16 +12,25 @@ angular.module("editor")
     .directive("availableRooms", function (rfeRooms) {
         return {
             restrict: "A",
-            require: "ngModel",
             scope: {
                 availableRooms: "=",
-                availableRoomsOn: "="
+                availableRoomsOn: "=",
+                selectedRoom: "="
             },
-            link: function (scope, elem, attrs, ctrl) {
+            link: function (scope, elem, attrs) {
                 scope.$watch("availableRoomsOn", function (nv) {
                     if (nv && nv.type) {
                         rfeRooms.getAllOfType(nv.type).then(function (rooms) {
                             scope.availableRooms = rooms;
+                            if (nv.room) {
+                                rooms.forEach(function (item) {
+                                    if (nv.room.title === item.title) {
+                                        scope.selectedRoom = item;
+                                    }
+                                });
+                            } else {
+                                scope.selectedRoom = rooms[0];
+                            }
                         });
                     }
                 })
@@ -112,6 +121,8 @@ angular.module("editor")
                                 scope.$apply();
                             }
                         })
+                    } else if (newValue && newValue.length === 0) {
+                        scope.fuzzy = [];
                     }
                 });
             }
@@ -371,6 +382,9 @@ angular.module("editor")
         function update () {
             rfeAnnouncements.getAll().then(function (announcements) {
                 $scope.announcementsList = announcements;
+                if (!announcements.length) {
+                    $scope.filteredAnnouncementItems = [];
+                }
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
                 }, 250);
@@ -669,14 +683,14 @@ angular.module("editor")
 
                 $scope.schedule.forEach(function (item, index, array) {
                     for (var i = 0; i < $scope.classesInDay; i++) {
-                        array[index].push({});
+                        array[index].push([]);
                     }
                 });
 
                 schedule.forEach(function (item, index, array) {
-                    $scope.schedule[item.day][item.index] = angular.extend(item, {
+                    $scope.schedule[item.day][item.index].push(angular.extend(item, {
                         title: item.class.title
-                    });
+                    }));
                 });
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
@@ -699,7 +713,12 @@ angular.module("editor")
 
         $scope.onDrop = function ($event) {
             var classScope = angular.element($event.toElement).scope();
-            $scope.getAvailableRoomsAndSave(classScope);
+            if (!classScope.dupe) {
+                $scope.saveItem(classScope.$parent.$index, classScope.$index, classScope.dndDragItem);
+            } else {
+                $scope.saveItem(classScope.$parent.$parent.$index, classScope.$parent.$index, classScope.dndDragItem);
+            }
+           
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
@@ -710,22 +729,20 @@ angular.module("editor")
                 $scope.downloadSchedule($scope.selectedGroup);
             });
         };
+       
+       
+       
+       
+       
+       
+       
 
-        $scope.getAvailableRoomsAndSave = function (scope) {
-            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-                scope.availableRooms = rooms;
-                scope.class.room = rooms[0];
-
-                $scope.saveItem(scope.$parent.$index, scope.$index, scope.class);
-            });
-        };
-
-        $scope.getAvailableRooms = function (scope) {
-            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-                scope.availableRooms = rooms;
-                scope.class.room = rooms[0];
-            });
-        };
+       
+       
+       
+       
+       
+       
 
         $scope.saveItem = function (day, index, item) {
             rfeSchedule.save(angular.extend(item, {

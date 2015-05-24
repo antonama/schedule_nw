@@ -74,6 +74,9 @@ angular.module("editor")
         function update () {
             rfeAnnouncements.getAll().then(function (announcements) {
                 $scope.announcementsList = announcements;
+                if (!announcements.length) {
+                    $scope.filteredAnnouncementItems = [];
+                }
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
                 }, 250);
