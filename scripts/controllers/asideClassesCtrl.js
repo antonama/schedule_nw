@@ -3,7 +3,7 @@
  */
 
 angular.module("editor")
-    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, iScrolls) {
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls) {
         rfeClasses.getAll().then(function (classes) {
             $scope.classItems = classes;
 
@@ -21,13 +21,14 @@ angular.module("editor")
         });
 
         $scope.customClassModel = {};
-        $scope.onStart = function ($event, u) {
+        $scope.onStart = function ($event) {
             var draggableScope = angular.element($event.target).scope();
             $scope.customClassModel = {
                 title: draggableScope.class.title,
-                lecturer: draggableScope.lecturer || draggableScope.lecturer,
+                lecturer: draggableScope.lecturer,
                 type: draggableScope.type ? draggableScope.type.trim() : null,
                 class: draggableScope.class
-            }
+            };
+            solver.getUnavailableForLecturer(draggableScope.lecturer);
         }
     });

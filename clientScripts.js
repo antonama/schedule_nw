@@ -311,6 +311,18 @@ angular.module("editor").service("iScrolls", function () {
 
 
 angular.module("editor")
+    .factory("solver", function ($rootScope, rfeSchedule) {
+        return {
+            getUnavailableForLecturer: function (lecturer) {
+                rfeSchedule.getUnavailableForLecturer(lecturer).then(function (schedule) {
+                    $rootScope.$broadcast("rfeLecturerTimeFindEnd", schedule);
+                });
+            }
+        }
+    });
+
+
+angular.module("editor")
     .controller("AnnouncementsCtrl", function ($scope, $timeout, rfeGroups, rfeAnnouncements, cfpLoadingBar, iScrolls) {
         $scope.moment = moment;
 
@@ -405,7 +417,7 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, iScrolls) {
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls) {
         rfeClasses.getAll().then(function (classes) {
             $scope.classItems = classes;
 
@@ -423,14 +435,15 @@ angular.module("editor")
         });
 
         $scope.customClassModel = {};
-        $scope.onStart = function ($event, u) {
+        $scope.onStart = function ($event) {
             var draggableScope = angular.element($event.target).scope();
             $scope.customClassModel = {
                 title: draggableScope.class.title,
-                lecturer: draggableScope.lecturer || draggableScope.lecturer,
+                lecturer: draggableScope.lecturer,
                 type: draggableScope.type ? draggableScope.type.trim() : null,
                 class: draggableScope.class
-            }
+            };
+            solver.getUnavailableForLecturer(draggableScope.lecturer);
         }
     });
 
@@ -729,20 +742,6 @@ angular.module("editor")
                 $scope.downloadSchedule($scope.selectedGroup);
             });
         };
-       
-       
-       
-       
-       
-       
-       
-
-       
-       
-       
-       
-       
-       
 
         $scope.saveItem = function (day, index, item) {
             rfeSchedule.save(angular.extend(item, {
@@ -752,6 +751,37 @@ angular.module("editor")
             })).then(function () {
                 $scope.downloadSchedule($scope.selectedGroup);
             });
+        };
+
+        var unavailableTimeForLecturer;
+        $scope.$on("rfeLecturerTimeFindEnd", function (event, schedule) {
+            unavailableTimeForLecturer = schedule;
+        });
+        $scope.isLecturerAvailable = function (day, index, classItem) {
+            var available = false;
+            if (unavailableTimeForLecturer && classItem.length && classItem[0].lecturer) {
+                unavailableTimeForLecturer.forEach(function (item, index) {
+                    if (classItem[0].lecturer.name.full !== item.lecturer.name.full) {
+                        available = true;
+                    }
+                    if (item.class.title !== classItem[0].class.title) {
+                        available = false;
+                    }
+                });
+            } else if (unavailableTimeForLecturer && !classItem.length) {
+                for (var i = 0; i < unavailableTimeForLecturer.length; i++) {
+                    if (unavailableTimeForLecturer[i].day === day && unavailableTimeForLecturer[i].index === index) {
+                        available = false;
+                        break;
+                    } else {
+                        available = true;
+                        break;
+                    }
+                }
+            } else {
+                available = true;
+            }
+            return available;
         };
 
         update();

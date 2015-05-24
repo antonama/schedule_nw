@@ -18,7 +18,7 @@
         <div ng-repeat="day in schedule" class="row day">
             <span class="title">{{moment().day($index + 1).format('dddd')}}</span>
             <div ng-repeat="class in day" class="day-class"
-                 data-drop="true"
+                 data-drop="isLecturerAvailable($parent.$index, $index, class)"
                  data-jqyoui-options="{activeClass: 'drag-active', hoverClass: 'draggable-over', tolerance: 'pointer'}"
                  jqyoui-droppable="{onDrop: 'onDrop', multiple: true}"
                  ng-model="class">

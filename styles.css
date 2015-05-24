@@ -8291,18 +8291,29 @@ header {
     font-size: 2em;
     border-bottom: 2px solid black; }
   .rfe-schedule .day .day-class {
-    margin-bottom: -2px;
     color: #a5a5a5;
     border-bottom: 2px solid #a5a5a5;
     text-align: left;
     position: relative; }
     .rfe-schedule .day .day-class:last-child {
       border-bottom: none; }
+    .rfe-schedule .day .day-class > div:last-child {
+      border-bottom: none !important; }
+    .rfe-schedule .day .day-class.drag-active {
+      color: black;
+      border-bottom: 2px solid black; }
+      .rfe-schedule .day .day-class.drag-active:last-child {
+        border-bottom: none; }
+      .rfe-schedule .day .day-class.drag-active .available-rooms, .rfe-schedule .day .day-class.drag-active .remove-class {
+        visibility: hidden; }
+    .rfe-schedule .day .day-class.draggable-over {
+      background-color: #4db6ac;
+      color: white; }
+      .rfe-schedule .day .day-class.draggable-over .available-rooms {
+        display: none; }
     .rfe-schedule .day .day-class .placeholder {
       padding: 10px;
       display: inline-block; }
-    .rfe-schedule .day .day-class > div:last-child {
-      border-bottom: none; }
     .rfe-schedule .day .day-class .dupe {
       position: relative;
       border-bottom: 2px dashed #a5a5a5;

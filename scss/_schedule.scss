@@ -16,7 +16,6 @@
     }
     
     .day-class {
-      margin-bottom: -2px;
       color: #a5a5a5;
       border-bottom: 2px solid #a5a5a5;
       text-align: left;
@@ -26,15 +25,38 @@
         border-bottom: none;
       }
 
-      .placeholder {
-        padding: 10px;
-        display: inline-block;
+      > div {
+        &:last-child {
+          border-bottom: none !important;
+        }
       }
 
-      > div {
+      &.drag-active {
+        color: black;
+        border-bottom: 2px solid black;
+
         &:last-child {
           border-bottom: none;
         }
+
+        .available-rooms,
+        .remove-class {
+          visibility: hidden;
+        }
+      }
+
+      &.draggable-over {
+        background-color: color("teal", "lighten-2");
+        color: white;
+
+        .available-rooms {
+          display: none;
+        }
+      }
+
+      .placeholder {
+        padding: 10px;
+        display: inline-block;
       }
 
       .dupe {

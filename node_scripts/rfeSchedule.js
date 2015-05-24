@@ -80,6 +80,27 @@
 
                     return dbItemDeferred.promise;
                 },
+                getUnavailableForLecturer: function (lecturer) {
+                    var dbItemDeferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Schedule
+                            .find()
+                            .where("lecturer").equals(lecturer._id)
+                            .populate("class lecturer")
+                            .exec(function (err, found) {
+                                if (!err) {
+                                    dbItemDeferred.resolve(found.map(function (item) {
+                                        return item.toObject();
+                                    }));
+                                } else {
+                                    dbItemDeferred.reject();
+                                }
+                            });
+                    });
+
+                    return dbItemDeferred.promise;
+                },
                 isLoading: function () {
                     return loading;
                 }

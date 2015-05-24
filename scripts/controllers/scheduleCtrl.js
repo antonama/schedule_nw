@@ -88,22 +88,6 @@ angular.module("editor")
                 $scope.downloadSchedule($scope.selectedGroup);
             });
         };
-        //
-        //$scope.getAvailableRoomsAndSave = function (scope) {
-        //    rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-        //        scope.availableRooms = rooms;
-        //        scope.class.room = rooms[0];
-        //
-        //        $scope.saveItem(scope.$parent.$parent.$index, scope.$parent.$index, scope.class);
-        //    });
-        //};
-
-        //$scope.getAvailableRooms = function (scope) {
-        //    rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
-        //        scope.availableRooms = rooms;
-        //        scope.class.room = rooms[0];
-        //    });
-        //};
 
         $scope.saveItem = function (day, index, item) {
             rfeSchedule.save(angular.extend(item, {
@@ -113,6 +97,37 @@ angular.module("editor")
             })).then(function () {
                 $scope.downloadSchedule($scope.selectedGroup);
             });
+        };
+
+        var unavailableTimeForLecturer;
+        $scope.$on("rfeLecturerTimeFindEnd", function (event, schedule) {
+            unavailableTimeForLecturer = schedule;
+        });
+        $scope.isLecturerAvailable = function (day, index, classItem) {
+            var available = false;
+            if (unavailableTimeForLecturer && classItem.length && classItem[0].lecturer) {
+                unavailableTimeForLecturer.forEach(function (item, index) {
+                    if (classItem[0].lecturer.name.full !== item.lecturer.name.full) {
+                        available = true;
+                    }
+                    if (item.class.title !== classItem[0].class.title) {
+                        available = false;
+                    }
+                });
+            } else if (unavailableTimeForLecturer && !classItem.length) {
+                for (var i = 0; i < unavailableTimeForLecturer.length; i++) {
+                    if (unavailableTimeForLecturer[i].day === day && unavailableTimeForLecturer[i].index === index) {
+                        available = false;
+                        break;
+                    } else {
+                        available = true;
+                        break;
+                    }
+                }
+            } else {
+                available = true;
+            }
+            return available;
         };
 
         update();
