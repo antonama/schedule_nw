@@ -2,6 +2,7 @@
   .setting {
     position: relative;
     margin-top: 15px;
+    padding-right: 30px;
 
     &:first-child {
       margin-top: 0;
@@ -10,7 +11,7 @@
     .save-button {
       position: absolute;
       bottom: 20px;
-      right: 0;
+      right: -20px;
     }
 
     div {

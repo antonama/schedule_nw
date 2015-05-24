@@ -56,6 +56,21 @@
 
                     return dbItemDeferred.promise;
                 },
+                getAllOfType: function (type) {
+                    var dbItemDeferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Room.find({
+                            types: { $in: [type] }
+                        }, function (err, found) {
+                            dbItemDeferred.resolve(found.map(function (item) {
+                                return item.toObject();
+                            }));
+                        });
+                    });
+
+                    return dbItemDeferred.promise;
+                },
                 isLoading: function () {
                     return loading;
                 }

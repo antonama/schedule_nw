@@ -5,6 +5,29 @@ angular.module("editor", [
     "ngDragDrop"
 ]);
 
+moment.locale("ru");
+
+
+angular.module("editor")
+    .directive("availableRooms", function (rfeRooms) {
+        return {
+            restrict: "A",
+            require: "ngModel",
+            scope: {
+                availableRooms: "=",
+                availableRoomsOn: "="
+            },
+            link: function (scope, elem, attrs, ctrl) {
+                scope.$watch("availableRoomsOn", function (nv) {
+                    if (nv && nv.type) {
+                        rfeRooms.getAllOfType(nv.type).then(function (rooms) {
+                            scope.availableRooms = rooms;
+                        });
+                    }
+                })
+            }
+        }
+    });
 
 
 angular.module("editor")
@@ -297,6 +320,7 @@ angular.module("editor")
             rfeAnnouncements.save($scope.newAnnouncementItem).then(function () {
                 $scope.clear();
                 update();
+                $scope.newItemIsShown = false;
             });
         };
 
@@ -311,6 +335,17 @@ angular.module("editor")
             });
             $scope.changeGroups($scope.selectedYear);
             iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
+        };
+
+        $scope.editNewItem = function () {
+            $scope.newItemIsShown = true;
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
         };
 
         $scope.deleteItem = function (item) {
@@ -345,6 +380,9 @@ angular.module("editor")
         $scope.clear = function () {
             $scope.newAnnouncementItem = {};
             $scope.updateDate = null;
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
         };
 
         updateGroups();
@@ -581,7 +619,9 @@ angular.module("editor")
         }
 
         rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
-            $scope.availableRoomTypes = types.split(",");
+            $scope.availableRoomTypes = types.split(",").map(function (item) {
+                return item.trim();
+            });
         });
 
         update();
@@ -590,7 +630,7 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, iScrolls) {
+    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, rfeRooms, iScrolls) {
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
@@ -659,11 +699,7 @@ angular.module("editor")
 
         $scope.onDrop = function ($event) {
             var classScope = angular.element($event.toElement).scope();
-            rfeSchedule.save(angular.extend(classScope.class, {
-                day: classScope.$parent.$index,
-                index: classScope.$index,
-                group: $scope.selectedGroup
-            }));
+            $scope.getAvailableRoomsAndSave(classScope);
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
@@ -675,12 +711,39 @@ angular.module("editor")
             });
         };
 
+        $scope.getAvailableRoomsAndSave = function (scope) {
+            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+                scope.availableRooms = rooms;
+                scope.class.room = rooms[0];
+
+                $scope.saveItem(scope.$parent.$index, scope.$index, scope.class);
+            });
+        };
+
+        $scope.getAvailableRooms = function (scope) {
+            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+                scope.availableRooms = rooms;
+                scope.class.room = rooms[0];
+            });
+        };
+
+        $scope.saveItem = function (day, index, item) {
+            rfeSchedule.save(angular.extend(item, {
+                day: day,
+                index: index,
+                group: $scope.selectedGroup
+            })).then(function () {
+                $scope.downloadSchedule($scope.selectedGroup);
+            });
+        };
+
         update();
     });
 
 
 angular.module("editor")
     .controller("SettingsCtrl", function ($scope, rfeSettings, cfpLoadingBar) {
+        $scope.rfeSettings = rfeSettings;
         cfpLoadingBar.start();
 
         $scope.saveItem = function (item) {
@@ -693,9 +756,24 @@ angular.module("editor")
             $scope.buttonsIsShown = false
         };
 
+        $scope.publishScheduleInInternet = function () {
+            $scope.publishSchedule.value = $scope.publishSchedule.value ? "true" : "false";
+            rfeSettings.save($scope.publishSchedule).then(function () {
+                update();
+            });
+        };
+
         function update () {
             rfeSettings.getAll().then(function (settings) {
-                $scope.settings = settings;
+                $scope.settings = settings.filter(function (item) {
+                    return item.uniqueId !== 'publishSchedule';
+                });
+
+                $scope.publishSchedule = settings.filter(function (item) {
+                    return item.uniqueId === 'publishSchedule';
+                }).pop();
+                $scope.publishSchedule.value = $scope.publishSchedule.value === "true" ? true : false;
+
                 cfpLoadingBar.complete();
             });
         }
@@ -822,14 +900,8 @@ angular.module("editor")
                     selectYears: 2,
                     firstDay: 1,
                     onSet: function(context) {
-                        scope.selectedDate = context.select;
+                        scope.selectedDate = moment(context.select).add(1, 'day');
                     }
-                   
-                   
-                   
-                   
-                   
-                   
                 });
 
                 var picker = $input.pickadate('picker');

@@ -4,6 +4,5 @@
 
 var roomSchema = mongoose.Schema({
     title: String,
-    address: String,
     types: [String]
 });

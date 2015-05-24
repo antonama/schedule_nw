@@ -8299,6 +8299,8 @@ header {
     position: relative; }
     .rfe-schedule .day .day-class:last-child {
       border-bottom: none; }
+    .rfe-schedule .day .day-class .class-item {
+      margin-bottom: 0; }
     .rfe-schedule .day .day-class .remove-class {
       position: absolute;
       top: 50%;
@@ -8318,6 +8320,8 @@ header {
   overflow: hidden;
   cursor: all-scroll;
   z-index: 9999; }
+  .rfe-classes.classes-aside .classes-list .class-item .class-lecturers .lecturer:hover {
+    font-weight: bold; }
   .rfe-classes.classes-aside .classes-list .class-item .class-lecturers .lecturer .lecturer-name {
     position: static;
     margin: 0; }
@@ -8328,103 +8332,119 @@ header {
 
 .rfe-settings .setting {
   position: relative;
-  margin-top: 15px; }
+  margin-top: 15px;
+  padding-right: 30px; }
   .rfe-settings .setting:first-child {
     margin-top: 0; }
   .rfe-settings .setting .save-button {
     position: absolute;
     bottom: 20px;
-    right: 0; }
+    right: -20px; }
   .rfe-settings .setting div {
     color: #009688; }
 
-.rfe-announcements {
-  padding-top: 65px; }
-  .rfe-announcements .new-announcement {
-    padding: 10px 10px 25px 0;
-    border: 2px solid #aeaeae;
-    border-radius: 6px;
-    margin: 10px;
-    position: relative;
-    margin-top: -55px; }
-    .rfe-announcements .new-announcement * {
-      outline: none; }
-    .rfe-announcements .new-announcement .input-field.date-picker-container {
-      padding-right: 100px; }
-    .rfe-announcements .new-announcement .groups {
-      margin-top: 0; }
-    .rfe-announcements .new-announcement .picker__holder {
-      overflow-y: visible;
-      background: transparent !important; }
-      .rfe-announcements .new-announcement .picker__holder .picker__weekday-display {
-        padding: 5px; }
-      .rfe-announcements .new-announcement .picker__holder .picker__month-display {
-        font-size: 1.5rem; }
-      .rfe-announcements .new-announcement .picker__holder .picker__day-display {
-        font-size: 3rem; }
-      .rfe-announcements .new-announcement .picker__holder .picker__year-display {
-        font-size: 1rem; }
-      .rfe-announcements .new-announcement .picker__holder .picker__day--infocus {
-        padding: 0.55rem 0; }
-      .rfe-announcements .new-announcement .picker__holder .picker__day--selected {
-        border-radius: 8px; }
-  .rfe-announcements .announcements-list .announcement-item {
-    padding: 10px;
-    position: relative;
-    margin: 10px 0 0 0;
-    min-height: 95px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px; }
-    .rfe-announcements .announcements-list .announcement-item:hover .announcement-edit-item {
-      display: block; }
-    .rfe-announcements .announcements-list .announcement-item .year {
+.rfe-announcements .rfe-find-announcement {
+  padding: 0 150px 0 10px; }
+.rfe-announcements .new-announcement {
+  padding: 10px 10px 25px 0;
+  border: 2px solid #aeaeae;
+  border-radius: 6px;
+  margin: 10px;
+  position: relative; }
+  .rfe-announcements .new-announcement * {
+    outline: none; }
+  .rfe-announcements .new-announcement .input-field.date-picker-container {
+    padding-right: 100px; }
+  .rfe-announcements .new-announcement .groups {
+    margin-top: 0; }
+  .rfe-announcements .new-announcement .picker__holder {
+    overflow-y: visible;
+    background: transparent !important; }
+    .rfe-announcements .new-announcement .picker__holder .picker__weekday-display {
+      padding: 5px; }
+    .rfe-announcements .new-announcement .picker__holder .picker__month-display {
+      font-size: 1.5rem; }
+    .rfe-announcements .new-announcement .picker__holder .picker__day-display {
+      font-size: 3rem; }
+    .rfe-announcements .new-announcement .picker__holder .picker__year-display {
+      font-size: 1rem; }
+    .rfe-announcements .new-announcement .picker__holder .picker__day--infocus {
+      padding: 0.55rem 0; }
+    .rfe-announcements .new-announcement .picker__holder .picker__day--selected {
+      border-radius: 8px; }
+.rfe-announcements .announcements-list > div:last-child {
+  margin-bottom: 20px; }
+.rfe-announcements .announcements-list .announcement-item {
+  padding: 10px;
+  position: relative;
+  margin: 10px 0 0 0;
+  min-height: 95px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px; }
+  .rfe-announcements .announcements-list .announcement-item:hover .announcement-edit-item {
+    display: block; }
+  .rfe-announcements .announcements-list .announcement-item .announcement-body {
+    padding-bottom: 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-top: 15px; }
+  .rfe-announcements .announcements-list .announcement-item .group-list {
+    color: #a5a5a5; }
+  .rfe-announcements .announcements-list .announcement-item .delete-notification {
+    position: absolute;
+    left: 16.66667%;
+    padding-left: 1.15rem;
+    top: 0;
+    font-size: 0.8em;
+    color: #a5a5a5; }
+  .rfe-announcements .announcements-list .announcement-item .year {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 16.66667%;
+    margin-left: 0;
+    text-align: center;
+    font-size: 4rem;
+    color: #a5a5a5;
+    border-right: 1px solid #e0e0e0; }
+    .rfe-announcements .announcements-list .announcement-item .year .value {
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 16.66667%;
-      margin-left: 0;
-      text-align: center;
-      font-size: 4rem;
-      color: #a5a5a5;
-      border-right: 1px solid #e0e0e0; }
-      .rfe-announcements .announcements-list .announcement-item .year .value {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); }
-    .rfe-announcements .announcements-list .announcement-item .announcement-edit-item {
-      display: none;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      border: 5px solid #fff;
-      border-radius: 8px;
-      text-align: center; }
-      .rfe-announcements .announcements-list .announcement-item .announcement-edit-item i {
-        cursor: pointer;
-        font-size: 2rem;
-        border-radius: 50%;
-        border: 3px solid #fff;
-        padding: 10px;
-        margin-right: 10px;
-        line-height: 85px;
-        color: #fff; }
-        .rfe-announcements .announcements-list .announcement-item .announcement-edit-item i:hover {
-          border: 3px solid #4db6ac;
-          background-color: #4db6ac; }
-  .rfe-announcements .add-button {
-    position: fixed;
-    top: 20px;
-    right: 20px; }
-  .rfe-announcements .cancel-button {
-    position: fixed;
-    top: 20px;
-    right: 70px; }
-  .rfe-announcements .save-button {
-    position: fixed;
-    top: 20px;
-    right: 20px; }
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); }
+  .rfe-announcements .announcements-list .announcement-item .announcement-edit-item {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 5px solid #fff;
+    border-radius: 8px;
+    text-align: center; }
+    .rfe-announcements .announcements-list .announcement-item .announcement-edit-item i {
+      cursor: pointer;
+      font-size: 2rem;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      padding: 10px;
+      margin-right: 10px;
+      line-height: 85px;
+      color: #fff; }
+      .rfe-announcements .announcements-list .announcement-item .announcement-edit-item i:hover {
+        border: 3px solid #4db6ac;
+        background-color: #4db6ac; }
+.rfe-announcements .add-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
+.rfe-announcements .cancel-button {
+  position: fixed;
+  top: 10px;
+  right: 60px; }
+.rfe-announcements .save-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }

@@ -34,7 +34,9 @@ angular.module("editor")
         }
 
         rfeSettings.getItemByUniqueId("classesTypes").then(function (types) {
-            $scope.availableRoomTypes = types.split(",");
+            $scope.availableRoomTypes = types.split(",").map(function (item) {
+                return item.trim();
+            });
         });
 
         update();

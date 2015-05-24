@@ -1,4 +1,15 @@
 <div class="rfe-announcements">
+
+    <div class="rfe-find-announcement input-field">
+        <input id="announcementFind" type="text"
+               fuzzy="filteredAnnouncementItems"
+               original-items="announcementsList"
+               ng-model="searchExpr"
+               keys="{{['body']}}"
+               ng-disabled="newItemIsShown"/>
+        <label for="announcementFind">Объявление</label>
+    </div>
+
     <div class="new-announcement row" ng-show="newItemIsShown">
         <div class="input-field date-picker-container col s12 m12 l12">
             <label for="expireAt">Показывать до (включительно)</label>
@@ -27,15 +38,18 @@
     </div>
 
     <div class="row announcements-list">
-        <div ng-repeat="announcement in announcementsList | orderBy: 'expireAt'" class="col s12 m12 l6">
+        <div ng-repeat="announcement in filteredAnnouncementItems | orderBy: 'expireAt'" class="col s12 m12 l6">
             <div class="announcement-item row">
                 <div class="col year">
                     <span class="value">{{announcement.for[0].year}}</span>
                 </div>
-                <div class="col offset-s2 s9 announcement-body">{{announcement.body}}</div>
-                <div class="col offset-s2 s9 delete-notification">
-                    Удалится {{::moment(announcement.expireAt).add(1, 'day').format("Do MMMM")}}</div>
-
+                <div class="col offset-s2 s10 announcement-body">{{announcement.body}}</div>
+                <div class="delete-notification">
+                    Удалится {{::moment(announcement.expireAt).format("Do MMMM")}}</div>
+                <div class="group-list col offset-s2 s10">
+                    <span>Для групп: </span>
+                    <span ng-repeat="group in announcement.for"><span>{{group.title}}</span><span ng-hide="$last">, </span></span>
+                </div>
                 <div class="announcement-edit-item">
                     <i class="mdi-action-delete" ng-click="deleteItem(announcement)"></i>
                     <i class="mdi-editor-mode-edit" ng-click="editItem(announcement)"></i>
@@ -44,7 +58,7 @@
         </div>
     </div>
 
-    <a class="add-button btn-floating waves-effect waves-light" ng-click="newItemIsShown = true" ng-show="!newItemIsShown">
+    <a class="add-button btn-floating waves-effect waves-light" ng-click="editNewItem()" ng-show="!newItemIsShown">
         <i class="mdi-content-add"></i>
     </a>
 

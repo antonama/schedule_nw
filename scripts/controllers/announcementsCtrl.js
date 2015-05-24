@@ -23,6 +23,7 @@ angular.module("editor")
             rfeAnnouncements.save($scope.newAnnouncementItem).then(function () {
                 $scope.clear();
                 update();
+                $scope.newItemIsShown = false;
             });
         };
 
@@ -37,6 +38,17 @@ angular.module("editor")
             });
             $scope.changeGroups($scope.selectedYear);
             iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
+        };
+
+        $scope.editNewItem = function () {
+            $scope.newItemIsShown = true;
+            iScrolls.get("contentIScroll").scrollTo(0, 0);
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
         };
 
         $scope.deleteItem = function (item) {
@@ -71,6 +83,9 @@ angular.module("editor")
         $scope.clear = function () {
             $scope.newAnnouncementItem = {};
             $scope.updateDate = null;
+            $timeout(function () {
+                iScrolls.get("contentIScroll").refresh();
+            }, 250);
         };
 
         updateGroups();

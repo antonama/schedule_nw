@@ -4,3 +4,5 @@ angular.module("editor", [
     "checklist-model",
     "ngDragDrop"
 ]);
+
+moment.locale("ru");

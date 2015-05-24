@@ -16,14 +16,8 @@ angular.module("editor")
                     selectYears: 2, // Creates a dropdown of 15 years to control year
                     firstDay: 1,
                     onSet: function(context) {
-                        scope.selectedDate = context.select;
+                        scope.selectedDate = moment(context.select).add(1, 'day');
                     }
-                    //monthsFull: ['Январь', 'Февраль', 'Март', 'Аперль', 'Май', 'Июнь', 'Июль', 'Август',
-                    //    'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                    //weekdaysShort: ['Пон', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
-                    //today: 'сегодня',
-                    //clear: 'очистить',
-                    //formatSubmit: 'd mmmm, yyyy'
                 });
 
                 var picker = $input.pickadate('picker');

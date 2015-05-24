@@ -21,12 +21,22 @@
                  data-drop="true"
                  data-jqyoui-options="{activeClass: 'drag-active', hoverClass: 'draggable-over', tolerance: 'pointer'}"
                  jqyoui-droppable="{onDrop: 'onDrop'}"
-                 ng-model="class">
+                 ng-model="class"
+                 available-rooms="availableRooms"
+                 available-rooms-on="class">
                 <span ng-show="!class.title">{{$index + 1}}</span>
-                <div ng-show="class.title">
-                    <span>{{class.title}}</span>
-                    <br/>
-                    <span ng-show="class.type">{{::class.type}}, {{::class.lecturer.name.surname}} {{::class.lecturer.name.initials}}</span>
+                <div ng-show="class.title" class="class-item row">
+                    <div class="col s8">
+                        <span>{{class.title}}</span>
+                        <br/>
+                        <span ng-show="class.type">{{::class.type}}, {{::class.lecturer.name.surname}} {{::class.lecturer.name.initials}}</span>
+                    </div>
+                    <div class="available-rooms col s4" ng-show="class.room">
+                        <select ng-options="room.title for room in availableRooms"
+                                ng-change="saveItem($parent.$index, $index, class)"
+                                ng-model="class.room"
+                                class="browser-default"></select>
+                    </div>
                 </div>
                 <div class="remove-class" ng-click="removeClass(class)" ng-show="class.title">
                     <i class="mdi-action-highlight-remove"></i>

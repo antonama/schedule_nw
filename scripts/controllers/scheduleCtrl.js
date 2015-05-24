@@ -3,7 +3,7 @@
  */
 
 angular.module("editor")
-    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, iScrolls) {
+    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, rfeRooms, iScrolls) {
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
@@ -72,11 +72,7 @@ angular.module("editor")
 
         $scope.onDrop = function ($event) {
             var classScope = angular.element($event.toElement).scope();
-            rfeSchedule.save(angular.extend(classScope.class, {
-                day: classScope.$parent.$index,
-                index: classScope.$index,
-                group: $scope.selectedGroup
-            }));
+            $scope.getAvailableRoomsAndSave(classScope);
             $timeout(function () {
                 iScrolls.get("contentIScroll").refresh();
             }, 250);
@@ -84,6 +80,32 @@ angular.module("editor")
 
         $scope.removeClass = function (classItem) {
             rfeSchedule.delete(classItem).then(function () {
+                $scope.downloadSchedule($scope.selectedGroup);
+            });
+        };
+
+        $scope.getAvailableRoomsAndSave = function (scope) {
+            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+                scope.availableRooms = rooms;
+                scope.class.room = rooms[0];
+
+                $scope.saveItem(scope.$parent.$index, scope.$index, scope.class);
+            });
+        };
+
+        $scope.getAvailableRooms = function (scope) {
+            rfeRooms.getAllOfType(scope.class.type).then(function (rooms) {
+                scope.availableRooms = rooms;
+                scope.class.room = rooms[0];
+            });
+        };
+
+        $scope.saveItem = function (day, index, item) {
+            rfeSchedule.save(angular.extend(item, {
+                day: day,
+                index: index,
+                group: $scope.selectedGroup
+            })).then(function () {
                 $scope.downloadSchedule($scope.selectedGroup);
             });
         };

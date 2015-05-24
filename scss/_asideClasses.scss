@@ -19,6 +19,10 @@
             cursor: all-scroll;
             z-index: 9999;
 
+            &:hover {
+              font-weight: bold;
+            }
+
             .lecturer-name {
               position: static;
               margin: 0;

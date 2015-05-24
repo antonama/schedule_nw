@@ -20,12 +20,12 @@
                                 _id: group._id
                             }
                         })
-                        .populate("class lecturer")
+                        .populate("class lecturer room")
                         .exec(function (err, found) {
                             var items = found.filter(function (item) {
                                 return item.group ? true : false;
                             });
-                            items.map(function (item) {
+                            items = items.map(function (item) {
                                 return item.toObject();
                             });
                             deferred.resolve(items);
@@ -39,17 +39,26 @@
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        var dbItem = new Schedule(item);
-                        angular.forEach(item, function (value, key) {
-                            dbItem[key] = value;
-                        });
-                        dbItem.save(function (err) {
-                            if (!err) {
-                                dbItemDeferred.resolve();
-                            } else {
-                                dbItemDeferred.reject();
-                            }
-                        })
+                        if (item._id) {
+                            Schedule.findByIdAndUpdate(item._id, {
+                                $set: item
+                            }, function (err, itemToUpdate) {
+                                if (!err) {
+                                    dbItemDeferred.resolve();
+                                } else {
+                                    dbItemDeferred.reject();
+                                }
+                            });
+                        } else {
+                            var dbItem = new Schedule(item);
+                            dbItem.save(function (err) {
+                                if (!err) {
+                                    dbItemDeferred.resolve();
+                                } else {
+                                    dbItemDeferred.reject();
+                                }
+                            });
+                        }
                     });
 
                     return dbItemDeferred.promise;
@@ -58,7 +67,9 @@
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
-                        Schedule.findOneAndRemove(item._id, function (err) {
+                        Schedule.findOneAndRemove({
+                            _id: item._id
+                        }, function (err) {
                             if (!err) {
                                 dbItemDeferred.resolve();
                             } else {
