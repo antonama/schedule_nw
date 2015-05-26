@@ -3,12 +3,14 @@
  */
 
 angular.module("editor")
-    .factory("solver", function ($rootScope, rfeSchedule) {
+    .factory("solver", function ($rootScope, $q, rfeSchedule) {
         return {
             getUnavailableForLecturer: function (lecturer) {
-                rfeSchedule.getUnavailableForLecturer(lecturer).then(function (schedule) {
-                    $rootScope.$broadcast("rfeLecturerTimeFindEnd", schedule);
-                });
+                if (lecturer) {
+                    return rfeSchedule.getUnavailableForLecturer(lecturer);
+                } else {
+                    return $q.when(null);
+                }
             }
         }
     });

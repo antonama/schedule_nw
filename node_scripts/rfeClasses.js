@@ -26,6 +26,25 @@
 
                     return deferred.promise;
                 },
+                getAllForYear: function (year) {
+                    var deferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Class.find()
+                            .where("years").in([year])
+                            .populate("lecturers")
+                            .exec(function (err, found) {
+                                var classes = [];
+                                found.forEach(function (item) {
+                                    classes.push(item.toObject());
+                                });
+                                loading = false;
+                                deferred.resolve(classes);
+                            })
+                    });
+
+                    return deferred.promise;
+                },
                 isLoading: function () {
                     return loading;
                 },

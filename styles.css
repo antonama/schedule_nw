@@ -8195,6 +8195,16 @@ header {
         font-size: 2.5rem; }
   .rfe-classes .classes-list .class-item .available-class-types {
     padding: 0 10px 10px 10px; }
+  .rfe-classes .classes-list .class-item .available-years {
+    padding: 0 10px 10px 10px;
+    color: #9e9e9e; }
+    .rfe-classes .classes-list .class-item .available-years .notification {
+      padding-bottom: 5px; }
+    .rfe-classes .classes-list .class-item .available-years .year {
+      display: inline-block;
+      padding-right: 20px; }
+      .rfe-classes .classes-list .class-item .available-years .year label {
+        padding-left: 25px; }
   .rfe-classes .classes-list .class-item .item-title {
     padding: 10px 10px 0 10px;
     font-weight: bold;

@@ -17,7 +17,7 @@
             <div class="class-item"
                  data-drag="!class.lecturers.length"
                  data-jqyoui-options="{revert: true, zIndex: 9999}"
-                 jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                 jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart', onStop: 'onEnd'}"
                  ng-model="customClassModel"
                  ng-style="!class.lecturers.length ? {'cursor': 'all-scroll'} : null">
                 <div class="item-title valign-wrapper">
@@ -27,7 +27,7 @@
                     <div class="class-types"
                          data-drag="true"
                          data-jqyoui-options="{revert: true, zIndex: 9999}"
-                         jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                         jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart', onStop: 'onEnd'}"
                          ng-model="customClassModel">
                         <div class="class-type">
                             <span>{{type}}</span>
@@ -37,7 +37,7 @@
                         <li class="lecturer" ng-repeat="lecturer in class.lecturers"
                             data-drag="true"
                             data-jqyoui-options="{revert: true, zIndex: 9999}"
-                            jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart'}"
+                            jqyoui-draggable="{placeholder: 'keep', onStart: 'onStart', onStop: 'onEnd'}"
                             ng-model="customClassModel">
                             <p class="lecturer-name">{{lecturer.name.initials}} {{lecturer.name.surname}}</p>
                         </li>

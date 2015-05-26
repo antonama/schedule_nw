@@ -9,28 +9,43 @@ moment.locale("ru");
 
 
 angular.module("editor")
-    .directive("availableRooms", function (rfeRooms) {
+    .directive("availableRooms", function ($q, rfeRooms, rfeSchedule) {
         return {
             restrict: "A",
             scope: {
                 availableRooms: "=",
                 availableRoomsOn: "=",
-                selectedRoom: "="
+                selectedRoom: "=",
+                roomDay: "@",
+                roomIndex: "@"
             },
             link: function (scope, elem, attrs) {
                 scope.$watch("availableRoomsOn", function (nv) {
                     if (nv && nv.type) {
                         rfeRooms.getAllOfType(nv.type).then(function (rooms) {
-                            scope.availableRooms = rooms;
-                            if (nv.room) {
-                                rooms.forEach(function (item) {
-                                    if (nv.room.title === item.title) {
-                                        scope.selectedRoom = item;
+                            rfeSchedule.getAllOfDayClass(scope.roomDay, scope.roomIndex).then(function (schedule) {
+                                scope.availableRooms = rooms.filter(function (item, index) {
+                                    var cleanRoom = true;
+                                    schedule.map(function (existingScheduleItem, classIndex) {
+                                        if (existingScheduleItem.room && existingScheduleItem.room.title === item.title) {
+                                            cleanRoom = false;
+                                        }
+                                    });
+                                    if (nv.room && item.title === nv.room.title) {
+                                        cleanRoom = true;
                                     }
+                                    return cleanRoom;
                                 });
-                            } else {
-                                scope.selectedRoom = rooms[0];
-                            }
+                                if (nv.room) {
+                                    scope.availableRooms.forEach(function (item) {
+                                        if (nv.room.title === item.title) {
+                                            scope.selectedRoom = item;
+                                        }
+                                    });
+                                } else {
+                                    scope.selectedRoom = {};
+                                }
+                            });
                         });
                     }
                 })
@@ -311,12 +326,14 @@ angular.module("editor").service("iScrolls", function () {
 
 
 angular.module("editor")
-    .factory("solver", function ($rootScope, rfeSchedule) {
+    .factory("solver", function ($rootScope, $q, rfeSchedule) {
         return {
             getUnavailableForLecturer: function (lecturer) {
-                rfeSchedule.getUnavailableForLecturer(lecturer).then(function (schedule) {
-                    $rootScope.$broadcast("rfeLecturerTimeFindEnd", schedule);
-                });
+                if (lecturer) {
+                    return rfeSchedule.getUnavailableForLecturer(lecturer);
+                } else {
+                    return $q.when(null);
+                }
             }
         }
     });
@@ -417,13 +434,15 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls) {
-        rfeClasses.getAll().then(function (classes) {
-            $scope.classItems = classes;
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls, $rootScope) {
+        $scope.$on("yearSelected", function (event, year) {
+            rfeClasses.getAllForYear(year.number).then(function (classes) {
+                $scope.classItems = classes;
 
-            $timeout(function () {
-                iScrolls.get("asideIScroll").refresh();
-            }, 500);
+                $timeout(function () {
+                    iScrolls.get("asideIScroll").refresh();
+                }, 500);
+            });
         });
 
         $scope.$watch("searchExpr", function () {
@@ -443,7 +462,12 @@ angular.module("editor")
                 type: draggableScope.type ? draggableScope.type.trim() : null,
                 class: draggableScope.class
             };
-            solver.getUnavailableForLecturer(draggableScope.lecturer);
+           
+           
+        };
+
+        $scope.onEnd = function ($event) {
+            $rootScope.$broadcast("rfeLecturerTimeFindClear");
         }
     });
 
@@ -475,7 +499,14 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeSettings) {
+    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeGroups, rfeSettings) {
+
+        $scope.selectedYears = [];
+        rfeGroups.getYears().then(function (years) {
+            $scope.years = years.sort(function (a, b) {
+                return a.number - b.number
+            });
+        });
 
         $scope.$watch("newItemIsShown", function () {
             if (iScrolls.get("contentIScroll")) {
@@ -657,10 +688,12 @@ angular.module("editor")
 
 
 angular.module("editor")
-    .controller("ScheduleCtrl", function ($scope, $timeout, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, rfeRooms, iScrolls) {
+    .controller("ScheduleCtrl", function ($scope, $rootScope, $timeout, $q, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, rfeRooms, solver, iScrolls) {
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
+            $rootScope.$broadcast("yearSelected", year || year.number);
+
             return rfeGroups.getGroupsForYear(year).then(function (groups) {
                 $scope.groups = groups.sort(function (a, b) {
                     return a.title > b.title ? 1 : -1
@@ -725,16 +758,35 @@ angular.module("editor")
         }
 
         $scope.onDrop = function ($event) {
-            var classScope = angular.element($event.toElement).scope();
+            var classScope = angular.element($event.toElement).scope(),
+                day,
+                index,
+                dndItem;
+
             if (!classScope.dupe) {
-                $scope.saveItem(classScope.$parent.$index, classScope.$index, classScope.dndDragItem);
+                day = classScope.$parent.$index;
+                index = classScope.$index;
+                dndItem = classScope.dndDragItem;
             } else {
-                $scope.saveItem(classScope.$parent.$parent.$index, classScope.$parent.$index, classScope.dndDragItem);
+                day = classScope.$parent.$parent.$index;
+                index = classScope.$parent.$index;
+                dndItem = classScope.dndDragItem;
             }
-           
-            $timeout(function () {
-                iScrolls.get("contentIScroll").refresh();
-            }, 250);
+            var newItem;
+            checkTimeSlot(day, index, $scope.selectedGroup, dndItem, angular.copy(classScope.class)).then(function () {
+                if (!classScope.dupe) {
+                    $scope.saveItem(classScope.$parent.$index, classScope.$index, classScope.dndDragItem);
+                } else {
+                    $scope.saveItem(classScope.$parent.$parent.$index, classScope.$parent.$index, classScope.dndDragItem);
+                }
+                classScope.class.push(newItem);
+                $timeout(function () {
+                    iScrolls.get("contentIScroll").refresh();
+                }, 250);
+            }, function (reason) {
+                alert(reason);
+            });
+            newItem = classScope.class.pop();
         };
 
         $scope.removeClass = function (classItem) {
@@ -753,36 +805,100 @@ angular.module("editor")
             });
         };
 
-        var unavailableTimeForLecturer;
-        $scope.$on("rfeLecturerTimeFindEnd", function (event, schedule) {
-            unavailableTimeForLecturer = schedule;
-        });
-        $scope.isLecturerAvailable = function (day, index, classItem) {
-            var available = false;
-            if (unavailableTimeForLecturer && classItem.length && classItem[0].lecturer) {
-                unavailableTimeForLecturer.forEach(function (item, index) {
-                    if (classItem[0].lecturer.name.full !== item.lecturer.name.full) {
-                        available = true;
-                    }
-                    if (item.class.title !== classItem[0].class.title) {
-                        available = false;
+        function checkTimeSlot(day, index, group, futureClass, existingClass) {
+            var deferred = $q.defer();
+            if (existingClass.length === 3) {
+                deferred.reject("Too many classes at that time");
+            } else {
+                $q.when(solver.getUnavailableForLecturer(futureClass.lecturer)).then(function (time) {
+                    var breakFe = false;
+                    if (time) {
+                        time.forEach(function (item) {
+                            if (item.day === day && item.index === index && !breakFe) {
+                                if (existingClass.length === 1) {
+                                    if (group.year == item.group.year && group.title === item.group.title) {
+                                        if (item.lecturer.name.full === futureClass.lecturer.name.full &&
+                                            item.class.title === futureClass.class.title) {
+                                            breakFe = true;
+                                            deferred.resolve();
+                                        }
+                                    } else {
+                                        breakFe = true;
+                                        deferred.reject("Group " + item.group.title + " of " + item.group.year + " year already work at this time");
+                                    }
+                                } else {
+                                    if (item.lecturer.name.full !== futureClass.lecturer.name.full &&
+                                        item.class.title === futureClass.class.title) {
+                                        breakFe = true;
+                                        deferred.resolve();
+                                    } else {
+                                        deferred.reject("One lecturer can't teach the same class at the same time");
+                                    }
+                                }
+                            } else if (!breakFe) {
+                                if (existingClass.length === 1) {
+                                    deferred.resolve();
+                                } else {
+                                    if (existingClass[0].lecturer.name.full !== futureClass.lecturer.name.full &&
+                                        existingClass[0].class.title === futureClass.class.title) {
+                                        deferred.resolve();
+                                    } else {
+                                        deferred.reject("Already taken");
+                                    }
+                                }
+                                breakFe = true;
+                            }
+                        });
+                    } else {
+                        if (existingClass.length === 1) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject("Already taken");
+                        }
                     }
                 });
-            } else if (unavailableTimeForLecturer && !classItem.length) {
-                for (var i = 0; i < unavailableTimeForLecturer.length; i++) {
-                    if (unavailableTimeForLecturer[i].day === day && unavailableTimeForLecturer[i].index === index) {
-                        available = false;
-                        break;
-                    } else {
-                        available = true;
-                        break;
-                    }
-                }
-            } else {
-                available = true;
             }
-            return available;
-        };
+            return deferred.promise;
+        }
+
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
 
         update();
     });

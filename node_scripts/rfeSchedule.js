@@ -87,7 +87,29 @@
                         Schedule
                             .find()
                             .where("lecturer").equals(lecturer._id)
-                            .populate("class lecturer")
+                            .populate("class lecturer group")
+                            .exec(function (err, found) {
+                                if (!err) {
+                                    dbItemDeferred.resolve(found.map(function (item) {
+                                        return item.toObject();
+                                    }));
+                                } else {
+                                    dbItemDeferred.reject();
+                                }
+                            });
+                    });
+
+                    return dbItemDeferred.promise;
+                },
+                getAllOfDayClass: function (day, index) {
+                    var dbItemDeferred = $q.defer();
+
+                    dbDeferred.promise.then(function () {
+                        Schedule
+                            .find()
+                            .where("day").equals(day)
+                            .where("index").equals(index)
+                            .populate("room")
                             .exec(function (err, found) {
                                 if (!err) {
                                     dbItemDeferred.resolve(found.map(function (item) {

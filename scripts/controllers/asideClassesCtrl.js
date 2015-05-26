@@ -3,13 +3,15 @@
  */
 
 angular.module("editor")
-    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls) {
-        rfeClasses.getAll().then(function (classes) {
-            $scope.classItems = classes;
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls, $rootScope) {
+        $scope.$on("yearSelected", function (event, year) {
+            rfeClasses.getAllForYear(year.number).then(function (classes) {
+                $scope.classItems = classes;
 
-            $timeout(function () {
-                iScrolls.get("asideIScroll").refresh();
-            }, 500);
+                $timeout(function () {
+                    iScrolls.get("asideIScroll").refresh();
+                }, 500);
+            });
         });
 
         $scope.$watch("searchExpr", function () {
@@ -29,6 +31,11 @@ angular.module("editor")
                 type: draggableScope.type ? draggableScope.type.trim() : null,
                 class: draggableScope.class
             };
-            solver.getUnavailableForLecturer(draggableScope.lecturer);
+            //$rootScope.$broadcast("rfeLecturerTimeFindStart", $scope.customClassModel);
+            //solver.getUnavailableForLecturer(draggableScope.lecturer);
+        };
+
+        $scope.onEnd = function ($event) {
+            $rootScope.$broadcast("rfeLecturerTimeFindClear");
         }
     });

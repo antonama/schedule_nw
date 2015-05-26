@@ -3,7 +3,14 @@
  */
 
 angular.module("editor")
-    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeSettings) {
+    .controller("ClassesCtrl", function ($scope, $timeout, iScrolls, rfeClasses, rfeGroups, rfeSettings) {
+
+        $scope.selectedYears = [];
+        rfeGroups.getYears().then(function (years) {
+            $scope.years = years.sort(function (a, b) {
+                return a.number - b.number
+            });
+        });
 
         $scope.$watch("newItemIsShown", function () {
             if (iScrolls.get("contentIScroll")) {

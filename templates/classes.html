@@ -27,6 +27,15 @@
                         <label for="class-type-{{$index}}">{{type}}</label>
                     </div>
                 </div>
+                <div class="available-years">
+                    <div class="notification">Для курсов: </div>
+                    <span class="year" ng-repeat="year in years">
+                        <input type="checkbox" id="year-{{$index}}"
+                               checklist-model="newClassItem.years"
+                               checklist-value="year.number"/>
+                        <label for="year-{{$index}}">{{year.number}}</label>
+                    </span>
+                </div>
                 <ul class="future-class-lecturers" ng-show="!!newClassItem.lecturers.length">
                     <li class="lecturer" ng-repeat="lecturer in newClassItem.lecturers">
                         <div class="circular-image" style="

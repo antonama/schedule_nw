@@ -1,23 +1,69 @@
 {
-  "name": "schedule_nw",
-  "main": "index.html",
-  "window": {
-    "title": "node-webkit demo",
-    "toolbar": true,
-    "frame": true,
-    "width": 800,
-    "min_width": 600,
-    "height": 500,
-    "min-width": 600,
-    "position": "center"
-  },
-  "dependencies": {
-    "request": "^2.55.0"
-  },
-  "devDependencies": {
-    "gulp": "*",
-    "gulp-sass": "*",
-    "gulp-concat": "*",
-    "gulp-strip-comments": "*"
-  }
+    "app_name": "schedule_nw", 
+    "nodejs": true, 
+    "additional_trust_anchors": "", 
+    "inject-js-end": "", 
+    "node-remote": "", 
+    "keywords": [], 
+    "devDependencies": {
+        "gulp": "*", 
+        "gulp-sass": "*", 
+        "gulp-concat": "*", 
+        "gulp-strip-comments": "*"
+    }, 
+    "user-agent": "", 
+    "window": {
+        "transparent": false, 
+        "fullscreen": false, 
+        "height": 500, 
+        "resizable": true, 
+        "show": true, 
+        "always-on-top": false, 
+        "frame": true, 
+        "title": "\u0420\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0420\u0424\u0438\u041a\u0422", 
+        "kiosk": false, 
+        "min-width": 600, 
+        "kiosk_emulation": false, 
+        "exe_icon": "img\\logo.png", 
+        "visible": true, 
+        "as_desktop": false, 
+        "min_width": 600, 
+        "position": "center", 
+        "show_in_taskbar": true, 
+        "mac_icon": "", 
+        "width": 800, 
+        "toolbar": true,
+        "icon": "img\\logo.png"
+    }, 
+    "version": "0.1.0", 
+    "inject-js-start": "", 
+    "main": "index.html", 
+    "node-main": "", 
+    "webexe_settings": {
+        "linux-x32": false, 
+        "export_dir": "output", 
+        "windows-x64": true, 
+        "download_dir": "C:\\Program Files\\Web2Exe\\files", 
+        "nw_compression_level": 0, 
+        "mac-x32": false, 
+        "windows-x32": true, 
+        "mac-x64": false, 
+        "nw_version": "0.12.2", 
+        "force_download": false, 
+        "linux-x64": false
+    }, 
+    "description": "", 
+    "dependencies": {
+        "request": "^2.55.0"
+    }, 
+    "webkit": {
+        "page-cache": false, 
+        "java": false, 
+        "plugin": false
+    }, 
+    "js-flags": "", 
+    "name": "schedule_nw", 
+    "single-instance": true, 
+    "snapshot": "", 
+    "chromium-args": ""
 }
