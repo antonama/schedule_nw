@@ -201,48 +201,5 @@ angular.module("editor")
             return deferred.promise;
         }
 
-        //var unavailableTimeForLecturer,
-        //    dndClass;
-        //$scope.$on("rfeLecturerTimeFindEnd", function (event, schedule) {
-        //    unavailableTimeForLecturer = schedule;
-        //});
-        //$scope.$on("rfeLecturerTimeFindStart", function (event, classItem) {
-        //    dndClass = classItem;
-        //});
-        //$scope.$on("rfeLecturerTimeFindClear", function (event) {
-        //    unavailableTimeForLecturer = null;
-        //    dndClass = null;
-        //});
-        //$scope.isLecturerAvailable = function (day, index, classItem) {
-        //    var available = false;
-        //
-        //    if (classItem[0] && classItem[0].class && dndClass && dndClass.class) {
-        //        if (dndClass.class.title === classItem[0].class.title &&
-        //            dndClass.lecturer.name.full !== classItem[0].lecturer.name.full) {
-        //            available = true;
-        //        }
-        //    }
-        //
-        //    if (classItem && classItem.length === 2) available = false;
-        //
-        //    var deprecated = true;
-        //    if (classItem && !classItem.length && unavailableTimeForLecturer) {
-        //        unavailableTimeForLecturer.forEach(function (item) {
-        //            if (item.day === day && item.index === index) {
-        //                if (dndClass.class.title === item.class.title && dndClass.type === item.type) {
-        //                    available = true;
-        //                }
-        //            } else if (deprecated) {
-        //                deprecated = false;
-        //            }
-        //        });
-        //        if (!deprecated) {
-        //            available = true;
-        //        }
-        //    }
-        //
-        //    return available;
-        //};
-
         update();
     });
