@@ -45,7 +45,7 @@
                 </div>
                 <div class="col offset-s2 s10 announcement-body">{{announcement.body}}</div>
                 <div class="delete-notification">
-                    Удалится {{::moment(announcement.expireAt).format("Do MMMM")}}</div>
+                    Удалится {{::moment(announcement.expireAt).subtract(1, 'day').format("Do MMMM")}}</div>
                 <div class="group-list col offset-s2 s10">
                     <span>Для групп: </span>
                     <span ng-repeat="group in announcement.for"><span>{{group.title}}</span><span ng-hide="$last">, </span></span>

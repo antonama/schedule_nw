@@ -127,17 +127,26 @@ angular.module("editor")
             } else {
                 $q.when(solver.getUnavailableForLecturer(futureClass.lecturer)).then(function (time) {
                     var breakFe = false;
-                    if (time) {
+                    if (time && time.length) {
                         time.forEach(function (item) {
                             if (item.day === day && item.index === index && !breakFe) {
                                 if (existingClass.length === 1) {
-                                    if (group.year == item.group.year && group.title === item.group.title) {
+                                    if (group.year === item.group.year && group.title !== item.group.title) {
                                         if (item.lecturer.name.full === futureClass.lecturer.name.full &&
-                                            item.class.title === futureClass.class.title) {
+                                            item.class.title === futureClass.class.title &&
+                                            item.type !== futureClass.type) {
+                                            breakFe = true;
+                                            deferred.reject("Lecturer " + item.lecturer.name.surname + " " + item.lecturer.name.initials
+                                                            + " works with " + item.group.title + " group of year " + item.group.year
+                                                            + " on " + item.class.title + ", " + item.type);
+                                        } else if (item.type === futureClass.type) {
                                             breakFe = true;
                                             deferred.resolve();
+                                        } else {
+                                            breakFe = true;
+                                            deferred.reject("Group " + item.group.title + " of " + item.group.year + " year already work at this time");
                                         }
-                                    } else {
+                                    } else if (group.year !== item.group.year) {
                                         breakFe = true;
                                         deferred.reject("Group " + item.group.title + " of " + item.group.year + " year already work at this time");
                                     }
@@ -164,6 +173,22 @@ angular.module("editor")
                                 breakFe = true;
                             }
                         });
+                    } else if (time && !time.length) {
+                        if (existingClass.length !== 1) {
+                            if (existingClass[0].lecturer.name.full !== futureClass.lecturer.name.full &&
+                                existingClass[0].class.title === futureClass.class.title) {
+                                breakFe = true;
+                                deferred.resolve();
+                            } else {
+                                deferred.reject("Already taken");
+                            }
+                        } else {
+                            if (existingClass.length === 1) {
+                                deferred.resolve();
+                            } else {
+                                deferred.reject("Already taken");
+                            }
+                        }
                     } else {
                         if (existingClass.length === 1) {
                             deferred.resolve();

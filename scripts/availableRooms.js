@@ -18,17 +18,14 @@ angular.module("editor")
                     if (nv && nv.type) {
                         rfeRooms.getAllOfType(nv.type).then(function (rooms) {
                             rfeSchedule.getAllOfDayClass(scope.roomDay, scope.roomIndex).then(function (schedule) {
-                                scope.availableRooms = rooms.filter(function (item, index) {
-                                    var cleanRoom = true;
-                                    schedule.map(function (existingScheduleItem, classIndex) {
-                                        if (existingScheduleItem.room && existingScheduleItem.room.title === item.title) {
-                                            cleanRoom = false;
-                                        }
-                                    });
-                                    if (nv.room && item.title === nv.room.title) {
-                                        cleanRoom = true;
+                                var deprecated = {};
+                                schedule.forEach(function (item) {
+                                    if (item.lecturer.name.full !== nv.lecturer.name.full && item.room) {
+                                        deprecated[item.room.title] = true
                                     }
-                                    return cleanRoom;
+                                });
+                                scope.availableRooms = rooms.filter(function (item, index) {
+                                    return !(item.title in deprecated);
                                 });
                                 if (nv.room) {
                                     scope.availableRooms.forEach(function (item) {

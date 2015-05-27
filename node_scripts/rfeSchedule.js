@@ -109,7 +109,7 @@
                             .find()
                             .where("day").equals(day)
                             .where("index").equals(index)
-                            .populate("room")
+                            .populate("room lecturer")
                             .exec(function (err, found) {
                                 if (!err) {
                                     dbItemDeferred.resolve(found.map(function (item) {
