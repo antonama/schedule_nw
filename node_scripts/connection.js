@@ -11,7 +11,8 @@ var Schedule,
     Room,
     Settings,
     Staff,
-    Announcement;
+    Announcement,
+    Preference;
 
 db.once('open', function () {
     Schedule = db.model("Schedule", scheduleSchema);
@@ -20,6 +21,7 @@ db.once('open', function () {
     Room = db.model("Room", roomSchema);
     Settings = db.model("Settings", settingsSchema);
     Staff = db.model("Staff", staffSchema);
+    Preference = db.model("Preference", preferenceSchema);
 
     Announcement = db.model("Announcement", announcementSchema);
     Announcement.collection.createIndex( { "expireAt": 1 }, { expireAfterSeconds: 0 }, function () {} );

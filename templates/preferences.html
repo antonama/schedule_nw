@@ -1,0 +1,53 @@
+<div class="rfe-preferences">
+
+    <div class="input-field">
+        <input id="classFind" type="text"
+               fuzzy="filteredPreferenceItems"
+               original-items="preferences"
+               ng-model="searchExpr"
+               keys="{{['name.full']}}"
+               ng-disabled="newItemIsShown"/>
+        <label for="classFind">Преподаватель</label>
+    </div>
+
+    <div class="staff-list row">
+
+        <!--new preference-->
+        <div class="col s12 m12 l12" ng-show="newItemIsShown">
+            <div class="preference-item">
+                <div class="lecturer-name" ng-model="newPreferenceItem.lecturer.name.full"></div>
+                <div class="table-header-group">
+                    <div class="table-cell"></div>
+                    <div ng-repeat="index in [] | range:classesInDay" class="table-cell">{{index + 1}}</div>
+                </div>
+                <div ng-repeat="day in [] | range:6" class="table-row">
+                    <span class="day table-cell">{{moment().day(day + 1).format('dddd')}}</span>
+                    <div ng-repeat="index in [] | range : classesInDay" class="lecturer-available table-cell">
+                        <input type="checkbox" id="preference-type-{{day}}-{{index}}"
+                               checklist-model="newPreferenceItem.dos[day]"
+                               checklist-value="index"
+                               class="filled-in"/>
+                        <label for="preference-type-{{day}}-{{index}}"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-repeat="preference in filteredPreferenceItems" class="col s12 m12 l6">
+            {{preference.lecturer.name.full}}
+        </div>
+    </div>
+
+
+    <a class="add-button btn-floating waves-effect waves-light" ng-click="edit()" ng-show="!newItemIsShown">
+        <i class="mdi-content-add"></i>
+    </a>
+
+    <a class="cancel-button btn-floating waves-effect waves-light" ng-click="clear()" ng-show="newItemIsShown">
+        <i class="mdi-navigation-close"></i>
+    </a>
+
+    <a class="save-button btn-floating waves-effect waves-light" ng-click="saveItem()" ng-show="newItemIsShown">
+        <i class="mdi-navigation-check"></i>
+    </a>
+</div>

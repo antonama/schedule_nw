@@ -1,0 +1,46 @@
+.rfe-preferences {
+
+  .input-field {
+    padding: 0 150px 0 10px;
+  }
+
+  .preference-item {
+    .table-row {
+      display: table-row;
+    }
+    .table-cell {
+      display: table-cell;
+    }
+    .table-header-group {
+      display: table-header-group;
+
+      .table-cell {
+        position: relative;
+        left: 6px;
+        padding-bottom: 5px;
+      }
+    }
+    .day {
+      vertical-align: top;
+      padding-right: 10px;
+    }
+  }
+
+  .add-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }
+
+  .cancel-button {
+    position: fixed;
+    top: 10px;
+    right: 60px;
+  }
+
+  .save-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }
+}

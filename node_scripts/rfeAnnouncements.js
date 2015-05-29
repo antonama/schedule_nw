@@ -35,20 +35,13 @@
 
                     dbDeferred.promise.then(function () {
                         if (item._id) {
-                            Announcement.findById(item._id, function (err, itemToUpdate) {
+                            Announcement.findByIdAndUpdate(item._id, {
+                                $set: item
+                            }, function (err, item) {
                                 if (!err) {
-                                    angular.forEach(item, function (value, key) {
-                                        if (key.indexOf("_") < 0) {
-                                            itemToUpdate[key] = value;
-                                        }
-                                    });
-                                    itemToUpdate.save(function (err) {
-                                        if (!err) {
-                                            dbItemDeferred.resolve();
-                                        } else {
-                                            dbItemDeferred.reject();
-                                        }
-                                    });
+                                    dbItemDeferred.resolve();
+                                } else {
+                                    dbItemDeferred.reject();
                                 }
                             });
                         } else {

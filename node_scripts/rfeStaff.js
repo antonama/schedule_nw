@@ -48,20 +48,13 @@
                     createAvatar(item).then(function () {
                         dbDeferred.promise.then(function () {
                             if (item._id) {
-                                Staff.findById(item._id, function (err, itemToUpdate) {
+                                Staff.findByIdAndUpdate(item._id, {
+                                    $set: item
+                                }, function (err, item) {
                                     if (!err) {
-                                        angular.forEach(item, function (value, key) {
-                                            if (key.indexOf("_") < 0) {
-                                                itemToUpdate[key] = value;
-                                            }
-                                        });
-                                        itemToUpdate.save(function (err) {
-                                            if (!err) {
-                                                dbItemDeferred.resolve();
-                                            } else {
-                                                dbItemDeferred.reject();
-                                            }
-                                        });
+                                        dbItemDeferred.resolve();
+                                    } else {
+                                        dbItemDeferred.reject();
                                     }
                                 });
                             } else {

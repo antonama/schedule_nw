@@ -1,59 +1,52 @@
 /**
- * Created by Anton on 4/20/2015.
+ * Created by Anton on 5/28/2015.
  */
+
 
 (function () {
     angular.module("editor")
-        .service("rfeClasses", function ($q) {
+        .service("rfePreferences", function ($q) {
             var loading = true;
 
             return {
+                getAllForLecturer: function (lecturer) {
+                    var deferred = $q.defer();
+                    var settings = [];
+                    dbDeferred.promise.then(function () {
+                        Preference.find()
+                            .where("lecturer").equals(lecturer._id)
+                            .exec(function (err, found) {
+                                found.forEach(function (item) {
+                                    settings.push(item.toObject());
+                                });
+                                loading = false;
+                                deferred.resolve(settings);
+                            });
+                    });
+
+                    return deferred.promise;
+                },
                 getAll: function () {
                     var deferred = $q.defer();
-
                     dbDeferred.promise.then(function () {
-                        Class.find()
-                            .populate("lecturers")
+                        Preference.find()
+                            .populate("lecturer")
                             .exec(function (err, found) {
-                                var classes = [];
-                                found.forEach(function (item) {
-                                    classes.push(item.toObject());
-                                });
                                 loading = false;
-                                deferred.resolve(classes);
-                            })
+                                deferred.resolve(found.map(function (item) {
+                                    return item.toObject();
+                                }));
+                            });
                     });
 
                     return deferred.promise;
-                },
-                getAllForYear: function (year) {
-                    var deferred = $q.defer();
-
-                    dbDeferred.promise.then(function () {
-                        Class.find()
-                            .where("years").in([year])
-                            .populate("lecturers")
-                            .exec(function (err, found) {
-                                var classes = [];
-                                found.forEach(function (item) {
-                                    classes.push(item.toObject());
-                                });
-                                loading = false;
-                                deferred.resolve(classes);
-                            })
-                    });
-
-                    return deferred.promise;
-                },
-                isLoading: function () {
-                    return loading;
                 },
                 save: function (item) {
                     var dbItemDeferred = $q.defer();
 
                     dbDeferred.promise.then(function () {
                         if (item._id) {
-                            Class.findByIdAndUpdate(item._id, {
+                            Preference.findByIdAndUpdate(item._id, {
                                 $set: item
                             }, function (err, item) {
                                 if (!err) {
@@ -63,7 +56,7 @@
                                 }
                             });
                         } else {
-                            var dbItem = new Class(item);
+                            var dbItem = new Preference(item);
                             dbItem.save(function (err) {
                                 if (!err) {
                                     dbItemDeferred.resolve();
@@ -76,21 +69,8 @@
 
                     return dbItemDeferred.promise;
                 },
-                delete: function (item) {
-                    var deferred = $q.defer();
-                    dbDeferred.promise.then(function () {
-                        Class.findOneAndRemove({
-                            _id: item._id
-                        }, function (err, item) {
-                            if (!err) {
-                                deferred.resolve();
-                            } else {
-                                deferred.reject();
-                            }
-                        });
-                    });
-
-                    return deferred.promise;
+                isLoading: function () {
+                    return loading;
                 }
             }
         });

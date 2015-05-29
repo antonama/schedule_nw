@@ -36,6 +36,16 @@ angular.module('editor')
         }
     });
 
+    $stateProvider.state("main.preferences", {
+        url: "/preferences",
+        views: {
+            "": {
+                templateUrl: "templates/preferences.html",
+                controller: "PreferencesCtrl"
+            }
+        }
+    });
+
     $stateProvider.state("main.groups", {
         url: "/groups",
         views: {

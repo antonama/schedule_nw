@@ -8478,3 +8478,31 @@ header {
   position: fixed;
   top: 10px;
   right: 10px; }
+
+.rfe-preferences .input-field {
+  padding: 0 150px 0 10px; }
+.rfe-preferences .preference-item .table-row {
+  display: table-row; }
+.rfe-preferences .preference-item .table-cell {
+  display: table-cell; }
+.rfe-preferences .preference-item .table-header-group {
+  display: table-header-group; }
+  .rfe-preferences .preference-item .table-header-group .table-cell {
+    position: relative;
+    left: 6px;
+    padding-bottom: 5px; }
+.rfe-preferences .preference-item .day {
+  vertical-align: top;
+  padding-right: 10px; }
+.rfe-preferences .add-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
+.rfe-preferences .cancel-button {
+  position: fixed;
+  top: 10px;
+  right: 60px; }
+.rfe-preferences .save-button {
+  position: fixed;
+  top: 10px;
+  right: 10px; }
