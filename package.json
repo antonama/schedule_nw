@@ -24,7 +24,7 @@
         "height": 500, 
         "visible": true,
         "as_desktop": false, 
-        "toolbar": false,
+        "toolbar": true,
         "min_width": 600,
         "position": "center", 
         "show_in_taskbar": true,

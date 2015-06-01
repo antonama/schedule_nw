@@ -43,11 +43,21 @@
                             Schedule.findByIdAndUpdate(item._id, {
                                 $set: item
                             }, function (err, itemToUpdate) {
-                                if (!err) {
-                                    dbItemDeferred.resolve();
-                                } else {
-                                    dbItemDeferred.reject();
-                                }
+                                Schedule.update({
+                                    day: item.day,
+                                    index: item.index,
+                                    class: item.class._id
+                                }, {
+                                    $set: {
+                                        room: item.room._id
+                                    }
+                                }, { multi: true }, function (err, updated) {
+                                    if (!err) {
+                                        dbItemDeferred.resolve();
+                                    } else {
+                                        dbItemDeferred.reject();
+                                    }
+                                });
                             });
                         } else {
                             var dbItem = new Schedule(item);
