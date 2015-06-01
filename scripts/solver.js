@@ -6,11 +6,16 @@ angular.module("editor")
     .factory("solver", function ($rootScope, $q, rfeSchedule) {
         return {
             getUnavailableForLecturer: function (lecturer) {
+                var schedule = [];
+
                 if (lecturer) {
-                    return rfeSchedule.getUnavailableForLecturer(lecturer);
-                } else {
-                    return $q.when(null);
+                    schedule = rfeSchedule.getScheduleObject();
+                    schedule = schedule.filter(function (item) {
+                        return item.lecturer && item.lecturer._id.toString() === lecturer._id.toString();
+                    });
                 }
+
+                return schedule;
             }
         }
     });

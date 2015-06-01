@@ -8513,19 +8513,19 @@ header {
       border-bottom: none; }
     .rfe-schedule .day .day-class > div:last-child {
       border-bottom: none !important; }
-    .rfe-schedule .day .day-class.drag-active {
+    .rfe-schedule .day .day-class.drag-active.ng-drag-active {
       color: black;
       border-bottom: 2px solid black; }
-      .rfe-schedule .day .day-class.drag-active:last-child {
+      .rfe-schedule .day .day-class.drag-active.ng-drag-active:last-child {
         border-bottom: none; }
-      .rfe-schedule .day .day-class.drag-active .available-rooms,
-      .rfe-schedule .day .day-class.drag-active .remove-class {
+      .rfe-schedule .day .day-class.drag-active.ng-drag-active.draggable-over {
+        background-color: #4db6ac;
+        color: white; }
+        .rfe-schedule .day .day-class.drag-active.ng-drag-active.draggable-over .available-rooms {
+          display: none; }
+      .rfe-schedule .day .day-class.drag-active.ng-drag-active .available-rooms,
+      .rfe-schedule .day .day-class.drag-active.ng-drag-active .remove-class {
         visibility: hidden; }
-    .rfe-schedule .day .day-class.draggable-over {
-      background-color: #4db6ac;
-      color: white; }
-      .rfe-schedule .day .day-class.draggable-over .available-rooms {
-        display: none; }
     .rfe-schedule .day .day-class .placeholder {
       padding: 10px;
       display: inline-block; }

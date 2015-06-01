@@ -31,7 +31,7 @@
         }
       }
 
-      &.drag-active {
+      &.drag-active.ng-drag-active {
         color: black;
         border-bottom: 2px solid black;
 
@@ -39,18 +39,18 @@
           border-bottom: none;
         }
 
+        &.draggable-over {
+          background-color: color("teal", "lighten-2");
+          color: white;
+
+          .available-rooms {
+            display: none;
+          }
+        }
+
         .available-rooms,
         .remove-class {
           visibility: hidden;
-        }
-      }
-
-      &.draggable-over {
-        background-color: color("teal", "lighten-2");
-        color: white;
-
-        .available-rooms {
-          display: none;
         }
       }
 

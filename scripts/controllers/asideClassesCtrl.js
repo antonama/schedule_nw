@@ -3,7 +3,7 @@
  */
 
 angular.module("editor")
-    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls, $rootScope) {
+    .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, scheduleService, solver, iScrolls, $rootScope) {
         $scope.$on("yearSelected", function (event, year) {
             rfeClasses.getAllForYear(year).then(function (classes) {
                 $scope.classItems = classes;
@@ -31,8 +31,8 @@ angular.module("editor")
                 type: draggableScope.type ? draggableScope.type.trim() : null,
                 class: draggableScope.class
             };
-            //$rootScope.$broadcast("rfeLecturerTimeFindStart", $scope.customClassModel);
-            //solver.getUnavailableForLecturer(draggableScope.lecturer);
+            scheduleService.set($scope.customClassModel);
+            $rootScope.$applyAsync();
         };
 
         $scope.onEnd = function ($event) {

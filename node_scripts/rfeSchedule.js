@@ -5,38 +5,42 @@
 (function () {
     angular.module("editor")
         .service("rfeSchedule", function ($q) {
-            var loading = true;
+            var loading = true,
+                schedule = [];
 
             return {
                 getGroupSchedule: function (group) {
                     var deferred = $q.defer();
+                    loading = true;
 
                     dbDeferred.promise.then(function () {
                         Schedule
-                        .find()
-                        .populate({
-                            path: 'group',
-                            match: {
-                                _id: group._id
-                            }
-                        })
-                        .populate("class lecturer room")
-                        .exec(function (err, found) {
-                            var items = found.filter(function (item) {
-                                return item.group ? true : false;
+                            .find()
+                            .populate({
+                                path: 'group',
+                                match: {
+                                    _id: group._id
+                                }
+                            })
+                            .populate("class lecturer room")
+                            .exec(function (err, found) {
+                                var items = found.filter(function (item) {
+                                    return item.group ? true : false;
+                                });
+                                items = items.map(function (item) {
+                                    return item.toObject();
+                                });
+                                schedule = items;
+                                deferred.resolve(items);
+                                loading = false;
                             });
-                            items = items.map(function (item) {
-                                return item.toObject();
-                            });
-                            deferred.resolve(items);
-                            loading = false;
-                        });
                     });
 
                     return deferred.promise;
                 },
                 save: function (item) {
                     var dbItemDeferred = $q.defer();
+                    loading = true;
 
                     dbDeferred.promise.then(function () {
                         if (item._id) {
@@ -75,6 +79,7 @@
                 },
                 delete: function (item) {
                     var dbItemDeferred = $q.defer();
+                    loading = true;
 
                     dbDeferred.promise.then(function () {
                         Schedule.findOneAndRemove({
@@ -85,6 +90,8 @@
                             } else {
                                 dbItemDeferred.reject();
                             }
+                            loading = false;
+
                         });
                     });
 
@@ -92,6 +99,7 @@
                 },
                 getUnavailableForLecturer: function (lecturer) {
                     var dbItemDeferred = $q.defer();
+                    loading = true;
 
                     dbDeferred.promise.then(function () {
                         Schedule
@@ -106,6 +114,8 @@
                                 } else {
                                     dbItemDeferred.reject();
                                 }
+                                loading = false;
+
                             });
                     });
 
@@ -113,6 +123,7 @@
                 },
                 getAllOfDayClass: function (day, index) {
                     var dbItemDeferred = $q.defer();
+                    loading = true;
 
                     dbDeferred.promise.then(function () {
                         Schedule
@@ -128,6 +139,7 @@
                                 } else {
                                     dbItemDeferred.reject();
                                 }
+                                loading = false;
                             });
                     });
 
@@ -135,6 +147,9 @@
                 },
                 isLoading: function () {
                     return loading;
+                },
+                getScheduleObject: function () {
+                    return schedule;
                 }
             }
         });

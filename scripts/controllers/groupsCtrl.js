@@ -30,7 +30,6 @@ angular.module("editor")
         }
 
         $scope.delete = function (item) {
-            console.log(item);
             rfeGroups.delete(item).then(function () {
                 update();
             });
