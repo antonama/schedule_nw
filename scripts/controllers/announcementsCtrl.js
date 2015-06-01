@@ -32,7 +32,7 @@ angular.module("editor")
             $scope.updateDate = item.expireAt;
             $scope.newItemIsShown = true;
             angular.forEach($scope.years, function (yearItem) {
-                if (yearItem.number === item.for[0].year) {
+                if (yearItem === item.for[0].year) {
                     $scope.selectedYear = yearItem;
                 }
             });
@@ -60,10 +60,10 @@ angular.module("editor")
         function updateGroups () {
             cfpLoadingBar.start();
             rfeGroups.getYears().then(function (years) {
-                $scope.years = years.sort(function (a, b) {
-                    return a.number - b.number
+                $scope.years = Object.keys(years).map(function (item) {
+                    return parseInt(item, 10);
                 });
-                $scope.selectedYear = years[0];
+                $scope.selectedYear = $scope.years[0];
                 $scope.changeGroups($scope.selectedYear).then(function () {
                     update();
                     cfpLoadingBar.complete();
@@ -72,11 +72,15 @@ angular.module("editor")
         }
 
         function update () {
+            cfpLoadingBar.start();
+
             rfeAnnouncements.getAll().then(function (announcements) {
                 $scope.announcementsList = announcements;
                 if (!announcements.length) {
                     $scope.filteredAnnouncementItems = [];
                 }
+                cfpLoadingBar.complete();
+
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
                 }, 250);

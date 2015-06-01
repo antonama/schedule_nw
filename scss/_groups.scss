@@ -20,18 +20,65 @@
     }
   }
 
-  //.rooms-list {
-  //  .room-item {
-  //    display: inline-block;
-  //    width: 45px;
-  //    height: 45px;
-  //    line-height: 45px;
-  //    text-align: center;
-  //    margin: 10px;
-  //    border-radius: 50%;
-  //    border: 1px solid color('grey', 'lighten-2');
-  //    position: relative;
-  //    cursor: default;
-  //  }
-  //}
+  .years-list {
+    margin-bottom: 0;
+
+    >div {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .year-group {
+    border: 1px solid color('grey', 'lighten-2');
+    margin-bottom: 10px;
+  }
+
+  .year {
+    border: 1px solid color('grey', 'lighten-2');
+    margin-top: -1px;
+    margin-left: -12px;
+    margin-right: -11px;
+    padding: 10px;
+    background-color: color('teal', 'lighten-2');
+    font-weight: bold;
+    font-size: 2rem;
+  }
+
+  .groups-list {
+    .group-item {
+      position: relative;
+      padding: 8px 15px;
+      display: inline-block;
+      border: 1px solid color('grey', 'lighten-2');
+      border-radius: 50%;
+      margin: 5px;
+
+      &:hover {
+        .group-edit-item {
+          display: block;
+        }
+      }
+
+      .group-edit-item {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+        border-radius: 50%;
+        line-height: 38px;
+
+        i {
+          cursor: pointer;
+          font-size: 2rem;
+          color: #fff;
+        }
+      }
+    }
+  }
 }

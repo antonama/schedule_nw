@@ -7,8 +7,8 @@ angular.module("editor")
 
         $scope.selectedYears = [];
         rfeGroups.getYears().then(function (years) {
-            $scope.years = years.sort(function (a, b) {
-                return a.number - b.number
+            $scope.years = Object.keys(years).map(function (item) {
+                return parseInt(item, 10);
             });
         });
 

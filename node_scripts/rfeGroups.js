@@ -10,14 +10,12 @@
             return {
                 getAll: function () {
                     var deferred = $q.defer();
-                    var groups = [];
                     dbDeferred.promise.then(function () {
                         Group.find(function (err, found) {
-                            found.forEach(function (item) {
-                                groups.push(item.toObject());
-                            });
                             loading = false;
-                            deferred.resolve(groups);
+                            deferred.resolve(found.map(function (item) {
+                                return item.toObject();
+                            }));
                         })
                     });
 
@@ -44,19 +42,14 @@
                 },
                 getYears: function () {
                     var deferred = $q.defer();
-                    var years = [];
+                    var years = {};
                     dbDeferred.promise.then(function () {
-                        Group.aggregate([
-                            {$group: {
-                                _id: "$year",
-                                groups: { $push: {title: '$title'} }
-                            }}
-                        ], function (err, found) {
-                            found.forEach(function (item) {
-                                years.push({
-                                    number: item._id,
-                                    groups: item.groups
-                                });
+                        Group.find(function (err, found) {
+                            found.forEach(function (item, index) {
+                                if (!years[item.year]) {
+                                    years[item.year] = [];
+                                }
+                                years[item.year].push(item.toObject());
                             });
                             loading = false;
                             deferred.resolve(years);
@@ -70,13 +63,29 @@
                     var groups = [];
                     dbDeferred.promise.then(function () {
                         Group.find({
-                            year: year.number ? year.number : year
+                            year: year
                         }, function (err, found) {
                             found.forEach(function (item) {
                                 groups.push(item.toObject());
                             });
                             loading = false;
                             deferred.resolve(groups);
+                        });
+                    });
+
+                    return deferred.promise;
+                },
+                delete: function (item) {
+                    var deferred = $q.defer();
+                    dbDeferred.promise.then(function () {
+                        Group.findOneAndRemove({
+                            _id: item._id
+                        }, function (err, item) {
+                            if (!err) {
+                                deferred.resolve();
+                            } else {
+                                deferred.reject();
+                            }
                         });
                     });
 

@@ -5,7 +5,7 @@
 angular.module("editor")
     .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls, $rootScope) {
         $scope.$on("yearSelected", function (event, year) {
-            rfeClasses.getAllForYear(year.number).then(function (classes) {
+            rfeClasses.getAllForYear(year).then(function (classes) {
                 $scope.classItems = classes;
 
                 $timeout(function () {

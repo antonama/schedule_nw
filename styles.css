@@ -8288,6 +8288,46 @@ header {
       bottom: 50%;
       right: 0;
       transform: translate(0, 50%); }
+  .rfe-groups .years-list {
+    margin-bottom: 0; }
+    .rfe-groups .years-list > div:last-child {
+      margin-bottom: 0; }
+  .rfe-groups .year-group {
+    border: 1px solid #e0e0e0;
+    margin-bottom: 10px; }
+  .rfe-groups .year {
+    border: 1px solid #e0e0e0;
+    margin-top: -1px;
+    margin-left: -12px;
+    margin-right: -11px;
+    padding: 10px;
+    background-color: #4db6ac;
+    font-weight: bold;
+    font-size: 2rem; }
+  .rfe-groups .groups-list .group-item {
+    position: relative;
+    padding: 8px 15px;
+    display: inline-block;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    margin: 5px; }
+    .rfe-groups .groups-list .group-item:hover .group-edit-item {
+      display: block; }
+    .rfe-groups .groups-list .group-item .group-edit-item {
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      text-align: center;
+      border-radius: 50%;
+      line-height: 38px; }
+      .rfe-groups .groups-list .group-item .group-edit-item i {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #fff; }
 
 .rfe-schedule .day {
   border: 2px solid black;

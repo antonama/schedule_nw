@@ -4,13 +4,13 @@
         <div class="col s4 m4 l4">
             <div class="input-field">
                 <input id="group-title" type="text" ng-model="newGroupItem.title"/>
-                <label for="group-title">&#1053;&#1086;&#1084;&#1077;&#1088; &#1075;&#1088;&#1091;&#1087;&#1087;&#1099;</label>
+                <label for="group-title">Номер</label>
             </div>
         </div>
         <div class="col s6 m6 l6">
             <div class="input-field">
                 <input id="group-year" type="text" ng-model="newGroupItem.year"/>
-                <label for="group-year">&#1050;&#1091;&#1088;&#1089;</label>
+                <label for="group-year">Курс</label>
             </div>
         </div>
         <div class="col s2 m2 l2 add-button">
@@ -20,10 +20,19 @@
         </div>
     </form>
 
-    <ul ng-repeat="year in years | orderBy: 'number'" class="year">
-        <span class="year-number">{{year.number}}:</span>
-        <li ng-repeat="group in year.groups | orderBy: 'title'" class="group-list">
-            <span class="group-title">{{group.title}}</span>
-        </li>
-    </ul>
+    <div class="row years-list">
+        <div ng-repeat="(year,groups) in years track by $index | orderBy: 'year'" class="col s12 m12 l12 year-group">
+            <div class="year">
+                <span class="value">{{year}}</span>
+            </div>
+            <div class="groups-list">
+                <span class="group-item" ng-repeat="group in groups track by group._id | orderBy: 'title'">
+                    <span class="group-title">{{group.title}}</span>
+                    <div class="group-edit-item">
+                        <i class="mdi-action-highlight-remove" ng-click="delete(group)"></i>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>

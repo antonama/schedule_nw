@@ -21,7 +21,7 @@
         </div>
         <div class="input-field col s4">
             <select ng-model="selectedYear"
-                    ng-options="year.number for year in years"
+                    ng-options="year for year in years"
                     class="browser-default"
                     ng-change="changeGroups(selectedYear)"></select>
         </div>

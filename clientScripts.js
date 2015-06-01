@@ -385,7 +385,7 @@ angular.module("editor")
             $scope.updateDate = item.expireAt;
             $scope.newItemIsShown = true;
             angular.forEach($scope.years, function (yearItem) {
-                if (yearItem.number === item.for[0].year) {
+                if (yearItem === item.for[0].year) {
                     $scope.selectedYear = yearItem;
                 }
             });
@@ -413,10 +413,10 @@ angular.module("editor")
         function updateGroups () {
             cfpLoadingBar.start();
             rfeGroups.getYears().then(function (years) {
-                $scope.years = years.sort(function (a, b) {
-                    return a.number - b.number
+                $scope.years = Object.keys(years).map(function (item) {
+                    return parseInt(item, 10);
                 });
-                $scope.selectedYear = years[0];
+                $scope.selectedYear = $scope.years[0];
                 $scope.changeGroups($scope.selectedYear).then(function () {
                     update();
                     cfpLoadingBar.complete();
@@ -425,11 +425,15 @@ angular.module("editor")
         }
 
         function update () {
+            cfpLoadingBar.start();
+
             rfeAnnouncements.getAll().then(function (announcements) {
                 $scope.announcementsList = announcements;
                 if (!announcements.length) {
                     $scope.filteredAnnouncementItems = [];
                 }
+                cfpLoadingBar.complete();
+
                 $timeout(function () {
                     iScrolls.get("contentIScroll").refresh();
                 }, 250);
@@ -452,7 +456,7 @@ angular.module("editor")
 angular.module("editor")
     .controller("AsideClassesCtrl", function ($scope, $timeout, rfeClasses, solver, iScrolls, $rootScope) {
         $scope.$on("yearSelected", function (event, year) {
-            rfeClasses.getAllForYear(year.number).then(function (classes) {
+            rfeClasses.getAllForYear(year).then(function (classes) {
                 $scope.classItems = classes;
 
                 $timeout(function () {
@@ -519,8 +523,8 @@ angular.module("editor")
 
         $scope.selectedYears = [];
         rfeGroups.getYears().then(function (years) {
-            $scope.years = years.sort(function (a, b) {
-                return a.number - b.number
+            $scope.years = Object.keys(years).map(function (item) {
+                return parseInt(item, 10);
             });
         });
 
@@ -619,8 +623,6 @@ angular.module("editor")
 
 angular.module("editor")
     .controller("GroupsCtrl", function ($scope, $timeout, rfeGroups, cfpLoadingBar, iScrolls) {
-        cfpLoadingBar.start();
-
         $scope.newGroupItem = {
             title: '',
             year: ''
@@ -629,11 +631,12 @@ angular.module("editor")
         $scope.saveItem = function () {
             rfeGroups.save($scope.newGroupItem).then(function () {
                 update();
-               
             })
         };
 
         function update () {
+            cfpLoadingBar.start();
+
             rfeGroups.getYears().then(function (years) {
                 $scope.years = years;
                 cfpLoadingBar.complete();
@@ -644,6 +647,13 @@ angular.module("editor")
                 }, 500);
             });
         }
+
+        $scope.delete = function (item) {
+            console.log(item);
+            rfeGroups.delete(item).then(function () {
+                update();
+            });
+        };
 
         update();
     });
@@ -751,7 +761,7 @@ angular.module("editor")
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
-            $rootScope.$broadcast("yearSelected", year || year.number);
+            $rootScope.$broadcast("yearSelected", year);
 
             return rfeGroups.getGroupsForYear(year).then(function (groups) {
                 $scope.groups = groups.sort(function (a, b) {
@@ -806,10 +816,10 @@ angular.module("editor")
 
         function update () {
             rfeGroups.getYears().then(function (years) {
-                $scope.years = years.sort(function (a, b) {
-                    return a.number - b.number
+                $scope.years = Object.keys(years).map(function (item) {
+                    return parseInt(item, 10);
                 });
-                $scope.selectedYear = years[0];
+                $scope.selectedYear = $scope.years[0];
                 $scope.changeGroups($scope.selectedYear).then(function () {
                     cfpLoadingBar.complete();
                 });
@@ -867,7 +877,7 @@ angular.module("editor")
         function checkTimeSlot(day, index, group, futureClass, existingClass) {
             var deferred = $q.defer();
             if (existingClass.length === 3) {
-                deferred.reject("Too many classes at that time");
+                deferred.reject("Слишком много предметов в это время");
             } else {
                 $q.when(solver.getUnavailableForLecturer(futureClass.lecturer)).then(function (time) {
                     var breakFe = false;

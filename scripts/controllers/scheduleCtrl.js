@@ -7,7 +7,7 @@ angular.module("editor")
         $scope.moment = moment;
 
         $scope.changeGroups = function (year) {
-            $rootScope.$broadcast("yearSelected", year || year.number);
+            $rootScope.$broadcast("yearSelected", year);
 
             return rfeGroups.getGroupsForYear(year).then(function (groups) {
                 $scope.groups = groups.sort(function (a, b) {
@@ -62,10 +62,10 @@ angular.module("editor")
 
         function update () {
             rfeGroups.getYears().then(function (years) {
-                $scope.years = years.sort(function (a, b) {
-                    return a.number - b.number
+                $scope.years = Object.keys(years).map(function (item) {
+                    return parseInt(item, 10);
                 });
-                $scope.selectedYear = years[0];
+                $scope.selectedYear = $scope.years[0];
                 $scope.changeGroups($scope.selectedYear).then(function () {
                     cfpLoadingBar.complete();
                 });
@@ -123,7 +123,7 @@ angular.module("editor")
         function checkTimeSlot(day, index, group, futureClass, existingClass) {
             var deferred = $q.defer();
             if (existingClass.length === 3) {
-                deferred.reject("Too many classes at that time");
+                deferred.reject("Слишком много предметов в это время");
             } else {
                 $q.when(solver.getUnavailableForLecturer(futureClass.lecturer)).then(function (time) {
                     var breakFe = false;

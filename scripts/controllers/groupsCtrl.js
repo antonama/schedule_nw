@@ -4,8 +4,6 @@
 
 angular.module("editor")
     .controller("GroupsCtrl", function ($scope, $timeout, rfeGroups, cfpLoadingBar, iScrolls) {
-        cfpLoadingBar.start();
-
         $scope.newGroupItem = {
             title: '',
             year: ''
@@ -14,11 +12,12 @@ angular.module("editor")
         $scope.saveItem = function () {
             rfeGroups.save($scope.newGroupItem).then(function () {
                 update();
-                //clearItem({saveAddress: true});
             })
         };
 
         function update () {
+            cfpLoadingBar.start();
+
             rfeGroups.getYears().then(function (years) {
                 $scope.years = years;
                 cfpLoadingBar.complete();
@@ -29,6 +28,13 @@ angular.module("editor")
                 }, 500);
             });
         }
+
+        $scope.delete = function (item) {
+            console.log(item);
+            rfeGroups.delete(item).then(function () {
+                update();
+            });
+        };
 
         update();
     });
