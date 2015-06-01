@@ -20,7 +20,7 @@ angular.module("editor")
                             rfeSchedule.getAllOfDayClass(scope.roomDay, scope.roomIndex).then(function (schedule) {
                                 var deprecated = {};
                                 schedule.forEach(function (item) {
-                                    if (item.lecturer.name.full !== nv.lecturer.name.full && item.room) {
+                                    if (item.lecturer && item.lecturer.name.full !== nv.lecturer.name.full && item.room) {
                                         deprecated[item.room.title] = true
                                     }
                                 });

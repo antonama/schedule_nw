@@ -30,9 +30,15 @@
                                 items = items.map(function (item) {
                                     return item.toObject();
                                 });
-                                schedule = items;
-                                deferred.resolve(items);
-                                loading = false;
+                                Schedule.find()
+                                    .populate("class lecturer room group")
+                                    .exec(function (err, found) {
+                                        schedule = found.map(function (item) {
+                                            return item.toObject();
+                                        });
+                                        deferred.resolve(items);
+                                        loading = false;
+                                    });
                             });
                     });
 

@@ -33,14 +33,11 @@
 
       &.drag-active.ng-drag-active {
         color: black;
-        border-bottom: 2px solid black;
-
-        &:last-child {
-          border-bottom: none;
-        }
+        font-weight: bold;
+        background-color: color("teal", "lighten-4");
 
         &.draggable-over {
-          background-color: color("teal", "lighten-2");
+          background-color: color("teal", "lighten-1");
           color: white;
 
           .available-rooms {

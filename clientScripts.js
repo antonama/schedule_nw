@@ -26,7 +26,7 @@ angular.module("editor")
                             rfeSchedule.getAllOfDayClass(scope.roomDay, scope.roomIndex).then(function (schedule) {
                                 var deprecated = {};
                                 schedule.forEach(function (item) {
-                                    if (item.lecturer.name.full !== nv.lecturer.name.full && item.room) {
+                                    if (item.lecturer && item.lecturer.name.full !== nv.lecturer.name.full && item.room) {
                                         deprecated[item.room.title] = true
                                     }
                                 });
@@ -270,7 +270,9 @@ angular.module("editor").factory("scheduleService", function (rfeSchedule, solve
 
     this.dndItem = {};
 
-    this.reason = "";
+    this.reasons = [];
+
+    this.moving = false;
 
     return {
         get: function () {
@@ -282,117 +284,68 @@ angular.module("editor").factory("scheduleService", function (rfeSchedule, solve
         check: function (day, index, group, existingClass) {
             return checkTimeSlot(day, index, group, self.dndItem, existingClass);
         },
-        getReason: function () {
-            return self.reason;
+        getReason: function (day, index, classItem, group) {
+            return self.reasons.filter(function (item) {
+                return item.day === day && item.index === index
+            }).pop();
         },
         setReason: function (reason) {
-            self.reason = reason;
+            self.reasons = reason;
+        },
+        setMoving: function (moving) {
+            self.moving = moving;
+        },
+        isMoving: function () {
+            return self.moving;
         }
     };
 
     function checkTimeSlot(day, index, group, futureClass, existingClass) {
         var available = true;
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
+
         if (futureClass) {
             if (existingClass.length === 2) {
                 available = false;
-                self.reason = "Слишком много предметов в это время";
+                self.reasons.push({
+                    day: existingClass[0].day,
+                    index: existingClass[0].index,
+                    text: "Слишком много занятий в это время"
+                });
             } else if (!existingClass.length) {
                 var unavailableTime = solver.getUnavailableForLecturer(futureClass.lecturer);
                 if (unavailableTime.length) {
                     var blockers = unavailableTime.filter(function (item) {
-                        return item.day === day && item.index === index && item.class.title !== futureClass.title;
+                        return item.day === day && item.index === index &&
+                            (item.class.title === futureClass.title && item.type !== futureClass.type);
                     });
                     if (blockers.length) {
                         available = false;
+                        self.reasons.push({
+                            day: blockers[0].day,
+                            index: blockers[0].index,
+                            text: "Преподаватель ведет занятие \"" + blockers[0].class.title + "\" у группы " + blockers[0].group.title + " курса " + blockers[0].group.year
+                        });
                     }
                 } else {
 
                 }
             } else {
                 if (existingClass && futureClass && futureClass.class) {
-                    if (existingClass[0].class.title !== futureClass.class.title) {
+                    if (existingClass[0].title !== futureClass.title) {
                         available = false;
-                        self.reason = "Таймслот занят";
-                    } else if (existingClass[0].class.title === futureClass.class.title &&
+                        self.reasons.push({
+                            day: existingClass[0].day,
+                            index: existingClass[0].index,
+                            text: "Таймслот занят"
+                        });
+                    } else if (existingClass[0].title === futureClass.title &&
                         existingClass[0].lecturer._id.toString() === futureClass.lecturer._id.toString()) {
                         available = false;
-                        self.reason = "Преподаватель уже ведет данное занятие";
+                        self.reasons.push({
+                            day: existingClass[0].day,
+                            index: existingClass[0].index,
+                            text: "Преподаватель уже ведет данное занятие"
+                        });
                     }
                 }
             }
@@ -624,11 +577,15 @@ angular.module("editor")
                 class: draggableScope.class
             };
             scheduleService.set($scope.customClassModel);
+            scheduleService.setMoving(true);
+            scheduleService.setReason([]);
+
             $rootScope.$applyAsync();
         };
 
-        $scope.onEnd = function ($event) {
-            $rootScope.$broadcast("rfeLecturerTimeFindClear");
+        $scope.onEnd = function () {
+            scheduleService.setMoving(false);
+            scheduleService.setReason([]);
         }
     });
 
@@ -899,6 +856,7 @@ angular.module("editor")
 angular.module("editor")
     .controller("ScheduleCtrl", function ($scope, $rootScope, $timeout, $q, cfpLoadingBar, rfeGroups, rfeSchedule, rfeSettings, rfeRooms, scheduleService, solver, iScrolls) {
         $scope.moment = moment;
+        $scope.scheduleService = scheduleService;
 
         $scope.changeGroups = function (year) {
             $rootScope.$broadcast("yearSelected", year);
@@ -967,34 +925,29 @@ angular.module("editor")
         }
 
         $scope.onDrop = function ($event) {
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
+            var classScope = angular.element($event.toElement).scope(),
+                day,
+                index,
+                dndItem;
+
+            if (!classScope.dupe) {
+                day = classScope.$parent.$index;
+                index = classScope.$index;
+            } else {
+                day = classScope.$parent.$parent.$index;
+                index = classScope.$parent.$index;
+            }
+            dndItem = classScope.dndDragItem;
+            classScope.class.pop();
+            var reason = scheduleService.getReason(day, index, classScope.class[0], $scope.selectedGroup);
+            if (!reason) {
+                $scope.saveItem(day, index, dndItem).then(function () {
+                    scheduleService.setReason([]);
+                });
+            } else {
+                alert(reason.text);
+                scheduleService.setReason([]);
+            }
         };
 
         $scope.removeClass = function (classItem) {
@@ -1004,7 +957,7 @@ angular.module("editor")
         };
 
         $scope.saveItem = function (day, index, item) {
-            rfeSchedule.save(angular.extend(item, {
+            return rfeSchedule.save(angular.extend(item, {
                 day: day,
                 index: index,
                 group: $scope.selectedGroup
@@ -1013,20 +966,12 @@ angular.module("editor")
             });
         };
 
-        $scope.isAvailable = function (day, index, group, existingClass) {
-            return scheduleService.check(day, index, group, existingClass);
+        $scope.isAvailable = function (day, index, existingClass) {
+            return scheduleService.check(day, index, $scope.selectedGroup, existingClass);
         };
 
         update();
     });
-
-angular.module("editor").controller("ClassItemCtrl", function ($scope, scheduleService) {
-    $scope.$watchCollection(function () {
-        return scheduleService.get()
-    }, function (newValue, oldValue) {
-        $scope.isAvailable = scheduleService.check($scope.$parent.$index, $scope.$index, $scope.selectedGroup, $scope.class);
-    });
-});
 
 
 angular.module("editor")

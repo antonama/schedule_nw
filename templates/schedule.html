@@ -17,12 +17,12 @@
     <div class="container">
         <div ng-repeat="day in schedule" class="row day">
             <span class="title">{{moment().day($index + 1).format('dddd')}}</span>
-            <div ng-repeat="class in day" class="day-class" ng-controller="ClassItemCtrl"
+            <div ng-repeat="class in day" class="day-class"
                  data-drop="true"
                  data-jqyoui-options="{activeClass: 'drag-active', hoverClass: 'draggable-over', tolerance: 'pointer'}"
                  jqyoui-droppable="{onDrop: 'onDrop', multiple: true}"
                  ng-model="class"
-                    ng-class="{'ng-drag-active': isAvailable}">
+                 ng-class="{'ng-drag-active': scheduleService.isMoving() && isAvailable($parent.$index, $index, class)}">
                 <span ng-show="!class.length" class="placeholder">{{$index + 1}}</span>
                 <div ng-repeat="dupe in class" class="dupe" ng-show="class.length"
                      available-rooms="availableRooms"

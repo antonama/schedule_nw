@@ -32,10 +32,14 @@ angular.module("editor")
                 class: draggableScope.class
             };
             scheduleService.set($scope.customClassModel);
+            scheduleService.setMoving(true);
+            scheduleService.setReason([]);
+
             $rootScope.$applyAsync();
         };
 
-        $scope.onEnd = function ($event) {
-            $rootScope.$broadcast("rfeLecturerTimeFindClear");
+        $scope.onEnd = function () {
+            scheduleService.setMoving(false);
+            scheduleService.setReason([]);
         }
     });
