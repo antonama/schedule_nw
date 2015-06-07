@@ -56,7 +56,8 @@
                                 Schedule.update({
                                     day: item.day,
                                     index: item.index,
-                                    class: item.class._id
+                                    class: item.class._id,
+                                    lecturer: item.lecturer._id
                                 }, {
                                     $set: {
                                         room: item.room._id
